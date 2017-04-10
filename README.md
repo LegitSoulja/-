@@ -12,6 +12,7 @@ With the power and usage of MySQLi, SlickInject uses MySQLi to send, and recieve
 
 ```php
 namespace tutorial;
+
 include 'SlickInject.php';
 use SlickInject\SlickInject as SlickInject;
 ```
