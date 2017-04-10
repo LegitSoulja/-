@@ -1,3 +1,5 @@
+###### HAS NOT YET BEEN RELEASED!.
+
 # SlickInject
 
 Tired of risky SQL Injects? Tired of typing out SQL syntax? Bothered with long boring code?
@@ -45,3 +47,12 @@ $username = "Johnny";
 SlickInject::DELETE("users", array("username"=>$username)); 
 // output: DELETE FROM `users` WHERE username='Johnny'
 ```
+
+# SQLObject
+SQLObject make thing's even more easier. You don't have to hassle with writing code to get data from the database, or retrieve. With one simple line of code will give you, 
+
+1. Your responce
+2. Your data (Rows), and other utils for information upon requests.
+
+##### Coming soon....
+
