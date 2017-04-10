@@ -10,6 +10,12 @@ Tired of risky SQL Injects? Tired of typing out SQL syntax? Bothered with long b
 
 With the power and usage of MySQLi, SlickInject uses MySQLi to send, and recieve data from your databases. Other's will soon be supported.
 
+```php
+namespace tutorial;
+include 'SlickInject.php';
+use SlickInject\SlickInject as SlickInject;
+```
+
 ###### Functions
 - SELECT
 ```php
