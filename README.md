@@ -22,14 +22,11 @@ use SlickInject\SlickInject as SlickInject;
 ```php
 // let's select all the data from the table, with a specific criteria.
 $email = "example@gmail.com"
-SlickInject::SELECT(null,"users",array("email"=>$username)); 
+SlickInject::SELECT("users",null,array("email"=>$username)); 
 // output: SELECT * FROM `users` WHERE email='example#@gmail.com'
 
 // Get specific columns, instead of getting all (*)
-SlickInject::SELECT("id,username,email","users",array("email"=>$username));
-
-// null only makes this, if null, or undefined.
-SlickInject::SELECT("*","users",array("email"=>$username));
+SlickInject::SELECT("users",["id","username","email"],array("email"=>$username));
 ```
 
 - INSERT
