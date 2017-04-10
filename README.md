@@ -16,7 +16,7 @@ namespace tutorial;
 include 'SlickInject.php';
 use SlickInject\SlickInject as SlickInject;
 
-// To be safe with parsing data into your database, we recommend using SQLObject, or your mysql object to string encode unsafe strings. You can simply connect using
+// To be safe with parsing data into your database, we recommend using SQLObject, or your mysqli object to string encape unsafe strings. You can simply connect using
 
 SlickInject::connect("dbhost","dbuser","dbpass","dbname");
 
