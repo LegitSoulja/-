@@ -52,6 +52,7 @@ class SlickInject
     {
         if (!self::isConnected())
             return;
-        return self::$SQLObject->close();
+		self::$SQLObject->close();
+		return self::$SQLObject = null;
     }
 }
