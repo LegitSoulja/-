@@ -1,7 +1,7 @@
 <?
 namespace SlickInject;
 
-// In-Case composer isn't being used. Recommended to use my _load_all function in test.php, if not composer being used.
+// In-Case composer isn't being used. Recommended to use my _load_all function in test.php, if no composer is being used.
 if(!class_exists("SlickInject\\Parser\\WHERE")) include 'Parser.php';
 if(!class_exists("SlickInject\\SQLObject\\SQLObject")) include 'SQLObject.php';
 
