@@ -65,7 +65,6 @@ $si->connect("dbhost","dbuser","dbpass","dbname");
 $si->SELECT("table",["*"]); // returns an object instance of SQLResponce
 $si->SELECT("table",["*"])->returnRows(); // return an array of table rows
 
-// When you now run any functions below, you wont get the SQL, but the mysqli responce of the query itself. Read SQLObject below.
 
 // CHECK TEST.PHP FOR MORE INFORMATION
 
