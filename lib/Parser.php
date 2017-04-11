@@ -5,17 +5,17 @@ class WHERE
 {
     private static $object;
     private static $index = 0;
-	private static $sql;
+    private static $sql;
     function __construct($a, $sql = null)
     {
         self::$object = $a;
-		self::$sql = $sql;
+        self::$sql    = $sql;
     }
     public function __toString()
     {
         $z = "";
         foreach (self::$object as $a => $b) {
-            $z .= $this->next($a, ((!empty(self::$sql))?self::$sql->escapeString($b):mysql_escape_string($b)), count(self::$object));
+            $z .= $this->next($a, ((!empty(self::$sql)) ? self::$sql->escapeString($b) : mysql_escape_string($b)), count(self::$object));
             self::$index++;
         }
         return $z;
@@ -40,12 +40,12 @@ class INSERT
     private static $index = 0;
     private static $object;
     private static $table;
-	private static $sql;
+    private static $sql;
     public function __construct($table, $object, $sql = null)
     {
         self::$object = $object;
         self::$table  = $table;
-		self::$sql = $sql;
+        self::$sql    = $sql;
     }
     public function __toString()
     {
@@ -57,7 +57,7 @@ class INSERT
             if (in_array($a, $dupes))
                 continue;
             array_push($dupes, $a);
-            $r = $this->next($a, ((!empty(self::$sql))?self::$sql->escapeString($b):mysql_escape_string($b)), $c);
+            $r = $this->next($a, ((!empty(self::$sql)) ? self::$sql->escapeString($b) : mysql_escape_string($b)), $c);
             $keys .= $r["a"];
             $values .= $r["b"];
             self::$index++;
@@ -90,20 +90,20 @@ class UPDATE
     private static $object;
     private static $where;
     private static $table;
-	private static $sql;
+    private static $sql;
     public function __construct($table, $object, $where, $sql = null)
     {
         self::$object = $object;
         self::$table  = $table;
-        self::$where  = new WHERE($where,$sql);
-		self::$sql = $sql;
+        self::$where  = new WHERE($where, $sql);
+        self::$sql    = $sql;
     }
     public function __toString()
     {
         $select = "UPDATE `" . self::$table . "` SET ";
         $c      = count(self::$object);
         foreach (self::$object as $a => $b) {
-            $select .= $this->next($a, ((!empty(self::$sql))?self::$sql->escapeString($b):mysql_escape_string($b)), $c);
+            $select .= $this->next($a, ((!empty(self::$sql)) ? self::$sql->escapeString($b) : mysql_escape_string($b)), $c);
             self::$index++;
         }
         $select .= " " . self::$where;
