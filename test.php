@@ -1,16 +1,15 @@
-<?
+<?php
 namespace test;
 function _load_all($a)
 {
-    global $ignore;
     foreach (glob($a) as $b) {
         if (is_dir($b)) {
-            _load_all($b . "/*");
+            _load_all($b . "/*"); // recursive include.
             continue;
         } else {
-            if (basename($b, ".php") == basename(__FILE__, ".php") || in_array(basename($b, ".php"), $ignore))
+            if (basename($b, ".php") == basename(__FILE__, ".php"))
                 continue;
-            if (pathinfo($b)['extension'] == "php")
+            if (pathinfo($b)['extension'] == "php") 
                 include $b;
         }
     }
