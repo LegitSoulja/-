@@ -2,11 +2,11 @@
 
 # SlickInject
 
-Tired of risky SQL Injects? Tired of typing out SQL syntax? Bothered with long boring code?
+Wwant to avoid risky SQL Injections? Tired of typing out SQL syntax? Bothered with long boring code?
 
 **SlickInject** is the solution to your problems, in which will hopefully save you some time, with coding. That's if you build websites from stratch without using frameworks.
 
-#### How to use?
+## How to use?
 
 ###### Functions
 - SELECT
