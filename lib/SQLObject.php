@@ -33,10 +33,11 @@ class SQLResponce
     function setup($request)
     {
         if ($request->num_rows < 1)
-            return;
+            return false;
         $return = array();
         $index  = 0;
         while ($row = mysqli_fetch_array($request)) {
+            print_r($row);
             $return[$index] = $row;
             $index++;
         }
@@ -55,11 +56,18 @@ class SQLObject
     private static $connected = false;
     public function connect($dbhost, $dbuser, $dbpass, $dbname)
     {
+        $a = $this->pcon($dbhost, $dbuser, $dbpass, $dbname);
+        if (gettype($a) == "string")
+            die($a); // error?
+        if ($this->getConnectionError() != 0)
+            return false;
+        return true;
+    }
+    private function pcon($dbhost, $dbuser, $dbpass, $dbname)
+    {
         self::$sql = @mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
         if (!self::$sql)
-            throw new \Exception("Could not connect to database -> " . $this->getConnectionError());
-        if ($this->getConnectionError() == 0)
-            return true;
+            return "Could not connect to database -> " . $this->getConnectionError();
         return true;
     }
     public function getConnectionError()
@@ -78,22 +86,6 @@ class SQLObject
     {
         mysqli_close(self::$sql);
     }
-    public function update($arr, $where, $table) // $where as `ticket`=1
-    {
-        if (gettype($arr) != "array" || !$arr)
-            throw new Exception("Array must be given with its key, and value");
-        if (empty($where))
-            throw new Error("Invalid use of update, WHERE is needed to update a specific table.");
-        $data  = "(";
-        $count = 1;
-        foreach ($arr as $key => $v) {
-            if (strlen($data) > 1) {
-                $data .= ",";
-            }
-            $data .= "`{$key}`='{$v}'";
-        }
-        return "UPDATE {$table} SET {$keys} VALUES {$value}";
-    }
     public function escapeString($string)
     {
         return self::$sql->real_escape_string($string);
@@ -103,18 +95,16 @@ class SQLObject
         if ($r = mysqli_query(self::$sql, $q)) {
             $responce = new SQLResponce($r);
             if (!$returnRows)
-                return $responce; // request good, ignore obtaining rows
+                return $responce;
             if ($responce->setup($r)) {
                 return $responce;
-                // $responce->returnRows();
-                // $responce->num_rows();
-                // $responce->getRequest();
             } else {
                 return $responce;
             }
+            throw new \Exception("Err");
             return false;
         }
-        throw new \Exception("Err");
+        throw new \Exception($this->returnLastError());
         return false;
     }
 }
