@@ -13,7 +13,7 @@ Tired of risky SQL Injects? Tired of typing out SQL syntax? Bothered with long b
 ```php
 // let's select all the data from the table, with a specific criteria.
 $email = "example@gmail.com"
-SlickInject::SELECT("users",[],array("email"=>$username)); // [] = null, and is required to be an array.
+SlickInject::SELECT("users",[],array("email"=>$email)); // [] = null, and is required to be an array.
 // output: SELECT * FROM `users` WHERE email='example@gmail.com'
 
 // Get specific columns, instead of getting all (*)
