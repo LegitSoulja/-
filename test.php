@@ -16,7 +16,7 @@ function _load_all($a)
 }
 _load_all("/lib/*");
 
-use SlickInject as SlickInject;
+use SlickInject\SlickInject as SlickInject;
 
 echo SlickInject::SELECT("table", ["*"], array(
     "id" => 1 // WHERE id=1
