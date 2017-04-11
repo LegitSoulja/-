@@ -64,7 +64,13 @@ $si->connect("dbhost","dbuser","dbpass","dbname");
 // Sample with SQLObject
 $a = $si->SELECT("table",["*"]); // returns an object instance of SQLResponce (SlickInject\SQLObject)
 $b = $si->SELECT("table",["*"])->returnRows(); // return an array of table rows
+// Extra SQLResponce 
 
+// Number of rows
+$a->num_rows();
+
+// Get request
+$a->getRequest(); // Same responce you'll get from mysqli_query
 
 // CHECK TEST.PHP FOR MORE INFORMATION
 
