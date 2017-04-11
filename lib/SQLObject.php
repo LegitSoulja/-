@@ -58,7 +58,7 @@ class SQLObject
     {
         $a = $this->pcon($dbhost, $dbuser, $dbpass, $dbname);
         if (gettype($a) == "string")
-            die($a); // error?
+            die($a);
         if ($this->getConnectionError() != 0)
             return false;
         return true;
