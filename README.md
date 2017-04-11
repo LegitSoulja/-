@@ -47,7 +47,7 @@ SlickInject::DELETE("users", array("username"=>$username));
 # SQLObject
 SQLObject make thing's even more easier. You don't have to hassle with writing code to get data from the database, or retrieve. With one simple line of code will give you, 
 
-1. An SQLResponce object
+1. A SQLResponce object
 
 With the power and usage of MySQLi, SlickInject uses MySQLi to send, and recieve data from your databases. Other's will soon be supported.
 
