@@ -2,7 +2,7 @@
 namespace SlickInject;
 
 use SlickInject\Parser as Parser;
-use SlickInject\SQLObject as SQLObject;
+use SlickInject\SQLObject\SQLObject as SQLObject;
 
 class SlickInject
 {
