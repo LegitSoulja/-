@@ -37,7 +37,6 @@ class SQLResponce
         $return = array();
         $index  = 0;
         while ($row = mysqli_fetch_array($request)) {
-            print_r($row);
             $return[$index] = $row;
             $index++;
         }
