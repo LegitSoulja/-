@@ -54,7 +54,8 @@ With the power and usage of MySQLi, SlickInject uses MySQLi to send, and recieve
 ```php
 namespace tutorial;
 
-include 'SlickInject.php';
+include 'lib/SlickInject.php';
+
 use SlickInject\SlickInject as SlickInject;
 
 // To be safe with parsing data into your database, we recommend using SQLObject, or your mysqli object to string encape unsafe strings. You can simply connect using
