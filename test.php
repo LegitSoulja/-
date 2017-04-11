@@ -31,8 +31,7 @@ $si->SELECT("table", ["*", array(
                       
 // OR
 $SQLResponce = $si->SELECT("table", ["*", array(
-    "id" => 1 // WHERE id=1
+    "id" => 1 // WHERE id=1, instanceof SQLResponce
 )); // returns object      
 $number_of_rows = $SQLResponce->num_rows();
 $rows_as_array = $SQLResponce->returnRows();
-$query_responce = $SQLResponce->getRequest();
