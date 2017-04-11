@@ -62,8 +62,8 @@ $si = new SlickInject();
 $si->connect("dbhost","dbuser","dbpass","dbname");
 
 // Sample with SQLObject
-$si->SELECT("table",["*"]); // returns an object instance of SQLResponce
-$si->SELECT("table",["*"])->returnRows(); // return an array of table rows
+$a = $si->SELECT("table",["*"]); // returns an object instance of SQLResponce (SlickInject\SQLObject)
+$b = $si->SELECT("table",["*"])->returnRows(); // return an array of table rows
 
 
 // CHECK TEST.PHP FOR MORE INFORMATION
