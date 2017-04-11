@@ -17,7 +17,8 @@ SlickInject::SELECT("users",[],array("email"=>$email)); // [] = null, and is req
 // output: SELECT * FROM `users` WHERE email='example@gmail.com'
 
 // Get specific columns, instead of getting all (*)
-SlickInject::SELECT("users",["id","username","email"],array("email"=>$username));
+SlickInject::SELECT("users",["id","username","email"],array("email"=>$email));
+// output: SELECT id,username,email FROM `users` WHERE email='example@gmail.com'
 ```
 
 - INSERT
