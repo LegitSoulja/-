@@ -27,4 +27,12 @@ $si = new SlickInject();
 $si->connect("localhost", "username", "password", "database");
 $si->SELECT("table", ["*", array(
     "id" => 1 // WHERE id=1
-)); // returns object
+))->returnRows(); // returns array
+                      
+// OR
+$SQLResponce = $si->SELECT("table", ["*", array(
+    "id" => 1 // WHERE id=1
+)); // returns object      
+$number_of_rows = $SQLResponce->num_rows();
+$rows_as_array = $SQLResponce->returnRows();
+$query_responce = $SQLResponce->getRequest();
