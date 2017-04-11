@@ -8,27 +8,12 @@ Tired of risky SQL Injects? Tired of typing out SQL syntax? Bothered with long b
 
 #### How to use?
 
-With the power and usage of MySQLi, SlickInject uses MySQLi to send, and recieve data from your databases. Other's will soon be supported.
-
-```php
-namespace tutorial;
-
-include 'SlickInject.php';
-use SlickInject\SlickInject as SlickInject;
-
-// To be safe with parsing data into your database, we recommend using SQLObject, or your mysqli object to string encape unsafe strings. You can simply connect using
-
-SlickInject::connect("dbhost","dbuser","dbpass","dbname");
-
-// When you now run any functions below, you wont get the SQL, but the mysqli responce of the query itself. Read SQLObject below.
-```
-
 ###### Functions
 - SELECT
 ```php
 // let's select all the data from the table, with a specific criteria.
 $email = "example@gmail.com"
-SlickInject::SELECT("users",null,array("email"=>$username)); 
+SlickInject::SELECT("users",[],array("email"=>$username)); // [] = null, and is required to be an array.
 // output: SELECT * FROM `users` WHERE email='example#@gmail.com'
 
 // Get specific columns, instead of getting all (*)
@@ -63,6 +48,21 @@ SQLObject make thing's even more easier. You don't have to hassle with writing c
 
 1. Your responce
 2. Your data (Rows), and other utils for information upon requests.
+With the power and usage of MySQLi, SlickInject uses MySQLi to send, and recieve data from your databases. Other's will soon be supported.
 
-##### Coming soon....
+```php
+namespace tutorial;
+
+include 'SlickInject.php';
+use SlickInject\SlickInject as SlickInject;
+
+// To be safe with parsing data into your database, we recommend using SQLObject, or your mysqli object to string encape unsafe strings. You can simply connect using
+$si = new SlickInject();
+$si->connect("dbhost","dbuser","dbpass","dbname");
+
+// Sample with SQLObject
+$si->SELECT("table",["*"]); // returns an object
+
+// When you now run any functions below, you wont get the SQL, but the mysqli responce of the query itself. Read SQLObject below.
+```
 
