@@ -143,7 +143,7 @@ class DELETE
 {
     private static $object;
     private static $table;
-    public function __construct($table, $object)
+    public function __construct($table, $object = null)
     {
         self::$object = $object;
         self::$table  = $table;
