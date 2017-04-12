@@ -29,7 +29,7 @@ class SlickInject
         else
             return self::$SQLObject->query((string) new Parser\INSERT($table, $object, self::$SQLObject), false);
     }
-    static function DELETE($table, $object)
+    static function DELETE($table, $object = null)
     {
         if (!self::isConnected())
             return (string) new Parser\DELETE($table, $object);
