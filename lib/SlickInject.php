@@ -2,8 +2,10 @@
 namespace SlickInject;
 
 // In-Case composer isn't being used. Recommended to use my _load_all function in test.php, if no composer is being used.
-if(!class_exists("SlickInject\\Parser\\WHERE")) include 'Parser.php';
-if(!class_exists("SlickInject\\SQLObject\\SQLObject")) include 'SQLObject.php';
+if (!class_exists("SlickInject\\Parser\\WHERE"))
+    include 'Parser.php';
+if (!class_exists("SlickInject\\SQLObject\\SQLObject"))
+    include 'SQLObject.php';
 
 use SlickInject\Parser as Parser;
 use SlickInject\SQLObject\SQLObject as SQLObject;
@@ -48,11 +50,18 @@ class SlickInject
         else
             return self::$SQLObject->query((string) new Parser\UPDATE($table, $object, $where, self::$SQLObject), false);
     }
+    static function TRUNCATE($table)
+    {
+        if (!self::isConnected())
+            return "TRUNCATE TABLE `$table`";
+        else
+            return self::$SQLObject->query("TRUNCATE TABLE `$table`", false);
+    }
     function close()
     {
         if (!self::isConnected())
             return;
-		self::$SQLObject->close();
-		return self::$SQLObject = null;
+        self::$SQLObject->close();
+        return self::$SQLObject = null;
     }
 }
