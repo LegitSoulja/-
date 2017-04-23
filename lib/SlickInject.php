@@ -20,7 +20,7 @@ class SlickInject
     }
     function isConnected()
     {
-        return (gettype(self::$SQLObject) == "NULL") ? false : true;
+        return (!(self::$SQLObject instanceof "SlickInject\\SQLObject\\SQLObject")) ? false : true;
     }
     static function INSERT($table, $object)
     {
