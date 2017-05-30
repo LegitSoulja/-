@@ -96,7 +96,7 @@ class SQLObject
             if (!$returnRows)
                 return $responce;
             if ($responce->setup($r)) {
-                return $responce;
+                return $responce->returnRows();
             } else {
                 return $responce;
             }
