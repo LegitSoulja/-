@@ -1,4 +1,5 @@
-###### HAS NOT YET BEEN RELEASED!.
+###### Deprecated.
+> SlickInject was a development project for a several projects, and has became outdated/out of sync with this github repo source, and our server source. Merging will be soon. Afterwards, this project is in hands of whoever wish to continue.
 
 # SlickInject
 
