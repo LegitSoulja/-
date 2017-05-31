@@ -1,5 +1,9 @@
 <?
 namespace SlickInject;
+/*
+  IF SQLObject is being used stand-alone, you may used SQLObject namespace.
+*/
+// namespace SQLObject;
 
 class SQLResponce{
   private static $rows = array();
