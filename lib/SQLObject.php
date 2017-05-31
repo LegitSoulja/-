@@ -1,7 +1,7 @@
 <?
 namespace SlickInject;
 /*
-  IF SQLObject is being used stand-alone, you may used SQLObject namespace.
+  IF SQLObject is being used stand-alone, you may use SQLObject namespace.
 */
 // namespace SQLObject;
 
