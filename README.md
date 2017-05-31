@@ -48,3 +48,12 @@ $sql = new \SlickInject\SQLObject("localhost", "username", "password", "database
 //
 $sql->close(); 
 ```
+
+### SQLResponce
+
+#### Functions
+- hasRows() :: Boolean : If query returned any rows
+- getResponce() :: Returns mysqli_query responce
+- num_rows() :: Int : Return number of rows
+- getData() :: Array : Return query table row(s)
+
