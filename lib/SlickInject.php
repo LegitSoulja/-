@@ -1,82 +1,67 @@
 <?
 namespace SlickInject;
 
-class SQLResponce{
-  private static $rows = array();
-  private static $row = array();
-  private static $responce;
-    
-  function __construct($resp){
-    self::$responce = $resp;
-    if($resp->num_rows < 1) return true;
-    $rows = array();
-    while($row = \mysqli_fetch_assoc($resp)) array_push($rows,$row);
-    if(count($rows) == 1) return self::$row = $rows;
-    return self::$rows = $rows;
-  }
-  function __destruct() { } // will be used in the future
-    
-  public function getResponce() 
-  { return self::$responce; }
-    
-  public function hasRows()
-  { return ((count(self::$rows) > 0) || (count(self::$row) > 0)) ? true : false; }
-    
-  public function num_rows()
-  { return self::$responce->num_rows; }
-    
-  public function getData()
-  { return (count(self::$rows) > 0) ? self::$rows : self::$row; }
-}
+// In-Case composer isn't being used. Recommended to use my _load_all function in test.php, if no composer is being used.
+if (!class_exists("SlickInject\\Parser\\WHERE"))
+    include 'Parser.php';
+if (!class_exists("SlickInject\\SQLObject\\SQLObject"))
+    include 'SQLObject.php';
 
-class SQLObject{
-  protected static $sql;
-    
-  function __construct()
-  { 
-      if(count(func_get_args()) === 4) return $this->connect(func_get_args()[0],func_get_args()[1],func_get_args()[2],func_get_args()[3]); 
-  }
-  
-  public function close() // close database connected
-  { return @\mysqli_close(self::$sql); }
-    
-  public function connect($dbhost,$dbuser,$dbpass,$dbname){
-    if(self::$sql) $this->close();
-    try{
-      self::$sql = @\mysqli_connect($dbhost,$dbuser,$dbpass,$dbname);
-      // error handle
-      if($this->getConnectionError() != 0 || !self::$sql) throw new \Exception($this->getConnectionError());
-    }catch(\Exception $ex){
-      die($ex->getMessage());
+use SlickInject\Parser as Parser;
+use SlickInject\SQLObject\SQLObject as SQLObject;
+
+class SlickInject
+{
+    private static $SQLObject = null;
+    function connect($dbhost, $dbuser, $dbpass, $dbname)
+    {
+        self::$SQLObject = new SQLObject();
+        return self::$SQLObject->connect($dbhost, $dbuser, $dbpass, $dbname);
     }
-  }
-    
-  function __destruct() {} // will be used in the future
-    
-  public function getConnectionError() // get connect error
-  { return @\mysqli_connect_error(); }
-   
-  public function getLastError() // get last sql error
-  { return @\mysqli_error(self::$sql); }
-    
-  public function escapeString($string) // escapes string using mysqli
-  { return self::$sql->real_escape_string($string); }
- 
-  public function ping() // checks if sql is connected
-  { return (@self::$sql->ping()) ? true : false; }
-  
-  public function query($query,$rr = false){ // rr = returnRows
-    try{
-      if($r = @\mysqli_query(self::$sql, $query)){
-        if(($resp = new SQLResponce($r))){ // this will always return true
-          if($rr) return ($resp->hasRows())?$resp->getData():array();
-          return $resp;
-        }
-      }else{
-        throw new \Exception($this->getLastError());
-      }
-    }catch(\Exception $ex){
-      die("Error ".$ex->getMessage());
+    function isConnected()
+    {
+        return (!(self::$SQLObject instanceof "SlickInject\\SQLObject\\SQLObject")) ? false : true;
     }
-  }
+    static function INSERT($table, $object)
+    {
+        if (!self::isConnected())
+            return (string) new Parser\INSERT($table, $object);
+        else
+            return self::$SQLObject->query((string) new Parser\INSERT($table, $object, self::$SQLObject), false);
+    }
+    static function DELETE($table, $object = null)
+    {
+        if (!self::isConnected())
+            return (string) new Parser\DELETE($table, $object);
+        else
+            return self::$SQLObject->query((string) new Parser\DELETE($table, $object), false);
+    }
+    static function SELECT($table, $c = null, $where = null)
+    {
+        if (!self::isConnected())
+            return (string) new Parser\SELECT($table, $c, $where);
+        else
+            return self::$SQLObject->query((string) new Parser\SELECT($table, $c, $where), true);
+    }
+    static function UPDATE($table, $object, $where)
+    {
+        if (!self::isConnected())
+            return (string) new Parser\UPDATE($table, $object, $where);
+        else
+            return self::$SQLObject->query((string) new Parser\UPDATE($table, $object, $where, self::$SQLObject), false);
+    }
+    static function TRUNCATE($table)
+    {
+        if (!self::isConnected())
+            return "TRUNCATE TABLE `$table`";
+        else
+            return self::$SQLObject->query("TRUNCATE TABLE `$table`", false);
+    }
+    function close()
+    {
+        if (!self::isConnected())
+            return;
+        self::$SQLObject->close();
+        return self::$SQLObject = null;
+    }
 }
