@@ -1,109 +1,77 @@
-<?php
-namespace SlickInject\SQLObject;
-class SQLResponce
-{
-    private static $request;
-    private static $rows = array();
-    private static $row = array();
-    private static $rowsIstablished = false;
-    function __construct($request)
-    {
-        self::$request = $request;
-    }
-    function returnRows()
-    {
-        if ($this->num_rows() == 0 || !self::$rowsIstablished)
-            return array();
-        if ($this->num_rows() > 1)
-            return self::$rows;
-        return self::$row;
-    }
-    function rowsIstablished()
-    {
-        return self::$rowsIstablished;
-    }
-    function getRequest()
-    {
-        return self::$request;
-    }
-    function num_rows()
-    {
-        return self::$request->num_rows;
-    }
-    function setup($request)
-    {
-        if ($request->num_rows < 1)
-            return false;
-        $return = array();
-        $index  = 0;
-        while ($row = mysqli_fetch_assoc($request)) {
-            $return[$index] = $row;
-            $index++;
-        }
-        self::$rowsIstablished = true;
-        if (count($return) > 1) {
-            self::$rows = $return;
-        } else {
-            self::$row = $return;
-        }
-        return true;
-    }
+<?
+namespace SlickInject;
+
+class SQLResponce{
+  private static $rows = array();
+  private static $row = array();
+  private static $responce;
+  function __construct($resp){
+    self::$responce = $resp;
+    if($resp->num_rows < 1) return true;
+    $rows = array();
+    while($row = mysqli_fetch_assoc($resp)) array_push($rows,$row);
+    if(count($rows) == 1) return self::$row = $rows;
+    return self::$rows = $rows;
+  }
+  function __destruct() { } // will be used in the future
+    
+  public function getResponce() 
+  { return self::$responce; }
+    
+  public function hasRows()
+  { return ((count(self::$rows) > 0) || (count(self::$row) > 0)) ? true : false; }
+    
+  public function num_rows()
+  { return self::$responce->num_rows; }
+    
+  public function getData()
+  { return (count(self::$rows) > 0) ? self::$rows : self::$row; }
 }
-class SQLObject
-{
-    private static $sql;
-    private static $connected = false;
-    public function connect($dbhost, $dbuser, $dbpass, $dbname)
-    {
-        $a = $this->pcon($dbhost, $dbuser, $dbpass, $dbname);
-        if (gettype($a) == "string")
-            die($a);
-        if ($this->getConnectionError() != 0)
-            return false;
-        return true;
+
+class SQLObject{
+  protected static $sql;
+  function __construct()
+  { 
+      if(count(func_get_args()) === 4) return $this->connect(func_get_args()[0],func_get_args()[1],func_get_args()[2],func_get_args()[3]); 
+  }
+  
+  public function close()
+  { return mysqli_close(self::$sql); }
+    
+  public function connect($dbhost,$dbuser,$dbpass,$dbname){
+    if(self::$sql) $this->close();
+    try{
+      self::$sql = @\mysqli_connect($dbhost,$dbuser,$dbpass,$dbname);
+      // error handle
+      if($this->getConnectionError() != 0 || !self::$sql) throw new \Exception($this->getConnectionError());
+    }catch(\Exception $ex){
+      die($ex->getMessage());
     }
-    private function pcon($dbhost, $dbuser, $dbpass, $dbname)
-    {
-        self::$sql = @mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
-        if (!self::$sql)
-            return "Could not connect to database -> " . $this->getConnectionError();
-        return true;
-    }
-    public function getConnectionError()
-    {
-        return mysqli_connect_error();
-    }
-    public function returnLastError()
-    {
-        return mysqli_error(self::$sql);
-    }
-    public function isConnected()
-    {
-        return self::$connected;
-    }
-    public function close()
-    {
-        mysqli_close(self::$sql);
-    }
-    public function escapeString($string)
-    {
-        return self::$sql->real_escape_string($string);
-    }
-    public function query($q, $returnRows = true)
-    {
-        if ($r = mysqli_query(self::$sql, $q)) {
-            $responce = new SQLResponce($r);
-            if (!$returnRows)
-                return $responce;
-            if ($responce->setup($r)) {
-                return $responce->returnRows();
-            } else {
-                return $responce;
-            }
-            throw new \Exception("Err");
-            return false;
+  }
+    
+  function __destruct() {} // will be used in the future
+    
+  public function getConnectionError()
+  { return mysqli_connect_error(); }
+    
+  public function getLastError()
+  { return mysqli_error(self::$sql); }
+    
+  public function escapeString($string)
+  { return self::$sql->real_escape_string($string); }
+    
+  public function query($query,$rr = false){ // rr = returnRows
+    try{
+      if($r = mysqli_query(self::$sql, $query)){
+        if(($resp = new SQLResponce($r))){ // this will always return true
+          if($resp->hasRows() && $rr) return $resp->getData();
+          return $resp;
         }
-        throw new \Exception($this->returnLastError());
-        return false;
+      }else{
+        throw new \Exception($this->getLastError());
+      }
+    }catch(\Exception $ex){
+      die("Error ".$ex->getMessage());
     }
+  }
 }
