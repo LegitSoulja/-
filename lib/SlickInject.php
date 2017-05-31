@@ -10,7 +10,7 @@ class SQLResponce{
     self::$responce = $resp;
     if($resp->num_rows < 1) return true;
     $rows = array();
-    while($row = mysqli_fetch_assoc($resp)) array_push($rows,$row);
+    while($row = \mysqli_fetch_assoc($resp)) array_push($rows,$row);
     if(count($rows) == 1) return self::$row = $rows;
     return self::$rows = $rows;
   }
@@ -38,7 +38,7 @@ class SQLObject{
   }
   
   public function close() // close database connected
-  { return @mysqli_close(self::$sql); }
+  { return @\mysqli_close(self::$sql); }
     
   public function connect($dbhost,$dbuser,$dbpass,$dbname){
     if(self::$sql) $this->close();
@@ -54,10 +54,10 @@ class SQLObject{
   function __destruct() {} // will be used in the future
     
   public function getConnectionError() // get connect error
-  { return @mysqli_connect_error(); }
+  { return @\mysqli_connect_error(); }
    
   public function getLastError() // get last sql error
-  { return @mysqli_error(self::$sql); }
+  { return @\mysqli_error(self::$sql); }
     
   public function escapeString($string) // escapes string using mysqli
   { return self::$sql->real_escape_string($string); }
@@ -67,7 +67,7 @@ class SQLObject{
   
   public function query($query,$rr = false){ // rr = returnRows
     try{
-      if($r = @mysqli_query(self::$sql, $query)){
+      if($r = @\mysqli_query(self::$sql, $query)){
         if(($resp = new SQLResponce($r))){ // this will always return true
           if($rr) return ($resp->hasRows())?$resp->getData():array();
           return $resp;
