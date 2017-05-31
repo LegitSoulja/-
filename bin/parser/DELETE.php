@@ -1,16 +1,11 @@
+<?
 class DELETE
 {
-    private static $object;
-    private static $table;
+    private static $data = array();
+    
     public function __construct($table, $object = null)
-    {
-        self::$object = $object;
-        self::$table  = $table;
-    }
+    { self::$data = array($table,$object); }
+    
     public function __toString()
-    {
-        $where = "";
-				if(!empty(self::$object)) $where = new WHERE(self::$object);
-        return "DELETE FROM " . self::$table . " " . $where;
-    }
+    { return "DELETE FROM `" . self::$data[0] . "` " . (string) (new WHERE(self::$data[1])); }
 }
