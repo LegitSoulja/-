@@ -36,7 +36,7 @@ class SQLResponce
             return false;
         $return = array();
         $index  = 0;
-        while ($row = mysqli_fetch_array($request)) {
+        while ($row = mysqli_fetch_assoc($request)) {
             $return[$index] = $row;
             $index++;
         }
@@ -96,7 +96,7 @@ class SQLObject
             if (!$returnRows)
                 return $responce;
             if ($responce->setup($r)) {
-                return $responce;
+                return $responce->returnRows();
             } else {
                 return $responce;
             }
