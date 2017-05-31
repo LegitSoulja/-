@@ -1,4 +1,4 @@
-<?
+<? /* LegitSoulja */
 class WHERE{
 
 	private static $data = array();
