@@ -4,11 +4,11 @@ namespace SlickInject;
 // In-Case composer isn't being used. Recommended to use my _load_all function in test.php, if no composer is being used.
 if (!class_exists("SlickInject\\Parser\\WHERE"))
     include 'Parser.php';
-if (!class_exists("SlickInject\\SQLObject\\SQLObject"))
+if (!class_exists("SlickInject\\SQLObject"))
     include 'SQLObject.php';
 
 use SlickInject\Parser as Parser;
-use SlickInject\SQLObject\SQLObject as SQLObject;
+use SlickInject\SQLObject as SQLObject;
 
 class SlickInject
 {
@@ -20,7 +20,7 @@ class SlickInject
     }
     function isConnected()
     {
-        return (!(self::$SQLObject instanceof "SlickInject\\SQLObject\\SQLObject")) ? false : true;
+        return (!(self::$SQLObject instanceof "SlickInject\\SQLObject")) ? false : true;
     }
     static function INSERT($table, $object)
     {
