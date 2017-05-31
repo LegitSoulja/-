@@ -1,19 +1,12 @@
 <?
 class SELECT
 {
-    private static $table;
-    private static $columns;
-    private static $where;
-    private static $index;
+    private static $data = array();
     public function __construct($table, $columns = null, $where = null)
     {
         if (!is_array($columns)) throw new \Exception("Args index 1 is not an array.");
-        self::$table   = $table;
-        self::$columns = (empty($columns)) ? "*" : join(",", $columns);
-        self::$where   = (empty($where)) ? null : new WHERE($where);
+        array_push(self::$data, $table);
     }
     public function __toString()
-    {
-        return "SELECT " . (self::$columns) . " FROM `" . (self::$table) . "` " . (self::$where);
-    }
+    { return "SELECT " . ((empty($columns)) ? "*" : join(",", $columns)) . " FROM `" . (self::$data[0]) . "` " . (string) ((empty($where)) ? null : new WHERE($where)); }
 }
