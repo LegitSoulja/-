@@ -64,7 +64,7 @@ class SQLObject{
     try{
       if($r = mysqli_query(self::$sql, $query)){
         if(($resp = new SQLResponce($r))){ // this will always return true
-          if($resp->hasRows() && $rr) return $resp->getData();
+          if($rr) return ($resp->hasRows())?$resp->getData():array();
           return $resp;
         }
       }else{
