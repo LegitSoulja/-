@@ -13,11 +13,11 @@ class WHERE
         foreach (self::$data[0] as $n => $v) {
             $n = ((!empty(self::$data[1])) ? self::$data[1]->escapeString($n) : mysql_escape_string($n));
             $v = ((!empty(self::$data[1])) ? self::$data[1]->escapeString($v) : mysql_escape_string($v));
-            if (!empty($n) && !empty($v) && !(is_int($n))) {
+            if (!empty($n) && !empty($v) && !(is_numeric($n))) {
                 if ($type == 1) $z .= " AND";
                 $type = 1;
                 $z .= " `" . $n . "`=";
-                if (is_int($v)) {
+                if (is_numeric($v)) {
                     $z .= $v;
                     continue;
                 }
