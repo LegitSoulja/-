@@ -1,9 +1,5 @@
 <?
 namespace SlickInject;
-/*
-  IF SQLObject is being used stand-alone, you may use SQLObject namespace.
-*/
-// namespace SQLObject;
 
 class SQLResponce{
   private static $rows = array();
@@ -22,6 +18,9 @@ class SQLResponce{
     
   public function getResponce() 
   { return self::$responce; }
+  
+  public function error()
+  { return (self::$responce) ? true : false; }
     
   public function hasRows()
   { return ((count(self::$rows) > 0) || (count(self::$row) > 0)) ? true : false; }
@@ -72,6 +71,7 @@ class SQLObject{
   public function query($query,$rr = false){ // rr = returnRows
     try{
       if($r = @\mysqli_query(self::$sql, $query)){
+        print_r($r);
         if(($resp = new SQLResponce($r))){ // this will always return true
           if($rr) return ($resp->hasRows())?$resp->getData():array();
           return $resp;
