@@ -1,36 +1,36 @@
-##### SlickInject
+### SlickInject
 
     Description..
 
-#### Connecting
+#### Connect to database.
 ```php
 $si = new SlickInject("host", "username", "password", "database_name");
 ```
 
-#### SELECT * FROM `table`
+###### SELECT * FROM `table`
 ```php
 $si->SELECT([], "table");
 ```
 
-#### SELECT * FROM `table` WHERE `id` = 1
+###### SELECT * FROM `table` WHERE `id` = 1
 ```php
 $si->SELECT([], "table", array("id"=>1));
 ```
 
-#### SELECT * FROM `table` WHERE `id`=1 AND `group_id`=1
+###### SELECT * FROM `table` WHERE `id`=1 AND `group_id`=1
 ```php
 $si->SELECT([], "table", array("id"=>1, "group_id"=>1));
 // - or - 
 $si->SELECT([], "table", array("id"=>1, "AND", "group_id"=>1));
 ```
 
-#### SELECT id FROM `table` WHERE `group_id`=1 AND `id` > 1
+###### SELECT id FROM `table` WHERE `group_id`=1 AND `id` > 1
 ```php
 $si->SELECT(["id"], "table", array("groud_id"=>1, "`id`>1"));
 ```
 
-#### Obtain mysqli_query request
-#### Obtain number of rows
+######Obtain mysqli_query request
+###### Obtain number of rows
 ```php
 /* NOTE: A null array was placed, as WHERE. 
    4th argument must be false, in order to get the SQLResponce/Responce
