@@ -36,12 +36,12 @@ class SlickInject
         else
             return self::$SQLObject->query((string) new Parser\DELETE($table, $object), false);
     }
-    static function SELECT($table, $c = null, $where = null)
+    static function SELECT($table, $c = null, $where = null, $return = true)
     {
         if (!self::isConnected())
-            return (string) new Parser\SELECT($table, $c, $where);
+            return (string) new Parser\SELECT($table, $c);
         else
-            return self::$SQLObject->query((string) new Parser\SELECT($table, $c, $where), true);
+            return self::$SQLObject->query((string) new Parser\SELECT($table, $c, $where), $return);
     }
     static function UPDATE($table, $object, $where)
     {
