@@ -36,11 +36,11 @@ class SlickInject
           : (self::$SQLObject->query((string) new Parser\DELETE($table, $object), false));
     }
   
-    static function SELECT($c = [], $table, $where = null)
+    static function SELECT($c = [], $table, $where = null, $return = true)
     {
         return (!self::isConnected()) 
           ? ((string) new Parser\SELECT($c, $table, $where)) 
-          : (self::$SQLObject->query((string) new Parser\SELECT($c, $table, $where), true));
+          : (self::$SQLObject->query((string) new Parser\SELECT($c, $table, $where), $return));
     }
   
     static function UPDATE($table, $object, $where)
