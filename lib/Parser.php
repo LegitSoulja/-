@@ -94,7 +94,7 @@ class UPDATE
 	
     function __toString()
     {
-        $z      = "UPDATE TABLE %s SET";
+        $z      = "UPDATE %s SET";
         $where  = (new WHERE(self::$data[2]));
         $append = "";
         foreach (self::$data[1] as $n => $v) {
