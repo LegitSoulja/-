@@ -1,8 +1,8 @@
 ##### SlickInject
 
-Tired of MySQLi, SQL, Duplicate Code, SQL Injection Risks and wasting time? SlickInject eliminates the use of even having to worry, most part waste time, secondly, must more faster, fun and easier to code.
+###### Tired of MySQLi, SQL, Duplicate Code, SQL Injection Risks and wasting time? SlickInject eliminates the use of even having to worry, most part waste time, secondly, must more faster, fun and easier to code.
 
-SlickInject makes it very easy, to write code to manage your database, on top of that secure that no SQL Injections is possible. Meaning, you won't experience the unexperienced, in which you wouldn't even want to experience. 
+###### SlickInject makes it very easy, to write code to manage your database, on top of that secure that no SQL Injections is possible. Meaning, you won't experience the unexperienced, in which you wouldn't even want to experience. 
 
 ### SlickInject Documentation
 
