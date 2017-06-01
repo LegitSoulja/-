@@ -12,7 +12,7 @@ class WHERE
     {
         $z    = "WHERE";
         $type = 0;
-        if (count(self::$data) < 1) return "";
+        if (count(self::$data[0]) < 1) return "";
         foreach (self::$data[0] as $n => $v) {
             $n = ((!empty(self::$data[1])) ? self::$data[1]->escapeString($n) : mysql_escape_string($n));
             $v = ((!empty(self::$data[1])) ? self::$data[1]->escapeString($v) : mysql_escape_string($v));
@@ -94,7 +94,7 @@ class UPDATE
 	
     function __toString()
     {
-        $z      = "INSERT INTO %s SET";
+        $z      = "UPDATE TABLE %s SET";
         $where  = (new WHERE(self::$data[2]));
         $append = "";
         foreach (self::$data[1] as $n => $v) {
