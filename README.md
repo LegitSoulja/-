@@ -1,6 +1,6 @@
 ##### SlickInject
 
-###### Tired of MySQLi, SQL, Duplicate Code, SQL Injection Risks and wasting time? SlickInject eliminates the use of even having to worry, most part waste time, secondly, must more faster, fun and easier to code.
+###### Tired of MySQLi, SQL, Duplicate Code, SQL Injection Risks and wasting time? SlickInject eliminates the use of even having to worry, most part waste time, secondly, much more faster, fun and easier to code.
 
 ###### SlickInject makes it very easy, to write code to manage your database, on top of that secure that no SQL Injections is possible. Meaning, you won't experience the unexperienced, in which you wouldn't even want to experience. 
 
@@ -28,6 +28,8 @@ $si->close();
 ##### (SELECT) from a datbase
 
 Select is very special, and can do almost anything, the same way you would write an ordinary SQL string.
+
+> Quote: ####### SELECT :: from, table, where
 
 ### Params
 - 1. ##### Columns
@@ -69,9 +71,32 @@ $si->SELECT(["id","username","email"], "table", array("id"=>1)); // Output: Arra
 
 ##### (INSERT) into a datbase
 
+INSERT is similar to SELECT, just it doesn't return rows, only the responce.
+
+> Quote: ####### INERT ^INTO :: (table, data)
+
+### Params
+- 1. ##### Table Name
+- - > The name of the table you will inserting data into
+
+- 2. ##### Inserting Data
+
+- - > Array key(column)/value of the data to be inserted
+
+```php
+// insert johnny username, and password into table.
+$si->INSERT('table', array("username"=>"Johnny", "password"=>"pass123")); // SQLResponce
+```
+
+##### (UPDATE) table datbase
 
 
+> Quote: ####### UPDATE :: (table, ^SET data, where)
 
+
+##### (DELETE) table database content
+
+> Quote: ####### DELETE :: ^FROM (table, $where(optional))
 
 ### SQLObject
 
