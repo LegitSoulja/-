@@ -17,7 +17,7 @@ class SlickInject
   
     function isConnected()
     {
-        return (!(self::$SQLObject instanceof self::$data[0])) 
+        return (!(self::$SQLObject instanceof self::$data[0])  && !self::$SQLObject->ping()) 
           ? false 
           : true;
     }
