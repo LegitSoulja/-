@@ -71,7 +71,6 @@ class SQLObject{
   public function query($query,$rr = false){ // rr = returnRows
     try{
       if($r = @\mysqli_query(self::$sql, $query)){
-        print_r($r);
         if(($resp = new SQLResponce($r))){ // this will always return true
           if($rr) return ($resp->hasRows())?$resp->getData():array();
           return $resp;
