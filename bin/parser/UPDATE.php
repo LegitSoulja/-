@@ -1,33 +1,24 @@
 <?
 class UPDATE
 {
-    private static $index = 0;
-    private static $object;
-    private static $where;
-    private static $table;
-    private static $sql;
-    public function __construct($table, $object, $where, $sql = null)
+    private static $data = array();
+    function __construct($table, $object, $where, $sql = null)
+    { self::$data = array($table,$object,$where,$sql); }
+    function __toString()
     {
-        self::$object = $object;
-        self::$table  = $table;
-        self::$where  = new WHERE($where, $sql);
-        self::$sql    = $sql;
-    }
-    public function __toString()
-    {
-        $select = "UPDATE `" . self::$table . "` SET ";
-        $c      = count(self::$object);
-        foreach (self::$object as $a => $b) {
-            $select .= $this->next($a, ((!empty(self::$sql)) ? self::$sql->escapeString($b) : mysql_escape_string($b)), $c);
-            self::$index++;
+        $z      = "INSERT INTO %s SET";
+        $where  = (new WHERE(self::$data[2]));
+        $append = "";
+        foreach (self::$data[1] as $n => $v) {
+            $n = ((!empty(self::$data[4])) ? self::$data[4]->escapeString($n) : mysql_escape_string($n));
+            $v = ((!empty(self::$data[4])) ? self::$data[4]->escapeString($v) : mysql_escape_string($v));
+            if (!empty($n) && !empty($v) && !is_numeric($n)) {
+                $append .= "`" . $n . "`=";
+                if (is_numeric($v)) $append .= (int) $v . " ";
+                else $append .= "'" . $v . "' ";
+            }
         }
-        $select .= " " . self::$where;
-        return $select;
-    }
-    private static function next($a, $b, $c)
-    {
-        if ($c == 1) return $a . "='" . $b . "'";
-        if (self::$index == $c - 1) return $a . "='" . $b . "'";
-        return $a . "='" . $b . "',";
+        $z = str_replace("%s", "`" . self::$data[0] . "`", $z);
+        return $z .= " " . $append . $where;
     }
 }
