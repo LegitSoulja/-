@@ -2,60 +2,46 @@
 
     Description..
 
+#### Connecting
 ```php
-/* COMPLETE GUIDE */
-
-// connect to a database
 $si = new SlickInject("host", "username", "password", "database_name");
-
-/*
-    Understanding SELECT.
-    
-    (1st argument)
-    [] = Columns, in which is used in SQL, for example SELECT id, username, email FROM `table`.
-    [] = *
-    and ["id","username","email"] = id, username, password
-    
-    (2nd argument) 
-    Table Name
-    
-    (3rd argument) WHERE -> (Search)
-     Key(Column)/Value(Data). Used to select rows from a table with a criteria, of a specific column name, and value.
-     
-     Behind the engine, array("id"=>1) turns into (WHERE `id`=1).
-     
-*/
-
-// SELECT DATA
-$arr = $si->SELECT([], "table", array("id"=>1));
-
-$arr = $si->SELECT([], "table", array("id"=>1, "username"=>"Johnny"));
-
-/*
-    Wait, now there's key/values in that array. What does that do?
-    
-    Behind the engine, if 2 key/values are together in an array, "AND" is placed in-between those 2 if non is specified. Therefor, the result of the sql below is "SELECT * FROM `table` WHERE `id=1 AND `username`='Johnny'";
-*/
-
-// This also works, either way
-
-$arr = $si->SELECT([], "table", array("id"=>1, "AND", "username"=>"Johnny"));
-
-// Other
-
-$arr = $si->SELECT([], "table", array("`id` > 1"));
-
-/*
-    Yes, strings work as normal when used. "SELECT * FROM `table` WHERE id > 1"
-*/
-
-
-
-
-
-
-
 ```
+
+#### SELECT * FROM `table`
+```php
+$si->SELECT([], "table");
+```
+
+#### SELECT * FROM `table` WHERE `id` = 1
+```php
+$si->SELECT([], "table", array("id"=>1));
+```
+
+#### SELECT * FROM `table` WHERE `id`=1 AND `group_id`=1
+```php
+$si->SELECT([], "table", array("id"=>1, "group_id"=>1));
+// - or - 
+$si->SELECT([], "table", array("id"=>1, "AND", "group_id"=>1));
+```
+
+#### SELECT id FROM `table` WHERE `group_id`=1 AND `id` > 1
+```php
+$si->SELECT(["id"], "table", array("groud_id"=>1, "`id`>1"));
+```
+
+#### Obtain mysqli_query request
+#### Obtain number of rows
+```php
+/* NOTE: A null array was placed, as WHERE. 
+   4th argument must be false, in order to get the SQLResponce/Responce
+*/
+
+$si->SELECT([],"table",[], false)->num_rows();
+// - or -
+$si->SELECT([],"table",[], false)->getResponce()->num_rows; // get mysqli_query request
+```
+
+
 
 
 ### SQLObject
