@@ -1,6 +1,9 @@
 <?
 namespace SlickInject;
 
+if (!class_exists("SlickInject\\Parser\\WHERE")) include 'Parser.php';
+if (!class_exists("SlickInject\\SQLObject")) include 'SQLObject.php';
+
 use SlickInject\Parser as Parser;
 use SlickInject\SQLObject as SQLObject;
 
