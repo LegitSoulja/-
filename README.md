@@ -1,9 +1,11 @@
 ##### SlickInject | In Development
 
 ### SlickInject
-> Coming Soon
+> Coming Soon (Look at test.php for now | I am too lazy.)
 
 ### SQLObject
+
+SQLObject can be used stand-alone if you don't like the quick and ease of SlickInject. Maybe, it's missing something. SQLObject Documentation..
 
 ##### Connecting
 - Method 1
