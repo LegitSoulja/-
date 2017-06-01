@@ -19,30 +19,32 @@ _load_all("lib/*");
 
 use SlickInject\SlickInject as SlickInject;
 
-// usage before class initialization
-echo "<br/><br/>- <b>SQL (String)</b><br/>";
-print_r(SlickInject::SELECT("table",["*"]));
+// create a new SlickInject instance
+$_slickinject = new SlickInject();
 
-// connect to database, and get row data
+// connect to the database
+$_slickinject->connect("localhost", "username", "password", "database_name");
 
-$si = new SlickInject();
-$si->connect("localhost", "username", "password", "database");
+/* DO WORK */
 
-echo "<br/><br/>- <b>Table data (Array)</b><br/>";
-print_r($si->SELECT("table", ["*"], array(
-    "id" => 1 // WHERE id=1
-))->returnRows()); // returns array
-                      
-// OR
-$SQLResponce = $si->SELECT("table", ["*"], array(
-    "id" => 1 // WHERE id=1, instanceof SQLResponce
-)); // returns object
+// get rows from database as an array
+$data = $_slickinject->SELECT([], "table", array("id"=>1)); // @Array : Returns array
+// Hidden SQL: "SELECT * FROM `table` WHERE `id`=1"
 
-echo "<br/><br/>- <b>SQL Responce (Object)</b><br/>";
-print_r($SQLResponce);   
+// insert
+$_slickinject->INSERT('table', array("id"=>5,"username"=>"bob")); // @SQLResponce :: Returns responce, since no data is being given.
+// Hidden SQL: "INSERT INTO `table` (id, username) VALUES (5, 'bob')"
 
-echo "<br/><br/><b>Get Number of rows SQLResponce</b><br/>";
-print_r($SQLResponce->num_rows());
+// update
+$_slickinject->UPDATE('table', array("username"=>"bobo"), array("id"=>5)); // @SQLResponce
+// Hidden SQL: "UPDATE `table` SET `username`='bobo' WHERE `id`=5"
 
-echo "<br/><br/><b>Get rows (Array) from SQLResponce</b><br/>";
-print_r($rows_as_array = $SQLResponce->returnRows());
+/*
+    You do not need to create a new instance of SlickInject. Creating a new instance allows you more ease with not having to worry about
+    dealing with mysql, and handling queries, and errors yourself. 
+    
+    You can use SlickInject as static, but only the SQL string will be returned on EVERY function for SQL.
+*/
+
+// Example of outputting JUST the string of the SQL.
+SlickInject::SELECT([], "table", array("id"=>1)); 
