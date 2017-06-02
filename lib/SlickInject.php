@@ -9,19 +9,22 @@ use SlickInject\SQLObject as SQLObject;
 
 class SlickInject
 {
+    private static $debug = false;
     private static $SQLObject = null;
   
     function __construct(){
+      if(self::$debug) return;
       if(count(func_get_args()) === 4)
         $this->connect(func_get_args()[0],func_get_args()[1],func_get_args()[2],func_get_args()[3]);
     }
-  
+    
+    /* soon to be deprecated/private */
     function connect($dbhost, $dbuser, $dbpass, $dbname)
     { return self::$SQLObject = new SQLObject($dbhost, $dbuser, $dbpass, $dbname); }
   
     static function isConnected()
     {
-      if(self::$SQLObject instanceof SQLObject) return self::$SQLObject->ping();
+      if(self::$SQLObject instanceof SQLObject && !(self::$debug)) return self::$SQLObject->ping();
       return false;
     }
 
