@@ -19,11 +19,15 @@ _load_all("lib/*");
 
 use SlickInject\SlickInject as SlickInject;
 
-// create a new SlickInject instance
-$_slickinject = new SlickInject();
+// // connect to the database / create instance
+$_slickinject = new SlickInject("localhost", "username", "password", "database_name");
 
-// connect to the database
-$_slickinject->connect("localhost", "username", "password", "database_name");
+// - or -
+
+/*
+    $_slickinject = new SlickInject();
+    $_slickinject->connect("localhost", "username", "password", "database_name");
+*/
 
 /* DO WORK */
 
@@ -53,3 +57,6 @@ $_slickinject->close();
 // Example of outputting JUST the string of the SQL.
 SlickInject::SELECT([], "table", array("id"=>1)); 
 // Output: SELECT * FROM `table` WHERE `id`=1
+
+
+// Check examples for more
