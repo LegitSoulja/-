@@ -1,67 +1,71 @@
 <?
 namespace SlickInject;
 
-// In-Case composer isn't being used. Recommended to use my _load_all function in test.php, if no composer is being used.
-if (!class_exists("SlickInject\\Parser\\WHERE"))
-    include 'Parser.php';
-if (!class_exists("SlickInject\\SQLObject\\SQLObject"))
-    include 'SQLObject.php';
+if (!class_exists("SlickInject\\Parser\\WHERE")) include 'Parser.php';
+if (!class_exists("SlickInject\\SQLObject")) include 'SQLObject.php';
 
 use SlickInject\Parser as Parser;
-use SlickInject\SQLObject\SQLObject as SQLObject;
+use SlickInject\SQLObject as SQLObject;
 
 class SlickInject
 {
+    private static $debug = false;
     private static $SQLObject = null;
+  
+    function __construct(){
+      if(self::$debug) return;
+      if(count(func_get_args()) === 4)
+        $this->connect(func_get_args()[0],func_get_args()[1],func_get_args()[2],func_get_args()[3]);
+    }
+    
+    /* soon to be deprecated/private */
     function connect($dbhost, $dbuser, $dbpass, $dbname)
+    { return self::$SQLObject = new SQLObject($dbhost, $dbuser, $dbpass, $dbname); }
+  
+    static function isConnected()
     {
-        self::$SQLObject = new SQLObject();
-        return self::$SQLObject->connect($dbhost, $dbuser, $dbpass, $dbname);
+      if(self::$SQLObject instanceof SQLObject && !(self::$debug)) return self::$SQLObject->ping();
+      return false;
     }
-    function isConnected()
-    {
-        return (!(self::$SQLObject instanceof "SlickInject\\SQLObject\\SQLObject")) ? false : true;
-    }
+
     static function INSERT($table, $object)
     {
-        if (!self::isConnected())
-            return (string) new Parser\INSERT($table, $object);
-        else
-            return self::$SQLObject->query((string) new Parser\INSERT($table, $object, self::$SQLObject), false);
+      return (!self::isConnected())
+        ? (Parser\INSERT::__build($table, $object)) 
+        : (self::$SQLObject->query(Parser\INSERT::__build($table, $object, self::$SQLObject), false));
     }
-    static function DELETE($table, $object = null)
+  
+    static function DELETE($table, $object = [])
     {
-        if (!self::isConnected())
-            return (string) new Parser\DELETE($table, $object);
-        else
-            return self::$SQLObject->query((string) new Parser\DELETE($table, $object), false);
+        return (!self::isConnected()) 
+          ? (Parser\DELETE::__build($table, $object)) 
+          : (self::$SQLObject->query(Parser\DELETE::__build($table, $object, self::$SQLObject), false));
     }
-    static function SELECT($table, $c = null, $where = null, $return = true)
+  
+    static function SELECT($columns = [], $table, $where = [], $return = true)
     {
-        if (!self::isConnected())
-            return (string) new Parser\SELECT($table, $c);
-        else
-            return self::$SQLObject->query((string) new Parser\SELECT($table, $c, $where), $return);
+        return (!self::isConnected()) 
+          ? (Parser\SELECT::__build($c, $table, $where)) 
+          : (self::$SQLObject->query(Parser\SELECT::__build($columns, $table, $where, self::$SQLObject), $return));
     }
+  
     static function UPDATE($table, $object, $where)
     {
-        if (!self::isConnected())
-            return (string) new Parser\UPDATE($table, $object, $where);
-        else
-            return self::$SQLObject->query((string) new Parser\UPDATE($table, $object, $where, self::$SQLObject), false);
+        return (!self::isConnected()) 
+          ? (Parser\UPDATE::__build($table, $object, $where)) 
+          : (self::$SQLObject->query(Parser\UPDATE::__build($table, $object, $where, self::$SQLObject), false));
     }
+  
     static function TRUNCATE($table)
     {
-        if (!self::isConnected())
-            return "TRUNCATE TABLE `$table`";
-        else
-            return self::$SQLObject->query("TRUNCATE TABLE `$table`", false);
+        return (!self::isConnected()) 
+          ? ("TRUNCATE TABLE `$table`") 
+          : self::$SQLObject->query("TRUNCATE TABLE `$table`", false);
     }
+  
     function close()
     {
-        if (!self::isConnected())
-            return;
-        self::$SQLObject->close();
-        return self::$SQLObject = null;
+        if (!self::isConnected()) return;
+        return self::$SQLObject->close();
     }
 }
