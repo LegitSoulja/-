@@ -10,44 +10,47 @@ use SlickInject\SQLObject as SQLObject;
 class SlickInject
 {
     private static $SQLObject = null;
-    private static $data = array("SlickInject\\SQLObject");
+  
+    function __construct(){
+      if(count(func_get_args()) === 4)
+        $this->connect(func_get_args()[0],func_get_args()[1],func_get_args()[2],func_get_args()[3]);
+    }
   
     function connect($dbhost, $dbuser, $dbpass, $dbname)
     { return self::$SQLObject = new SQLObject($dbhost, $dbuser, $dbpass, $dbname); }
   
-    function isConnected()
+    static function isConnected()
     {
-        return (!(self::$SQLObject instanceof self::$data[0])  && !self::$SQLObject->ping()) 
-          ? false 
-          : true;
+      if(self::$SQLObject instanceof SQLObject) return self::$SQLObject->ping();
+      return false;
     }
-  
+
     static function INSERT($table, $object)
     {
       return (!self::isConnected())
-        ? ((string) new Parser\INSERT($table, $object)) 
-        : (self::$SQLObject->query((string) new Parser\INSERT($table, $object, self::$SQLObject), false));
+        ? (Parser\INSERT::__build($table, $object)) 
+        : (self::$SQLObject->query(Parser\INSERT::__build($table, $object, self::$SQLObject), false));
     }
   
-    static function DELETE($table, $object = null)
+    static function DELETE($table, $object = [])
     {
         return (!self::isConnected()) 
-          ? ((string) new Parser\DELETE($table, $object)) 
-          : (self::$SQLObject->query((string) new Parser\DELETE($table, $object), false));
+          ? (Parser\DELETE::__build($table, $object)) 
+          : (self::$SQLObject->query(Parser\DELETE::__build($table, $object, self::$SQLObject), false));
     }
   
-    static function SELECT($c = [], $table, $where = null, $return = true)
+    static function SELECT($columns = [], $table, $where = [], $return = true)
     {
         return (!self::isConnected()) 
-          ? ((string) new Parser\SELECT($c, $table, $where)) 
-          : (self::$SQLObject->query((string) new Parser\SELECT($c, $table, $where), $return));
+          ? (Parser\SELECT::__build($c, $table, $where)) 
+          : (self::$SQLObject->query(Parser\SELECT::__build($columns, $table, $where, self::$SQLObject), $return));
     }
   
     static function UPDATE($table, $object, $where)
     {
         return (!self::isConnected()) 
-          ? ((string) new Parser\UPDATE($table, $object, $where)) 
-          : (self::$SQLObject->query((string) new Parser\UPDATE($table, $object, $where, self::$SQLObject), false));
+          ? (Parser\UPDATE::__build($table, $object, $where)) 
+          : (self::$SQLObject->query(Parser\UPDATE::__build($table, $object, $where, self::$SQLObject), false));
     }
   
     static function TRUNCATE($table)
