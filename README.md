@@ -1,6 +1,6 @@
 ### SlickInject
 
-    Want to avoid risky SQL Injections? Tired of typing out SQL syntax? Bothered with long boring code?
+    Want to avoid risky SQL Injections? Tired of typing out SQL syntax? Bothered with long boring/duplicate code when managing your database?
 
 SlickInject is the solution to your problems, in which will save you some time, with coding. That's if you build websites from stratch without using frameworks. SlickInject makes it easy to manage your database, protect again SQL injections, accomplish things faster, less code, less duplicate code (Using MySQLi). Let's make the life of a back-end dev easier.
 #### Connect to database.
@@ -135,4 +135,19 @@ $sql->close();
 - getResponce() :: Returns mysqli_query responce
 - num_rows() :: Int : Return number of rows
 - getData() :: Array : Return query table row(s)
+
+### Future Additions
+
+- [ ] Create "Tables, Databases" with ease.
+- [ ] Complex/Smart algorithm of building SQL queries w/ parser.
+- [ ] Create a parser, in which validates your SQL queries, and validate queries before executed (Prevent SQL Injection).
+- [ ] More in dept usage/mech/doc/additions of SlickInject (Plan, and make methods/functions understandable, easier to understand/learn/use).
+- [ ] SlickInject Database TreeView (Displays maximum, but minumum detailed information about your database, tables, etc).
+- [ ] Most of all, noob friendly, family safe, environment safe, global safe, familiarly recognizable and easily understandable. (TOo much?)
+
+### Constribute
+
+> If you see a vulnerabilty, or recommend an extra security layer, or just want to help in any-way, you are allowed, and welcomed. This project may/may not be (updated/maintained), therefor, it is in your hands to maintain. 
+
+However, SlickInject is also useful for those who are new to working with databases(SQL), or php even. This is a great start!. It has never been this easier, and safe to work with databases. I am now very happy to build sites more comfortable with the power of SlickInject. 
 
