@@ -39,12 +39,17 @@ $_slickinject->INSERT('table', array("id"=>5,"username"=>"bob")); // @SQLResponc
 $_slickinject->UPDATE('table', array("username"=>"bobo"), array("id"=>5)); // @SQLResponce
 // Hidden SQL: "UPDATE `table` SET `username`='bobo' WHERE `id`=5"
 
+// close database connection
+$_slickinject->close();
+
 /*
     You do not need to create a new instance of SlickInject. Creating a new instance allows you more ease with not having to worry about
     dealing with mysql, and handling queries, and errors yourself. 
     
     You can use SlickInject as static, but only the SQL string will be returned on EVERY function for SQL.
+    Enabling DEBUG will return the same results.
 */
 
 // Example of outputting JUST the string of the SQL.
 SlickInject::SELECT([], "table", array("id"=>1)); 
+// Output: SELECT * FROM `table` WHERE `id`=1
