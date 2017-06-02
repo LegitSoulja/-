@@ -24,9 +24,9 @@ $si->SELECT([], "table", array("id"=>1, "group_id"=>1));
 $si->SELECT([], "table", array("id"=>1, "AND", "group_id"=>1));
 ```
 
-###### ```SELECT id FROM `table` WHERE `group_id`=1 AND `id` > 1```
+###### ```SELECT `email` FROM `table` WHERE `group_id`=1 AND `id` > 1```
 ```php
-$si->SELECT(["id"], "table", array("groud_id"=>1, "`id`>1"));
+$si->SELECT(["email"], "table", array("groud_id"=>1, "`id`>1"));
 ```
 
 ###### Obtain mysqli_query request
@@ -56,7 +56,15 @@ $email = "test@email.com"
 $si->INSERT('table', array("username"=>$username, "email"=>$email));
 ```
 
+###### ```DELETE FROM `table` WHERE `id`=1```
+```php
+$si->DELETE("table", array("id"=>1));
+```
 
+###### ```TRUNCATE TABLE `table` ```
+```php
+$si->TRUNCATE("table");
+```
 
 
 ### SQLObject
@@ -109,7 +117,7 @@ $sql->close();
 
 ### SQLResponce
 
-#### Functions
+#### Functions | Last arguments for SlickInject must be false, to get SQLResponce
 - hasRows() :: Boolean : If query returned any rows
 - getResponce() :: Returns mysqli_query responce
 - num_rows() :: Int : Return number of rows
