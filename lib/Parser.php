@@ -53,7 +53,7 @@ class INSERT
 class SELECT 
 {
     static function __build($columns = [], $table, $where = null, $sql = null)
-    { return "SELECT " . ((count($c) < 1) ? "*" : join(",", $c)) . " FROM `" . ($table) . "` " . (($where != null) ? (WHERE::__build($where, $sql)) : ""); }
+    { return "SELECT " . ((count($columns) < 1) ? "*" : join(",", $columns)) . " FROM `" . ($table) . "` " . (($where != null) ? (WHERE::__build($where, $sql)) : ""); }
 }
 
 class DELETE
