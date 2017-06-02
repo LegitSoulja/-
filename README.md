@@ -1,11 +1,16 @@
 ### SlickInject
 
-    Description..
+    Want to avoid risky SQL Injections? Tired of typing out SQL syntax? Bothered with long boring code?
 
+SlickInject is the solution to your problems, in which will save you some time, with coding. That's if you build websites from stratch without using frameworks. SlickInject makes it easy to manage your database, protect again SQL injections, accomplish things faster, less code, less duplicate code (Using MySQLi). Let's make the life of a back-end dev easier.
 #### Connect to database.
 ```php
 $si = new SlickInject("host", "username", "password", "database_name");
 ```
+
+> Any other functions below, of SlickInject can be called without initalization. Why? Each function below can be used as STATIC::, and will only return the generated SQL query in which (Was going to be sent to your DB server). Doing this allows you to use another database, unlike mysql to build/generate SQL, and our check the results of queries. (Debug purposes, same as enabling debug mode in SlickInject). NO SQL WILL BE CHANGED/PARSED/ALTERED DURING THIS SESSION.
+
+### SELECT
 
 ###### ```SELECT * FROM `table` ```
 ```php
@@ -41,11 +46,15 @@ $si->SELECT([],"table",[], false)->num_rows();
 $si->SELECT([],"table",[], false)->getResponce()->num_rows; // get mysqli_query request
 ```
 
+### UPDATE
+
 ###### ```UPDATE `table` SET `username`="Guest" WHERE `id`=1```
 ```php
 $username = "Guest";
 $si->UPDATE('users', array("username"=>$username), array("id"=>1));
 ```
+
+### INSERT
 
 ###### ```INSERT INTO `table` (`username`, `email`) VALUES ('Johnny', 'test@email.com')```
 ```php
@@ -56,10 +65,14 @@ $email = "test@email.com"
 $si->INSERT('table', array("username"=>$username, "email"=>$email));
 ```
 
+### DELETE
+
 ###### ```DELETE FROM `table` WHERE `id`=1```
 ```php
 $si->DELETE("table", array("id"=>1));
 ```
+
+### TRUNCATE
 
 ###### ```TRUNCATE TABLE `table` ```
 ```php
@@ -69,7 +82,7 @@ $si->TRUNCATE("table");
 
 ### SQLObject
 
-SQLObject can be used stand-alone if you don't like the quick and ease of SlickInject. Maybe, it's missing something. SQLObject Documentation..
+SQLObject can be used stand-alone if you don't like the quick and ease of use with SlickInject. Maybe, it's missing something. SQLObject Documentation..
 
 ##### Connecting
 - Method 1
@@ -117,7 +130,7 @@ $sql->close();
 
 ### SQLResponce
 
-#### Functions | Last arguments for SlickInject must be false, to get SQLResponce
+#### Functions | Last arguments for SlickInject must be false as of [this](https://github.com/LegitSoulja/SlickInject/blob/dev/README.md#obtain-mysqli_query-request), to get SQLResponce 
 - hasRows() :: Boolean : If query returned any rows
 - getResponce() :: Returns mysqli_query responce
 - num_rows() :: Int : Return number of rows
