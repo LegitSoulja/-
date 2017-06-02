@@ -2,5 +2,5 @@
 /* global $si; */
 
 foreach($si->SELECT([], "users") as $s){
-  echo $a[0]["id"];
+  echo $s[0]["id"];
 }
