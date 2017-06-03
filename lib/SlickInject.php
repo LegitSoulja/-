@@ -1,4 +1,4 @@
-<?
+<?php
 namespace SlickInject;
 
 if (!class_exists("SlickInject\\Parser\\WHERE")) include 'Parser.php';
