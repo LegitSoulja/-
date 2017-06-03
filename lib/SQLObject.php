@@ -1,4 +1,4 @@
-<?
+<?php
 namespace SlickInject;
 
 class SQLResponce{
