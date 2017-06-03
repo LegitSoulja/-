@@ -78,7 +78,7 @@ class UPDATE
         $where  = (WHERE::__build($where, $sql));
         $append = "";
         foreach ($object as $n => $v) {
-            Parser::escapeString($N, $sql);
+            Parser::escapeString($n, $sql);
             Parser::escapeString($v, $sql);
             if (!empty($n) && !empty($v) && !is_numeric($n)) {
                 $append .= "`" . $n . "`=";
