@@ -26,7 +26,7 @@ class WHERE
             }
             continue;
         }
-        return $z;
+        return ($type === 0)?"":$z;
     }
 }
 
