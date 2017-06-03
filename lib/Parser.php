@@ -1,6 +1,12 @@
 <?php
 namespace SlickInject\Parser;
 
+class Parser{
+    static function escapeString(&$sql, $so) {
+        return $sql = (!empty($so)) ? $so->escapeString($sql) : mysql_escape($sql);
+    }
+}
+
 class WHERE
 {
     static function __build($a, $sql = null)
@@ -9,8 +15,8 @@ class WHERE
         $type = 0;
         if (count($a) < 1) return "";
         foreach ($a as $n => $v) {
-            $n = (($sql != null) ? $sql->escapeString($n) : mysql_escape_string($n));
-            $v = (($sql != null) ? $sql->escapeString($v) : mysql_escape_string($v));
+            Parser::escapeString($n, $sql);
+            Parser::escapeString($v, $sql);
             if (!empty($n) && !empty($v) && !(is_numeric($n))) {
                 if ($type == 1) $z .= " AND";
                 $type = 1;
@@ -21,6 +27,8 @@ class WHERE
                 }
                 $z .= "'" . ($v) . "'";
             } else {
+                if(empty($v)) trigger_error("NULL WHERE $n", E_USER_ERROR);
+                if(!is_numeric($n)) continue;
                 $type = 2;
                 $z .= " " . ($v);
             }
@@ -38,8 +46,8 @@ class INSERT
         $keys = array(array(),array());
         
         foreach ($object as $n => $v) {
-            $n = (($sql != null) ? $sql->escapeString($n) : mysql_escape_string($n));
-            $v = (($sql != null) ? $sql->escapeString($v) : mysql_escape_string($v));
+            Parser::escapeString($n, $sql);
+            Parser::escapeString($v, $sql);
             if (!empty($n) && !empty($v) && !(is_numeric($n))) {
                 array_push($keys[0], $n);
                 if (is_numeric($v)) array_push($keys[1], $v);
@@ -70,8 +78,8 @@ class UPDATE
         $where  = (WHERE::__build($where, $sql));
         $append = "";
         foreach ($object as $n => $v) {
-            $n = (($sql != null) ? $sql->escapeString($n) : mysql_escape_string($n));
-            $v = (($sql != null) ? $sql->escapeString($v) : mysql_escape_string($v));
+            Parser::escapeString($N, $sql);
+            Parser::escapeString($v, $sql);
             if (!empty($n) && !empty($v) && !is_numeric($n)) {
                 $append .= "`" . $n . "`=";
                 if (is_numeric($v)) $append .= (int) $v . " ";
