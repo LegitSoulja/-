@@ -1,5 +1,8 @@
 ### SlickInject
 
+###### ::v2
+You cannot depend on escaping strings/remove code. There will always be another way around. With v2, that problem will be eliminated, into just using, and combining the use of sending "safe/raw" sql code to the server first, before the actual data. (Prepare/Execute).
+
     Want to avoid risky SQL Injections? Tired of typing out SQL syntax? Bothered with long boring/duplicate code when managing your database?
 
 SlickInject is the solution to your problems, in which will save you some time, with coding. That's if you build websites from stratch without using frameworks. SlickInject makes it easy to manage your database, protect again SQL injections, accomplish things faster, less code, less duplicate code (Using MySQLi). Let's make the life of a back-end dev easier.
