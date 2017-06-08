@@ -20,7 +20,7 @@ class WHERE
             if (!empty($n) && !empty($v) && !(is_numeric($n))) {
                 if ($type == 1) $z .= " AND";
                 $type = 1;
-                $z .= " " . ($n) . "=";
+                $z .= " `" . ($n) . "`=";
                 if (is_numeric($v)) {
                     $z .= $v;
                     continue;
@@ -42,7 +42,7 @@ class INSERT
 {
    static function __build($table, $object, $sql = null)
     {
-        $z    = "INSERT INTO " . ($table) . "";
+        $z    = "INSERT INTO `" . ($table) . "`";
         $keys = array(array(),array());
         
         foreach ($object as $n => $v) {
@@ -61,13 +61,13 @@ class INSERT
 class SELECT 
 {
     static function __build($columns = [], $table, $where = null, $sql = null)
-    { return "SELECT " . ((count($columns) < 1) ? "*" : join(",", $columns)) . " FROM " . ($table) . " " . (($where != null) ? (WHERE::__build($where, $sql)) : ""); }
+    { return "SELECT " . ((count($columns) < 1) ? "*" : join(",", $columns)) . " FROM `" . ($table) . "` " . (($where != null) ? (WHERE::__build($where, $sql)) : ""); }
 }
 
 class DELETE
 {
     static function __build($table, $object, $sql = null)
-    { return "DELETE FROM " . ($table) . " " .(WHERE::__build($object, $sql)); }
+    { return "DELETE FROM `" . ($table) . "` " .(WHERE::__build($object, $sql)); }
 }
 
 class UPDATE
@@ -81,13 +81,13 @@ class UPDATE
             Parser::escapeString($n, $sql);
             Parser::escapeString($v, $sql);
             if (!empty($n) && !empty($v) && !is_numeric($n)) {
-                $add = "" . $n . "=";
+                $add = "`" . $n . "`=";
                 if (is_numeric($v)) $add .= (int) $v . " ";
                 else $add .= "'" . $v . "' ";
                 array_push($append, $add);
             }
         }
-        $z = str_replace("%s", "" . ($table) . "", $z);
+        $z = str_replace("%s", "`" . ($table) . "`", $z);
         return $z .= " " . join(", ", $append) . ($where);
     }
 }
