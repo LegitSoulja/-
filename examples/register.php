@@ -1,6 +1,10 @@
 <?
 /* global $si; */
 
+/*
+* DO NOT USE THIS AS A REAL EXAMPLE! - INSECURE (SlickInject Usage Only)
+*/
+
 if(!empty($_POST["username"]) && !empty($_POST["password"]) && !empty($_POST["email"])){
 
   $username = $_POST["username"];
