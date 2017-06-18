@@ -49,7 +49,7 @@ class INSERT
             Parser::escapeString($n, $sql);
             Parser::escapeString($v, $sql);
             if (!empty($n) && !empty($v) && !(is_numeric($n))) {
-                array_push($keys[0], $n);
+                array_push($keys[0], '`'.$n.'`');
                 if (is_numeric($v)) array_push($keys[1], $v);
                 else array_push($keys[1], "'" . $v . "'");
             }
