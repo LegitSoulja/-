@@ -48,7 +48,8 @@ class INSERT
         foreach ($object as $n => $v) {
             Parser::escapeString($n, $sql);
             Parser::escapeString($v, $sql);
-            if (!empty($n) && !empty($v) && !(is_numeric($n))) {
+            if (!empty($n) && !(is_numeric($n))) {
+                if(!is_numeric($v)) : if(empty($v)) : continue; endif; endif;
                 array_push($keys[0], '`'.$n.'`');
                 if (is_numeric($v)) array_push($keys[1], $v);
                 else array_push($keys[1], "'" . $v . "'");
@@ -80,7 +81,8 @@ class UPDATE
         foreach ($object as $n => $v) {
             Parser::escapeString($n, $sql);
             Parser::escapeString($v, $sql);
-            if (!empty($n) && !empty($v) && !is_numeric($n)) {
+            if (!empty($n) && !is_numeric($n)) {
+                if(!is_numeric($v)) : if(empty($v)) : continue; endif; endif;
                 $add = "`" . $n . "`=";
                 if (is_numeric($v)) $add .= (int) $v . " ";
                 else $add .= "'" . $v . "' ";
