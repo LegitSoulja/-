@@ -1,4 +1,4 @@
- <?php
+<?
 
 class Parser{
   
@@ -48,9 +48,73 @@ class Parser{
       $sql .= " WHERE ".join(" ", $where[0]);
     return array($sql, $where[1]);
   }
-  final static public function INSERT(){}
-  final static public function UPDATE(){
+  final static public function INSERT($table, $object){
+    $sql = "INSERT INTO `".$table."` ";
+    $names = array();
+    $replace = array();
+    $values = array();
+    foreach($object as $k => $v){
+      if(isset($k) && isset($v)){
+        if(is_numeric($k)) return;
+        array_push($names, "`".$k."`");
+        array_push($replace, "?");
+        array_push($values, $v);
+      }
+    }
+    $sql .= "(".join(", ", $names).") VALUES ";
+    $sql .= "(".join(", ", $replace).")";
     
+    $types = "";
+    foreach($values as $v)
+    { $types .= self::getType($v); }
+    
+    foreach(array_keys($values) as $i)
+    { $values[$i] = &$values[$i]; }
+    
+    array_unshift($values, $types);
+    
+    return array($sql, $values);
+  }
+  final static public function UPDATE($table, $object, $where){
+    $insert = array();
+    $values = array();
+    $where = (count($where) > 0)?self::WHERE($where):NULL;
+    $sql = "UPDATE `".$table."` SET";
+    foreach($object as $k => $v){
+      if(isset($k) && isset($v)){
+        if(is_numeric($k)) continue;
+        array_push($insert, "`".$k."`=?");
+        array_push($values, $v);
+      }
+    }
+    $sql .= " ".join(", ", $insert);
+    if($where != NULL){
+      $sql .= " WHERE ".join(" ", $where[0]);
+    }
+    
+    $types = "";
+    foreach($values as $v)
+    { $types .= self::getType($v); }
+    
+    if($where != NULL){
+      $types .= $where[1][0];
+      array_shift($where[1]);
+    }
+    
+    foreach(array_keys($values) as $i)
+    { $values[$i] = &$values[$i]; }
+    
+    $ni = count($values) + 1;
+    
+    foreach($where[1] as $k => $n){
+      $values[$ni] = $n;
+      $ni++;
+    }
+    
+
+    array_unshift($values, $types);
+    print_r($sql);
+    return array($sql, $values);
   }
   final static public function TRUNCATE(){}
   final static public function DELETE($table, $where){
@@ -74,8 +138,12 @@ class SlickInject{
   }
   
   public function connect($db_host, $db_user, $db_pass, $db_name){
-    if(!(self::$SQLObject instanceof SQLObject)) return;
+    if($this->isConnected()) return;
     self::$SQLObject = new SQLObject($db_host, $db_user, $db_pass, $db_name);
+  }
+  
+  public function isConnected(){
+    return ((self::$SQLObject instanceof SQLObject))?true:false;
   }
   
   public function getSQLObject()
@@ -84,7 +152,26 @@ class SlickInject{
   public function close()
   { return self::$SQLObject->close(); }
   
+  public function UPDATE($table, $object, $where){
+    if(!$this->isConnected()) return;
+    $update = Parser::UPDATE($table, $object, $where);
+    $responce = self::$SQLObject->query($update[0], $update[1]);
+    print_r($responce);
+  }
   
+  public function SELECT($columns, $table, $where){
+    if(!$this->isConnected()) return;
+    $select = Parser::SELECT($columns, $table, $where);
+    $responce = self::$SQLObject->query($select[0], $select[1], true);
+    print_r($responce);
+  }
+  
+  public function INSERT($table, $object){
+    if(!$this->isConnected()) return;
+    $insert = Parser::INSERT($table, $object);
+    $responce = self::$SQLObject->query($insert[0], $insert[1]);
+    print_r($insert);
+  }
 }
 
 
@@ -104,10 +191,10 @@ class SQLResponce{
     return self::$rows = $rows;
   }
   
-  private function getResult()
+  public function getResult()
   { return self::$result; }
   
-  private function error()
+  public function error()
   { return (self::$result)?true:false; }
   
   public function hasRows()
@@ -119,8 +206,7 @@ class SQLResponce{
   public function getData(){
     return (count(self::$rows) > 0)?self::$rows:self::$row;
   }
-  
-  
+
 }
 
 class SQLObject{
@@ -139,13 +225,8 @@ class SQLObject{
     self::$con = mysqli_connect($db_host, $db_user, $db_pass, $db_name);
   }
   
-  public function isConnected(){
-    if(isset(self::$con)){
-      if($this->ping())
-        return true;
-    }
-    return false;
-  }
+  public function isConnected()
+  { return (isset(self::$con) && $this->ping())?true:false; }
   
   public function getConnectionError()
   { return @\mysqli_connect_error(); }
@@ -161,7 +242,7 @@ class SQLObject{
   
   public function query($sql, $bind, $rr = false){
     try{
-      $prep = $con->stmt_init();
+      $prep = self::$con->stmt_init();
       if($prep->prepare($sql)){
         call_user_func_array(array($prep, "bind_param"), $bind);
         if($prep->execute()){
