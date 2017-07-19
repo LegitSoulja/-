@@ -1,7 +1,5 @@
  <?php
 
-<?php
-
 class Parser{
   
   final static public function WHERE($arr){
