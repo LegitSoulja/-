@@ -1,7 +1,6 @@
 <?
-class WHERE{
-  
-  static public function __build($arr){
+class SlickInject{
+  final static public function WHERE($arr){
     $append = $values = array();
     $flag = 1;
     foreach($arr as $k => $v){
@@ -23,7 +22,8 @@ class WHERE{
     foreach($values as $v) $types .= self::getType($v);
     return array($append, $values, $types);
   }
-  static private function getType($type){
+  
+  final static private function getType($type){
     switch(gettype($type)){
       case "string": return "s";
       case "boolean": // bool is recognized as an integer
@@ -33,19 +33,16 @@ class WHERE{
     }
   }
   
-}
-
-class SELECT{
-  static public function __build($columns, $table, $where, $explain = false){
+  final static public function SELECT($columns, $table, $where, $explain = false){
     $columns = (count($columns) > 0)?$columns:array("*");
-    $where = WHERE::__build($where);
+    $where = self::WHERE($where);
     $sql = (($explain)?"EXPLAIN ":""); 
     $sql .= "SELECT ".join(", ", $columns)." `".$table."` WHERE ".join(" ", $where[0]);
     print_r($sql);
     print_r($where);
-    
   }
+  final static public function INSERT(){}
+  final static public function UPDATE(){}
+  final static public function TRUNCATE(){}
+  final static public function DELETE(){}
 }
-
-class UPDATE{}
-class INSERT{}
