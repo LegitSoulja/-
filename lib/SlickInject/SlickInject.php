@@ -110,7 +110,7 @@ class SlickInject{
 	* @param array $where                List of key/values that directs which/where table is being deleted
 	* @return bool
 	*/
-  public function DELETE($table, $where){
+  public function DELETE($table, $where = NULL){
     if(!$this->isConnected() || !isset($table) || !isset($object)) return;
     $delete = Parser::DELETE($table, $where);
     return self::$SQLObject->query($delete[0], (isset($delete[1]))?$delete[1]:NULL);
