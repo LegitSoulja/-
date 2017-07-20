@@ -3,6 +3,8 @@
 use SlickInject\Parser as Parser;
 use SlickInject\SQLObject as SQLObject;
 
+define("SI_VERSION", 102); // 1.0.2
+
 class SlickInject{
   
   private static $SQLObject;
