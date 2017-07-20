@@ -46,7 +46,7 @@ class Parser{
     $sql .= "SELECT ".join(", ", $columns)." FROM `".$table."`";
     if($where != NULL)
       $sql .= " WHERE ".join(" ", $where[0]);
-    return array($sql, $where[1]);
+    return array($sql, (isset($where[1]))?$where[1]:NULL);
   }
   final static public function INSERT($table, $object){
     $sql = "INSERT INTO `".$table."` ";
@@ -119,7 +119,10 @@ class Parser{
     array_unshift($values, $types);
     return array($sql, $values);
   }
-  final static public function TRUNCATE(){}
+  final static public function TRUNCATE($table){
+    $sql = "TRUNCATE TABLE `".$table."`";
+    return array($sql);
+  }
   final static public function DELETE($table, $where){
     $sql = "DELETE FROM `".$table."`";
     if(count($where) > 0) {
@@ -156,25 +159,29 @@ class SlickInject{
   { return self::$SQLObject->close(); }
   
   public function UPDATE($table, $object, $where){
-    if(!$this->isConnected()) return;
+    if(!$this->isConnected() || !isset($table) || !isset($object) || !isset($where)) return;
     $update = Parser::UPDATE($table, $object, $where);
-    $responce = self::$SQLObject->query($update[0], $update[1]);
-    print_r($responce);
+    return self::$SQLObject->query($update[0], (isset($update[1]))?$update[1]:NULL);
   }
   
-  public function SELECT($columns, $table, $where){
-    if(!$this->isConnected()) return;
+  public function SELECT($columns, $table, $where = NULL){
+    if(!$this->isConnected() || !isset($columns) || !isset($table)) return;
     $select = Parser::SELECT($columns, $table, $where);
-    $responce = self::$SQLObject->query($select[0], $select[1], true);
-    print_r($responce);
+    return self::$SQLObject->query($select[0], (isset($select[1]))?$select[1]:NULL, true);
   }
   
   public function INSERT($table, $object){
-    if(!$this->isConnected()) return;
+    if(!$this->isConnected() || !isset($table) || !isset($object)) return;
     $insert = Parser::INSERT($table, $object);
-    $responce = self::$SQLObject->query($insert[0], $insert[1]);
-    print_r($insert);
+    return self::$SQLObject->query($insert[0], $insert[1]);
   }
+  
+  public function TRUNCATE($table){
+    if(!$this->isConnected() || !isset($table)) return;
+    $insert = Parser::TRUNCATE($table);
+    return self::$SQLObject->query($insert[0]);
+  }
+  
 }
 
 
@@ -251,11 +258,10 @@ class SQLObject{
   { return (@self::$con->ping())?true:false; }
   
   public function query($sql, $bind, $rr = false){
-    print_r(func_get_args());
     try{
       $prep = self::$con->stmt_init();
       if($prep->prepare($sql)){
-        call_user_func_array(array($prep, "bind_param"), $bind);
+        if(isset($bind) && $bind != NULL) call_user_func_array(array($prep, "bind_param"), $bind);
         if($prep->execute()){
           $result = new SQLResponce($prep->get_result(), $prep); // nd_mysqli && 
           if($rr) return ($result->hasRows())?$result->getData():array();
