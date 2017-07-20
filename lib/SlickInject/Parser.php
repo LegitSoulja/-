@@ -1,6 +1,11 @@
 <?php
 namespace SlickInject;
 
+  /**
+	* Class Parser
+	* This class should not be extended. They are static functions, but grouped in an organized maner,
+	* Most of this doc is self explanatory if you look @ SlickInject.php
+	*/
 class Parser{
   
   final static public function WHERE($arr){
@@ -30,6 +35,11 @@ class Parser{
     return array($append, $values);
   }
   
+  /**
+	* Get initial of type in which is needed to bind the proper types when executing to the database
+	* @param string $type               <T>
+	* @return char
+	*/
   final static private function getType($type){
     switch(gettype($type)){
       case "string": return "s";
@@ -40,6 +50,11 @@ class Parser{
     }
   }
   
+  /**
+	* Delete a row in a table
+	* @param array $explain               Don't use, unless you know what you're doing.
+	* @return array
+	*/
   final static public function SELECT($columns, $table, $where, $explain = false){
     $columns = (count($columns) > 0)?$columns:array("*");
     $where = (count($where) > 0)?self::WHERE($where):NULL;
