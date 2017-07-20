@@ -115,7 +115,6 @@ class Parser{
     foreach(array_keys($values) as $i)
     { $values[$i] = &$values[$i]; }
     
-
     array_unshift($values, $types);
     return array($sql, $values);
   }
@@ -164,10 +163,10 @@ class SlickInject{
     return self::$SQLObject->query($update[0], (isset($update[1]))?$update[1]:NULL);
   }
   
-  public function SELECT($columns, $table, $where = NULL){
+  public function SELECT($columns, $table, $where = NULL, $rr = false){
     if(!$this->isConnected() || !isset($columns) || !isset($table)) return;
     $select = Parser::SELECT($columns, $table, $where);
-    return self::$SQLObject->query($select[0], (isset($select[1]))?$select[1]:NULL, true);
+    return self::$SQLObject->query($select[0], (isset($select[1]))?$select[1]:NULL, $rr);
   }
   
   public function INSERT($table, $object){
@@ -223,7 +222,6 @@ class SQLResponce{
   public function getData(){
     return (count(self::$rows) > 0)?self::$rows:self::$row;
   }
-
 }
 
 class SQLObject{
@@ -265,7 +263,7 @@ class SQLObject{
         if($prep->execute()){
           $result = new SQLResponce($prep->get_result(), $prep); // nd_mysqli && 
           if($rr) return ($result->hasRows())?$result->getData():array();
-          return ($result->didAffect())?$result:false;
+          return $result;
         }
       }
       throw new \Exception($this->getLastError());
