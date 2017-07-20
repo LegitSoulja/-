@@ -36,7 +36,7 @@ class SlickInject{
     return self::$SQLObject->query($update[0], (isset($update[1]))?$update[1]:NULL);
   }
   
-  public function SELECT($columns, $table, $where = NULL, $rr = false){
+  public function SELECT($columns, $table, $where = NULL, $rr = true){
     if(!$this->isConnected() || !isset($columns) || !isset($table)) return;
     $select = Parser::SELECT($columns, $table, $where);
     return self::$SQLObject->query($select[0], (isset($select[1]))?$select[1]:NULL, $rr);
