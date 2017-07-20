@@ -44,8 +44,11 @@ class Parser{
     $where = (count($where) > 0)?self::WHERE($where):NULL;
     $sql = (($explain)?"EXPLAIN ":""); 
     $sql .= "SELECT ".join(", ", $columns)." FROM `".$table."`";
-    if($where != NULL)
+    if($where != NULL && count($where[1]) > 1 && isset($where[0])) {
       $sql .= " WHERE ".join(" ", $where[0]);
+		}else if(isset($where[0])) {
+			$sql .= " ".join(" ", $where[0]);
+		}
     return array($sql, (isset($where[1]))?$where[1]:NULL);
   }
   final static public function INSERT($table, $object){
