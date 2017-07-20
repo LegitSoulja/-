@@ -1,4 +1,4 @@
-<?
+<?php
 
 class Parser{
   
@@ -104,16 +104,19 @@ class Parser{
     foreach(array_keys($values) as $i)
     { $values[$i] = &$values[$i]; }
     
-    $ni = count($values) + 1;
+    $ni = count($values);
     
-    foreach($where[1] as $k => $n){
-      $values[$ni] = $n;
+    foreach($where[1] as $k => $v){
+      $values[$ni] = $v;
       $ni++;
     }
     
+    // fix
+    foreach(array_keys($values) as $i)
+    { $values[$i] = &$values[$i]; }
+    
 
     array_unshift($values, $types);
-    print_r($sql);
     return array($sql, $values);
   }
   final static public function TRUNCATE(){}
@@ -180,9 +183,11 @@ class SQLResponce{
   private static $result;
   private static $rows;
   private static $row;
+  private static $stmt;
   
-  function __construct($result){
+  function __construct($result, $stmt){
     self::$result = $result;
+    self::$stmt = $stmt;
     if($result->num_rows < 1) return;
     $rows = array();
     while($row = $result->fetch_assoc())
@@ -193,6 +198,11 @@ class SQLResponce{
   
   public function getResult()
   { return self::$result; }
+  
+  public function didAffect(){
+    // check is any rows was affected.
+    return (self::$stmt->affected_rows > 0)?true:false;
+  }
   
   public function error()
   { return (self::$result)?true:false; }
@@ -241,14 +251,15 @@ class SQLObject{
   { return (@self::$con->ping())?true:false; }
   
   public function query($sql, $bind, $rr = false){
+    print_r(func_get_args());
     try{
       $prep = self::$con->stmt_init();
       if($prep->prepare($sql)){
         call_user_func_array(array($prep, "bind_param"), $bind);
         if($prep->execute()){
-          $result = new SQLResponce($prep->get_result()); // nd_mysqli && 
+          $result = new SQLResponce($prep->get_result(), $prep); // nd_mysqli && 
           if($rr) return ($result->hasRows())?$result->getData():array();
-          return $result;
+          return ($result->didAffect())?$result:false;
         }
       }
       throw new \Exception($this->getLastError());
