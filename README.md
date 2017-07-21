@@ -1,4 +1,4 @@
-### SlickInject
+### SlickInject!
 
 ###### ::v2
 You cannot depend on escaping strings/remove code. There will always be another way around. With v2, that problem will be eliminated, into just using, and combining the use of sending "safe/raw" sql code to the server first, before the actual data. (Prepare/Execute).
