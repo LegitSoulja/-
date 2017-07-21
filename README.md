@@ -28,7 +28,7 @@ $si = new SlickInject("host", "username", "password", "database_name");
 
 
 
-> Using SELECT, you will automatically get returned the selected rows in an array format. Check examples for more detailed examples
+> Using SELECT, you will automatically get returned the selected rows in an array format. Check examples for more detailed information. The 4th argument is true by default. Setting it false will return an SQLResponce.
 
 
 
