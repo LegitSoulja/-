@@ -21,13 +21,28 @@ $si = new SlickInject("localhost", "username", "password", "database_name");
 
 // get rows from database as an array
 $data = $_slickinject->SELECT([], "table", array("id"=>1)); // @Array : Returns array
+print_r($data); // print data
 
-// INSERT
+// INSERT :: INSERT INTO `table` (`id`,`username`) VALUES (5, 'bob')
 $si->INSERT('table', array("id"=>5,"username"=>"bob")); // @SQLResponce
 
-// UPDATE
+// UPDATE :: UPDATE `table` SET `username`='bobo' WHERE `id`=5
 $si->UPDATE('table', array("username"=>"bobo"), array("id"=>5)); // @SQLResponce
 
-// CLOSE
+// DELETE :: DELETE FROM `table` WHERE `username`='bobo'
+$si->DELETE('table', array("username"=>"bobo"));
+
+// TRUNCATE
+$si->TRUNCATE("table");
+
+// Advanced Selecting
+// :: SELECT id, username, email FROM `table` WHERE id > 5 AND active = 1
+$si->SELECT(["id", "username", "email"], "table", array("id > 5", "AND", "active = 1"));
+
+// Reserved Keyword Handler : Mistakes happens
+// :: SELECT `from`, `where`, `key` FROM `table`
+$si->SELECT(["from", "where", "key"], "table");
+
+// CLOSE : ALWAYS CLOSE YOUR DATABASE IF NOT LONGER BEING USED
 $si->close();
 
