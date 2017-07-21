@@ -131,13 +131,25 @@ $sql = new \SlickInject\SQLObject("localhost", "username", "password", "database
 $sql->close(); 
 ```
 
+
+#### Functions | Return <T> | Description
+- connect(s,s,s,s) :: void : Connect to databse.
+- getConnectionError() :: integer : Get database connection status error code
+- getLastError() :: string : Get last database error
+- escapeString(s) :: string :: **Deprecated**
+- ping() :: bool : Return if connection is still live and not closed.
+- query() :: void : Shouldn't be used unless you know what you're doing.
+
 ### SQLResponce
 
-#### Functions | Last arguments for SlickInject must be false as of [this](https://github.com/LegitSoulja/SlickInject/blob/dev/README.md#obtain-mysqli_query-request), to get SQLResponce 
-- hasRows() :: Boolean : If query returned any rows
-- getResponce() :: Returns mysqli_query responce
-- num_rows() :: Int : Return number of rows
-- getData() :: Array : Return query table row(s)
+#### Functions | Return <T> | Description
+> Last arguments for SlickInject must be false as of [this](https://github.com/LegitSoulja/SlickInject/blob/dev/README.md#obtain-mysqli_query-request), to get SQLResponce 
+- hasRows() :: bool : If query returned any rows
+- getResult() :: object : Returns mysqli_query responce
+- num_rows() :: integer : Return number of rows
+- getData() :: array : Return query table row(s)
+- didAffect() :: bool : If any rows was affected during execution
+- error() :: bool : If result doesn't exist or contain any errors
 
 ### Future Additions
 
