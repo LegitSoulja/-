@@ -43,6 +43,19 @@ $si->SELECT(["id", "username", "email"], "table", array("id > 5", "AND", "active
 // :: SELECT `from`, `where`, `key` FROM `table`
 $si->SELECT(["from", "where", "key"], "table");
 
+
+
+// SQLResponce Example
+$responce = $si->SELECT([], "table", [], false);
+
+if($responce->hasRows()) {
+    $number_of_rows = $responce->num_rows();
+    $rows = $responce->getData();
+    foreach($rows as $row) {
+        // iterate
+    }
+}
+
 // CLOSE : ALWAYS CLOSE YOUR DATABASE IF NOT LONGER BEING USED
 $si->close();
 
