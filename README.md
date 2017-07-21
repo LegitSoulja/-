@@ -11,9 +11,9 @@ SlickInject is the solution to your problems, in which will save you some time, 
 $si = new SlickInject("host", "username", "password", "database_name");
 ```
 
-> Any other functions below, of SlickInject can be called without initalization. Why? Each function below can be used as STATIC::, and will only return the generated SQL query in which (Was going to be sent to your DB server). Doing this allows you to use another database, unlike mysql to build/generate SQL, and our check the results of queries. (Debug purposes, same as enabling debug mode in SlickInject). NO SQL WILL BE CHANGED/PARSED/ALTERED DURING THIS SESSION.
-
 ### SELECT
+
+> Using SELECT, you will automatically get returned the selected rows in an array format. Check examples for more detailed examples
 
 ###### ```SELECT * FROM `table` ```
 ```php
@@ -44,9 +44,10 @@ $si->SELECT(["email"], "table", array("groud_id"=>1, "`id`>1"));
    4th argument must be false, in order to get the SQLResponce/Responce
 */
 
-$si->SELECT([],"table",[], false)->num_rows();
-// - or -
-$si->SELECT([],"table",[], false)->getResponce()->num_rows; // get mysqli_query request
+// stay efficent : 3rd argument is false, which will return an SQLResponce
+$responce = $si->SELECT([],"table",[], false);
+
+print_r($responce->num_rows()); // int
 ```
 
 ### UPDATE
@@ -92,7 +93,7 @@ $si->close();
 Sometimes, SlickInject may lack certain things when managing your database. You can use SQLObject, as a below which is returned by SlickInject.
 ```php
 $sql = $si->getSQLObject();
-$sql->query("SELECT * FROM `table`", [(boolean) if:true return rows, else return SQLResponce])
+$sql->query("SELECT * FROM `table`", true); // return rows
 ```
 
 
@@ -103,18 +104,16 @@ SQLObject can be used stand-alone if you don't like the quick and ease of use wi
 ##### Connecting
 - Method 1
 ```php
-$sql = new \SlickInject\SQLObject();
-$sql->connect("localhost", "username", "password", "database");
+$sql = new \SlickInject\SQLObject("localhost", "username", "password", "database");
 ```
 - Method 2
 ```php
-$sql = new \SlickInject\SQLObject("localhost", "username", "password", "database");
+$sql = new \SlickInject\SQLObject();
+$sql->connect("localhost", "username", "password", "database");
 ```
 
 ##### Sending Queries
 ```php
-$sql = new \SlickInject\SQLObject("localhost", "username", "password", "database");
-//
 $sql->query("INSERT INTO table (username) VALUES ('LegitSoulja')"); // *SQLResponce
 //
 $sql->query("SELECT * FROM table", true); // Array : Get array of requested table rows
@@ -122,15 +121,11 @@ $sql->query("SELECT * FROM table", true); // Array : Get array of requested tabl
 
 ##### Ping
 ```php
-$sql = new \SlickInject\SQLObject("localhost", "username", "password", "database");
-//
 $sql->ping(); // Boolean : Returns if database is still connected
 ```
 
 ##### Errors
 ```php
-$sql = new \SlickInject\SQLObject("localhost", "username", "password", "database");
-//
 $sql->getConnectionError(); // String : Get connect errror, if present
 //
 $sql->getLastError(); // String : Get last error from last executed query
@@ -139,8 +134,6 @@ $sql->getLastError(); // String : Get last error from last executed query
 ##### Close Datbase
 
 ```php
-$sql = new \SlickInject\SQLObject("localhost", "username", "password", "database");
-//
 $sql->close(); 
 ```
 
