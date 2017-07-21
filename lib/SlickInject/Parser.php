@@ -45,7 +45,8 @@ class Parser
         foreach (array_keys($values) as $i) 
 	{ $values[$i] =& $values[$i]; }
         
-        array_unshift($values, $types);
+	// fix
+        if(!empty($types)) array_unshift($values, $types);
         return array($append, $values);
     }
     
@@ -86,8 +87,9 @@ class Parser
         if (in_array(strtoupper($table), self::$RESERVED_KEYWORDS)) 
 	{ $table = "`" . $table . "`"; }
         
-        $sql .= "SELECT [" . join(", ", $columns) . "] FROM " . $table;
-        
+        // $sql .= "SELECT [" . join(", ", $columns) . "] FROM " . $table;
+        $sql .= "SELECT " . join(", ", $columns) . " FROM " . $table;
+	    
         if ($where != NULL && count($where[1]) > 1 && isset($where[0])) {
             $sql .= " WHERE " . join(" ", $where[0]);
         } elseif (isset($where[0])) {
