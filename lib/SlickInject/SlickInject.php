@@ -31,7 +31,8 @@ class SlickInject
      */
     public function connect($db_host, $db_user, $db_pass, $db_name)
     {
-        if ($this->isConnected()) return;
+        if ($this->isConnected())
+            return;
         self::$SQLObject = new SQLObject($db_host, $db_user, $db_pass, $db_name);
     }
     
@@ -40,21 +41,27 @@ class SlickInject
      * @return bool
      */
     public function isConnected()
-    { return ((self::$SQLObject instanceof SQLObject)) ? true : false; }
+    {
+        return ((self::$SQLObject instanceof SQLObject)) ? true : false;
+    }
     
     /**
      * Returns SQLObject
      * @return object
      */
     public function getSQLObject()
-    { return self::$SQLObject; }
+    {
+        return self::$SQLObject;
+    }
     
     /**
      *Close database connection
      * @return void
      */
     public function close()
-    { return self::$SQLObject->close(); }
+    {
+        return self::$SQLObject->close();
+    }
     
     /**
      * Update database with data
@@ -65,7 +72,8 @@ class SlickInject
      */
     public function UPDATE($table, $object, $where)
     {
-        if (!$this->isConnected() || !isset($table) || !isset($object) || !isset($where)) return;
+        if (!$this->isConnected() || !isset($table) || !isset($object) || !isset($where))
+            return;
         $update = Parser::UPDATE($table, $object, $where);
         return self::$SQLObject->query($update[0], (isset($update[1])) ? $update[1] : NULL);
     }
@@ -79,7 +87,8 @@ class SlickInject
      */
     public function SELECT($columns, $table, $where = NULL, $rr = true)
     {
-        if (!$this->isConnected() || !isset($columns) || !isset($table)) return;
+        if (!$this->isConnected() || !isset($columns) || !isset($table))
+            return;
         $select = Parser::SELECT($columns, $table, $where);
         return self::$SQLObject->query($select[0], (isset($select[1])) ? $select[1] : NULL, $rr);
     }
@@ -92,7 +101,8 @@ class SlickInject
      */
     public function INSERT($table, $object)
     {
-        if (!$this->isConnected() || !isset($table) || !isset($object)) return;
+        if (!$this->isConnected() || !isset($table) || !isset($object))
+            return;
         $insert = Parser::INSERT($table, $object);
         return self::$SQLObject->query($insert[0], $insert[1]);
     }
@@ -105,7 +115,8 @@ class SlickInject
      */
     public function TRUNCATE($table)
     {
-        if (!$this->isConnected() || !isset($table)) return;
+        if (!$this->isConnected() || !isset($table))
+            return;
         $truncate = Parser::TRUNCATE($table);
         return self::$SQLObject->query($truncate[0]);
     }
@@ -118,7 +129,8 @@ class SlickInject
      */
     public function DELETE($table, $where = NULL)
     {
-        if (!$this->isConnected() || !isset($table) || !isset($object)) return;
+        if (!$this->isConnected() || !isset($table) || !isset($object))
+            return;
         $delete = Parser::DELETE($table, $where);
         return self::$SQLObject->query($delete[0], (isset($delete[1])) ? $delete[1] : NULL);
     }
