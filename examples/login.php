@@ -1,10 +1,6 @@
 <?
 /* global $si; */
 
-/*
-* DO NOT USE THIS AS A REAL EXAMPLE! - INSECURE (SlickInject Usage Only)
-*/
-
 if(!isset($_POST["username"]) || !isset($_POST["password"])) {
   die("No information received.");
 }
@@ -16,4 +12,7 @@ if($si->SELECT([], "users", array("username"=>$username, "password"=>$password),
   // user exist, 
 }else {
   // user does not exist
+  
+  // for this example, let's insert/register this data since the user doesn't exist
+  $si->INSERT("users", array("username"=>$username, "password"=>$password));
 }
