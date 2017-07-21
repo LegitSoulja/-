@@ -1,5 +1,11 @@
 <?php
 
+/*
+\| @Author: LegitSoulja
+\| @License: MIT
+\| @Source: https://github.com/LegitSoulja/SlickInject
+*/
+
 use SlickInject\Parser as Parser;
 use SlickInject\SQLObject as SQLObject;
 
