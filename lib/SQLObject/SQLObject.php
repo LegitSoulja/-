@@ -17,14 +17,11 @@ class SQLResponce
     {
         self::$result = $result;
         self::$stmt   = $stmt;
-        if ($result->num_rows < 1)
-            return;
+        if ($result->num_rows < 1) return;
         $rows = array();
-        while ($row = $result->fetch_assoc()) {
-            array_push($rows, $row);
-        }
-        if (count($rows) === 1)
-            return self::$row = $rows;
+        while ($row = $result->fetch_assoc()) 
+        { array_push($rows, $row); }
+        if (count($rows) === 1) return self::$row = $rows;
         return self::$rows = $rows;
     }
     
@@ -33,54 +30,42 @@ class SQLResponce
      * @return object
      */
     public function getResult()
-    {
-        return self::$result;
-    }
+    { return self::$result; }
     
     /**
      * Check if any rows was affected during execution
      * @return bool
      */
     public function didAffect()
-    {
-        return (self::$stmt->affected_rows > 0) ? true : false;
-    }
+    { return (self::$stmt->affected_rows > 0) ? true : false; }
     
     /**
      * Check if result hasn't failed
      * @return bool
      */
     public function error()
-    {
-        return (self::$result) ? true : false;
-    }
+    { return (self::$result) ? true : false; }
     
     /**
      * Check if results contain rows
      * @return bool
      */
     public function hasRows()
-    {
-        return ((count(self::$rows) > 0) || (count(self::$row) > 0)) ? true : false;
-    }
+    { return ((count(self::$rows) > 0) || (count(self::$row) > 0)) ? true : false; }
     
     /**
      * Return number of rows
      * @return int
      */
     public function num_rows()
-    {
-        return (int) self::$result->num_rows;
-    }
+    { return (int) self::$result->num_rows; }
     
     /**
      * Return rows from results
      * @return array
      */
     public function getData()
-    {
-        return (count(self::$rows) > 0) ? self::$rows : self::$row;
-    }
+    { return (count(self::$rows) > 0) ? self::$rows : self::$row; }
 }
 
 class SQLObject
@@ -104,9 +89,7 @@ class SQLObject
      * @return void
      */
     public function close()
-    {
-        @\mysqli_close(self::$con);
-    }
+    { @\mysqli_close(self::$con); }
     
     
     /**
@@ -119,8 +102,7 @@ class SQLObject
      */
     public function connect($db_host, $db_user, $db_pass, $db_name)
     {
-        if ($this->isConnected())
-            return;
+        if ($this->isConnected()) return;
         self::$con = mysqli_connect($db_host, $db_user, $db_pass, $db_name);
     }
     
@@ -129,45 +111,35 @@ class SQLObject
      * @return bool
      */
     private function isConnected()
-    {
-        return (isset(self::$con) && $this->ping()) ? true : false;
-    }
+    { return (isset(self::$con) && $this->ping()) ? true : false; }
     
     /**
      * Get connect error status
      * @return int
      */
     public function getConnectionError()
-    {
-        return @\mysqli_connect_error();
-    }
+    { return @\mysqli_connect_error(); }
     
     /**
      * Get last error from a failed prepare, and or execute.
      * @return string
      */
     public function getLastError()
-    {
-        return @\mysqli_error(self::$con);
-    }
+    { return @\mysqli_error(self::$con); }
     
     /** Deprecated [Useless]
      * Escape string using mysqli
      * @return string
      */
     public function escapeString(&$string)
-    {
-        return self::$con->real_escape_string($string);
-    }
+    { return self::$con->real_escape_string($string); }
     
     /**
      * Check if connection still live
      * @return bool
      */
     public function ping()
-    {
-        return (@self::$con->ping()) ? true : false;
-    }
+    { return (@self::$con->ping()) ? true : false; }
     
     
     /**
@@ -182,22 +154,16 @@ class SQLObject
         try {
             $prep = self::$con->stmt_init();
             if ($prep->prepare($sql)) {
-                if (isset($bind) && $bind != NULL)
-                    call_user_func_array(array(
-                        $prep,
-                        "bind_param"
-                    ), $bind);
+                if (isset($bind) && $bind != NULL) call_user_func_array(array($prep, "bind_param" ), $bind);
                 if ($prep->execute()) {
                     $result = new SQLResponce($prep->get_result(), $prep); // nd_mysqli && 
-                    if ($rr)
-                        return ($result->hasRows()) ? $result->getData() : array();
+                    if ($rr) return ($result->hasRows()) ? $result->getData() : array();
                     return $result;
                 }
             }
             throw new \Exception($this->getLastError());
         }
-        catch (\Exception $ex) {
-            die("Error " . $ex->getMessage());
-        }
+        catch (\Exception $ex) 
+        { die("Error " . $ex->getMessage()); }
     }
 }
