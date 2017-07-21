@@ -1,6 +1,10 @@
 <?
 /* global $si; */
 
+/*
+* DO NOT USE THIS AS A REAL EXAMPLE! - INSECURE (SlickInject Usage Only)
+*/
+
 if(!isset($_POST["username"]) || !isset($_POST["password"])) {
   die("No information received.");
 }

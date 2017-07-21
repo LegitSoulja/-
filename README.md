@@ -82,6 +82,19 @@ $si->DELETE("table", array("id"=>1));
 $si->TRUNCATE("table");
 ```
 
+### Closing Database
+When using SlickInject, it does not handle rather or not the connection should be open or closed. Using the statement below, you can close your databse when you're done using it.
+```php
+$si->close();
+```
+
+### SQL (SQLObject)
+Sometimes, SlickInject may lack certain things when managing your database. You can use SQLObject, as a below which is returned by SlickInject.
+```php
+$sql = $si->getSQLObject();
+$sql->query("SELECT * FROM `table`", [(boolean) if:true return rows, else return SQLResponce])
+```
+
 
 ### SQLObject
 
