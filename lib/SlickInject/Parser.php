@@ -1,4 +1,11 @@
 <?php
+
+/*
+\| @Author: LegitSoulja
+\| @License: MIT
+\| @Source: https://github.com/LegitSoulja/SlickInject
+*/
+
 namespace SlickInject;
 
 /**
