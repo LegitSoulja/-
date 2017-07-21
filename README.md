@@ -35,9 +35,7 @@ $si = new SlickInject("host", "username", "password", "database_name");
 ###### ```SELECT * FROM `table` ```
 
 ```php
-
-$si->SELECT([], "table");
-
+$si->SELECT([], "table", []);
 ```
 
 
@@ -45,9 +43,7 @@ $si->SELECT([], "table");
 ###### ```SELECT * FROM `table` WHERE `id` = 1```
 
 ```php
-
 $si->SELECT([], "table", array("id"=>1));
-
 ```
 
 
@@ -55,13 +51,23 @@ $si->SELECT([], "table", array("id"=>1));
 ###### ```SELECT * FROM `table` WHERE `id`=1 AND `group_id`=1```
 
 ```php
-
 $si->SELECT([], "table", array("id"=>1, "group_id"=>1));
 
 // - or - 
 
 $si->SELECT([], "table", array("id"=>1, "AND", "group_id"=>1));
+```
 
+##### ```SELECT `email` FROM `table` ORDER BY id```
+
+```php
+$si->SELECT(["email"], "table", array("ORDER BY", "id"))
+```
+
+##### ```SELECT `email` FROM `table` WHERE id = 1 ORDER BY id```
+
+```php
+$si->SELECT(["email"], "table", array("id"=>1, "ORDER BY", "id"))
 ```
 
 
@@ -69,9 +75,7 @@ $si->SELECT([], "table", array("id"=>1, "AND", "group_id"=>1));
 ###### ```SELECT `email` FROM `table` WHERE `group_id`=1 AND `id` > 1```
 
 ```php
-
 $si->SELECT(["email"], "table", array("groud_id"=>1, "`id`>1"));
-
 ```
 
 
@@ -82,7 +86,7 @@ $si->SELECT(["email"], "table", array("groud_id"=>1, "`id`>1"));
 
 ```php
 
-/* NOTE: A null [] array was placed, as WHERE. 
+/* NOTE: A null [] array was placed, as WHERE (3rd argument). 
 
    4th argument must be false, in order to get the SQLResponce/Responce
 
@@ -90,9 +94,9 @@ $si->SELECT(["email"], "table", array("groud_id"=>1, "`id`>1"));
 
 
 
-// stay efficient : 3rd argument is false, which will return an SQLResponce
+// stay efficient : 4th argument is false, which will return an SQLResponce
 
-$response = $si->SELECT([],"table",[], false);
+$response = $si->SELECT([], "table", [], false);
 
 
 
@@ -188,7 +192,7 @@ Sometimes, SlickInject may lack certain things when managing your database. You 
 
 $sql = $si->getSQLObject();
 
-$sql->query("SELECT * FROM `table`", true); // return rows
+$sql->query("SELECT * FROM `table`", NULL, true); // return rows
 
 ```
 
@@ -230,11 +234,11 @@ $sql->connect("localhost", "username", "password", "database");
 
 ```php
 
-$sql->query("INSERT INTO table (username) VALUES ('LegitSoulja')"); // *SQLResponce
+$sql->query("INSERT INTO table (username) VALUES ('LegitSoulja')", NULL); // *SQLResponce
 
 //
 
-$sql->query("SELECT * FROM table", true); // Array : Get array of requested table rows
+$sql->query("SELECT * FROM table", NULL, true); // Array : Get array of requested table rows
 
 ```
 
