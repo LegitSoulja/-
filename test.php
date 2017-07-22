@@ -1,25 +1,19 @@
 <?php
-namespace test;
-function _load_all($a)
-{
-    foreach (glob($a) as $b) {
-        if (is_dir($b)) {
-            _load_all($b . "/*"); // recursive include.
-            continue;
-        } else {
-            if ($b == __FILE__) continue;
-            if (pathinfo($b)['extension'] == "php") : include $b; endif;
-        }
-    }
+function _load_all($a) {
+  foreach (glob($a) as $b) :
+    if (is_dir($b) && _load_all($b . "/*")) : continue; else:
+    if ($b == __FILE__) : continue; endif; endif;
+    if (pathinfo($b)['extension'] == "php") : include $b; endif;
+  endforeach;
 }
 _load_all("lib/*");
 
 
-// // connect to the database / create instance
+// Connect to the database / create instance
 $si = new SlickInject("localhost", "username", "password", "database_name");
 // $si->connect() is usable aswell, instead of passing the args via the constructor
 
-// get rows from database as an array
+// Get rows from database as an array
 $data = $_slickinject->SELECT([], "table", array("id"=>1)); // @Array : Returns array
 print_r($data); // print data
 
@@ -30,23 +24,23 @@ $si->INSERT('table', array("id"=>5,"username"=>"bob")); // @SQLResponce
 $si->UPDATE('table', array("username"=>"bobo"), array("id"=>5)); // @SQLResponce
 
 // DELETE :: DELETE FROM `table` WHERE `username`='bobo'
-$si->DELETE('table', array("username"=>"bobo"));
+$si->DELETE('table', array("username"=>"bobo")); // @SQLResponce
 
 // TRUNCATE
-$si->TRUNCATE("table");
+$si->TRUNCATE("table"); // @SQLResponce
 
 // Advanced Selecting
 // :: SELECT id, username, email FROM `table` WHERE id > 5 AND active = 1
-$si->SELECT(["id", "username", "email"], "table", array("id > 5", "AND", "active = 1"));
+$si->SELECT(["id", "username", "email"], "table", array("id > 5", "AND", "active = 1")); // @array
 
 // Reserved Keyword Handler : Mistakes happens
 // :: SELECT `from`, `where`, `key` FROM `table`
-$si->SELECT(["from", "where", "key"], "table");
+$si->SELECT(["from", "where", "key"], "table"); // @array
 
 
 
 // SQLResponce Example
-$responce = $si->SELECT([], "table", [], false);
+$responce = $si->SELECT([], "table", [], false); // @SQLResponce
 
 if($responce->hasRows()) {
     $number_of_rows = $responce->num_rows();
