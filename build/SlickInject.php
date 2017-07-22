@@ -9,7 +9,7 @@
 namespace {
   
   use \SlickInject\Parser as Parser;
-  use \SlickInject\SQLObject as SQLobject;
+  use \SlickInject\SQLObject as SQLObject;
   
   class SlickInject
   {
