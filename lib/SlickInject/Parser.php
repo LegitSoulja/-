@@ -71,16 +71,10 @@ class Parser
         }
     }
     
-    /**
-     * Delete a row in a table
-     * @param array $explain               Don't use, unless you know what you're doing.
-     * @return array
-     */
     final static public function SELECT($columns, $table, $where, $explain = false)
     {
         $columns = (count($columns) > 0) ? $columns : array("*");
         
-        // fix $columns
         foreach ($columns as $k => $v) {
             if (in_array(strtoupper($v), self::$RESERVED_KEYWORDS)) 
                 $columns[$k] = "`" . $v . "`";
@@ -170,7 +164,6 @@ class Parser
             $ni++;
         }
         
-        // fix
         foreach (array_keys($values) as $i) 
         { $values[$i] =& $values[$i]; }
         
