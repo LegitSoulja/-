@@ -1,48 +1,60 @@
 ### SlickInject!
 
-
-
 ###### ::v2
 
-You cannot depend on escaping strings/remove code. There will always be another way around. With v2, that problem will be eliminated, into just using, and combining the use of sending "safe/raw" sql code to the server first, before the actual data. (Prepare/Execute).
+#### Supports
+- [x] MySQLi (100% fully supported)
+> Extensions needed
+- - nd_mysqli
+- - mysqlnd
+- [ ] PDO (Adapters Needed)
+- [ ] MySQL (Adapter Needed)
 
+SlickInject is a PHP library in which allows you to write efficent code, and be safe and secure while doing so. Using this library, makes ease of writing code for your database easier, faster, and no need of extra work/worries of having your database hacked upon an injection, or some random errors. SlickInject does this all for you, very simple.
 
+Using SlickInject, just remember how your SQL is wrote. You'll slowly start to understand the concept behind this, and hopefully you may even have a way to make this even better.
 
-    Want to avoid risky SQL Injections? Tired of typing out SQL syntax? Bothered with long boring/duplicate code when managing your database?
-
-
-
-SlickInject is the solution to your problems, in which will save you some time, with coding. That's if you build websites from scratch without using frameworks. SlickInject makes it easy to manage your database, protect again SQL injections, accomplish things faster, less code, less duplicate code (Using MySQLi). Let's make the life of a back-end dev easier.
 
 #### Connect to database.
 
+> When connecting to the databse, it requires 4 arguments. Obviously your database credentials, including your database name. Instantiating this object without arguments is safe, as you can connect at any time using the connect method providing your database credentials.
+
 ```php
-
 $si = new SlickInject("host", "username", "password", "database_name");
-
 ```
-
-
 
 ### SELECT
 
+> Using SELECT, you will automatically get returned the selected rows in an array format. Check examples for more detailed information. 
+
+#### Notes about ```SELECT```
+
+- **The 1st argument ```must``` be an array. ```[]``` = ```*```**
+- **The 3rd argument ```must``` be an array, and or ```NULL```**
+- **The 4th argument is ```true``` by default. Setting it ```false``` will return ```SlickInject\SQLResponce``` (see below).**
 
 
-> Using SELECT, you will automatically get returned the selected rows in an array format. Check examples for more detailed information. The 4th argument is true by default. Setting it false will return an SQLResponce.
-
-
+The example query correlates to the code example of the way you should think when writing.
 
 ###### ```SELECT * FROM `table` ```
 
 ```php
-$si->SELECT([], "table", []);
+$si->SELECT([], "table", []); // [] = *, 1st argument (All rows)
 ```
 
 
 
 ###### ```SELECT * FROM `table` WHERE `id` = 1```
 
+#### Notes about ```WHERE```
+- **The 3rd argument as spoke, is WHERE in this case. **
+
 ```php
+
+// @param array []       |  Columns you're receiving
+// @param string "table" |  The table name
+// @param array array()  |  WHERE cause
+
 $si->SELECT([], "table", array("id"=>1));
 ```
 
@@ -78,37 +90,21 @@ $si->SELECT(["email"], "table", array("id"=>1, "ORDER BY", "id"))
 $si->SELECT(["email"], "table", array("groud_id"=>1, "`id`>1"));
 ```
 
+###### SQLResponce | SELECT (Example)
 
+Except for the ```SELECT``` method, the others will return you ```SQLResponce```, however by default, you are given the rows of the selected data as an array, which can be toggled false as the 4th argument when using ```SELECT```
 
-###### Obtain mysqli_query request
-
-#### Obtain number of rows
+###### Obtain number of rows
 
 ```php
-
-/* NOTE: A null [] array was placed, as WHERE (3rd argument). 
-
-   4th argument must be false, in order to get the SQLResponce/Responce
-
-*/
-
-
-
-// stay efficient : 4th argument is false, which will return an SQLResponce
-
 $response = $si->SELECT([], "table", [], false);
 
-
-
 print_r($response ->num_rows()); // int
-
 ```
 
 
 
 ### UPDATE
-
-
 
 ###### ```UPDATE `table` SET `username`="Guest" WHERE `id`=1```
 
@@ -117,7 +113,6 @@ print_r($response ->num_rows()); // int
 $username = "Guest";
 
 $si->UPDATE('users', array("username"=>$username), array("id"=>1));
-
 ```
 
 
@@ -132,9 +127,7 @@ $si->UPDATE('users', array("username"=>$username), array("id"=>1));
 
 $username = "Johnny";
 
-$email = "test@email.com"
-
-
+$email = "example@example.com"
 
 // very simple, and easy.
 
@@ -145,8 +138,6 @@ $si->INSERT('table', array("username"=>$username, "email"=>$email));
 
 
 ### DELETE
-
-
 
 ###### ```DELETE FROM `table` WHERE `id`=1```
 
@@ -182,16 +173,37 @@ $si->close();
 
 ```
 
+### SQLResponce
 
 
-### SQL (SQLObject)
+
+#### Functions | Return <T> | Description
+
+> Last arguments for SlickInject must be false as of [this](https://github.com/LegitSoulja/SlickInject/blob/dev/README.md#obtain-mysqli_query-request), to get SQLResponce 
+
+- hasRows() :: bool : If query returned any rows
+
+- getResult() :: object : Returns mysqli_query responce
+
+- num_rows() :: integer : Return number of rows
+
+- getData() :: array : Return query table row(s)
+
+- didAffect() :: bool : If any rows was affected during execution
+
+- error() :: bool : If result doesn't exist or contain any errors
+
+
+
+### SQLObject
 
 Sometimes, SlickInject may lack certain things when managing your database. You can use SQLObject, as a below which is returned by SlickInject.
 
 ```php
+// $si = new SlickInject(connected to databse)
+$sqlobject = $si->getSQLObject(); // store object
 
-$sql = $si->getSQLObject();
-
+// execute freely
 $sql->query("SELECT * FROM `table`", NULL, true); // return rows
 
 ```
@@ -202,75 +214,58 @@ $sql->query("SELECT * FROM `table`", NULL, true); // return rows
 
 ### SQLObject
 
-
-
 SQLObject can be used stand-alone if you don't like the quick and ease of use with SlickInject. Maybe, it's missing something. SQLObject Documentation..
 
 
-
-##### Connecting
+###### Connecting
 
 - Method 1
 
 ```php
-
 $sql = new \SlickInject\SQLObject("localhost", "username", "password", "database");
-
 ```
 
 - Method 2
 
 ```php
-
 $sql = new \SlickInject\SQLObject();
-
 $sql->connect("localhost", "username", "password", "database");
-
 ```
 
 
 
-##### Sending Queries
+###### Sending Queries
 
 ```php
-
 $sql->query("INSERT INTO table (username) VALUES ('LegitSoulja')", NULL); // *SQLResponce
-
 //
 
 $sql->query("SELECT * FROM table", NULL, true); // Array : Get array of requested table rows
-
 ```
 
 
 
-##### Ping
+###### Ping
 
 ```php
-
 $sql->ping(); // Boolean : Returns if database is still connected
-
 ```
 
 
 
-##### Errors
+###### Errors
 
 ```php
-
 $sql->getConnectionError(); // String : Get connect errror, if present
 
 //
 
 $sql->getLastError(); // String : Get last error from last executed query
-
 ```
 
 
 
-##### Close Datbase
-
-
+###### Close Datbase
 
 ```php
 
@@ -298,30 +293,10 @@ $sql->close();
 
 
 
-### SQLResponce
-
-
-
-#### Functions | Return <T> | Description
-
-> Last arguments for SlickInject must be false as of [this](https://github.com/LegitSoulja/SlickInject/blob/dev/README.md#obtain-mysqli_query-request), to get SQLResponce 
-
-- hasRows() :: bool : If query returned any rows
-
-- getResult() :: object : Returns mysqli_query responce
-
-- num_rows() :: integer : Return number of rows
-
-- getData() :: array : Return query table row(s)
-
-- didAffect() :: bool : If any rows was affected during execution
-
-- error() :: bool : If result doesn't exist or contain any errors
 
 
 
 ### Future Additions
-
 
 
 - [ ] Create "Tables, Databases" with ease.
@@ -332,13 +307,8 @@ $sql->close();
 
 - [ ] More in dept usage/mech/doc/additions of SlickInject (Plan, and make methods/functions understandable, easier to understand/learn/use).
 
-- [ ] SlickInject Database TreeView (Displays maximum, but minimum detailed information about your database, tables, etc).
 
-- [ ] Most of all, noob friendly, family safe, environment safe, global safe, familiarly recognizable and easily understandable. (TOo much?)
-
-
-
-### contribute
+## Contribute
 
 
 
