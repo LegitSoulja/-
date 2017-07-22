@@ -20,17 +20,18 @@ class SQLResponce
      * SQLResponce constructor
      * @return void
      */
-    function __construct($result, $stmt)
+    function __construct($stmt, $rows = array())
     {
-        self::$result = $result;
         self::$stmt   = $stmt;
-        if ($result->num_rows < 1) return;
-        $rows = array();
-        while ($row = $result->fetch_assoc()) 
+        self::$result = $stmt->get_result();
+        if (self::$result->num_rows < 1) return;
+        while ($row = self::$result->fetch_assoc())
         { array_push($rows, $row); }
         if (count($rows) === 1) return self::$row = $rows;
         return self::$rows = $rows;
     }
+    
+    function __destruct(){}
     
     /**
      * Return mysqli_result object
@@ -138,7 +139,7 @@ class SQLObject
      * Escape string using mysqli
      * @return string
      */
-    public function escapeString(&$string)
+    private function escapeString(&$string)
     { return self::$con->real_escape_string($string); }
     
     /**
@@ -163,7 +164,7 @@ class SQLObject
             if ($prep->prepare($sql)) {
                 if (isset($bind) && $bind != NULL) call_user_func_array(array($prep, "bind_param" ), $bind);
                 if ($prep->execute()) {
-                    $result = new SQLResponce($prep->get_result(), $prep); // nd_mysqli && 
+                    $result = new SQLResponce($prep);
                     if ($rr) return ($result->hasRows()) ? $result->getData() : array();
                     return $result;
                 }
