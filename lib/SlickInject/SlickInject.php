@@ -41,16 +41,12 @@ class SlickInject
         self::$SQLObject = new SQLObject($db_host, $db_user, $db_pass, $db_name);
     }
     
-    /**
-     * Check if a connect was ever established
-     * @return bool
-     */
-    public function isConnected()
+    private function isConnected()
     { return ((self::$SQLObject instanceof SQLObject)) ? true : false; }
     
     /**
      * Returns SQLObject
-     * @return object
+     * @return \SlickInject\SQLObject
      */
     public function getSQLObject()
     { return self::$SQLObject; }
@@ -67,7 +63,7 @@ class SlickInject
      * @param string $table          Name of table in which you're updating.
      * @param array $object          List of key/values of the data you're updating
      * @param array $where           List of key/values of the where exist
-     * @return bool
+     * @return \SlickInject\SQLResponce
      */
     public function UPDATE($table, $object, $where)
     {
@@ -81,7 +77,8 @@ class SlickInject
      * @param array $columns              List of specific columns that is being obtained. * = [];
      * @param string $table               Name of table in which you're updating.
      * @param array $where                List of key/values of the where exist
-     * @return bool
+     * @param bool $rr                    Return rows, false returns \SlickInject\SQLResponce
+     * @return array
      */
     public function SELECT($columns, $table, $where = NULL, $rr = true)
     {
@@ -94,7 +91,7 @@ class SlickInject
      * Insert data into a database
      * @param string $table               Name of table in which you're updating.
      * @param array $object                List of key/values of the data you're inserting
-     * @return bool
+     * @return \SlickInject\SQLResponce
      */
     public function INSERT($table, $object)
     {
@@ -104,10 +101,9 @@ class SlickInject
     }
     
     /**
-     * Insert data into a database
+     * Truncate/Delete table
      * @param string $table               Name of table in which you're updating.
-     * @param array $object                List of key/values of the data you're inserting
-     * @return bool
+     * @return \SlickInject\SQLResponce
      */
     public function TRUNCATE($table)
     {
@@ -120,7 +116,7 @@ class SlickInject
      * Delete a row in a table
      * @param string $table               Name of table in which you're updating.
      * @param array $where                List of key/values that directs which/where table is being deleted
-     * @return bool
+     * @return \SlickInject\SQLResponce
      */
     public function DELETE($table, $where = NULL)
     {
