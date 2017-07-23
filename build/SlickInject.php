@@ -212,6 +212,7 @@ namespace SlickInject {
   {
       private static $con;
       private $d_db_name; // default database name
+      private $isInDefault = true;
 
       /**
        * SQLObject constructor | Can accept database  credentials
@@ -256,6 +257,7 @@ namespace SlickInject {
       { return (isset(self::$con) && $this->ping()) ? true : false; }
 
       public function select_db($name){
+          $this->isInDefault = false;
           return mysqli_select_db(self::$con, $name);
       }
 
@@ -288,7 +290,10 @@ namespace SlickInject {
       { return (@self::$con->ping()) ? true : false; }
 
       private function set_default_db()
-      { return mysqli_select_db(self::$con, $this->d_db_name); }
+      { 
+          $this->isInDefault = true;
+          return mysqli_select_db(self::$con, $this->d_db_name); 
+      }
 
       /**
        * Send query, in which is processed specially.
@@ -305,7 +310,7 @@ namespace SlickInject {
                   if (isset($bind) && $bind != NULL) call_user_func_array(array($prep, "bind_param" ), $bind);
                   if ($prep->execute()) {
                       $result = new SQLResponce($prep);
-                      $this->set_default_db(); // reset default database
+                      if(!$this->isInDefault) $this->set_default_db(); // reset default database
                       if ($rr) return ($result->hasRows()) ? $result->getData() : array();
                       return $result;
                   }
@@ -314,7 +319,7 @@ namespace SlickInject {
           }
           catch (\Exception $ex) 
           { 
-              $this->set_default_db(); // reset default database
+              if(!$this->isInDefault) $this->set_default_db(); // reset default database
               die("Error " . $ex->getMessage()); 
           }
       }
