@@ -142,7 +142,7 @@ namespace SlickInject {
        * SQLResponce constructor
        * @return void
        */
-      function __construct($stmt, $roows = array())
+      function __construct($stmt, $rows = array())
       {
           $this->result = $stmt->get_result();
           $this->stmt   = $stmt;
