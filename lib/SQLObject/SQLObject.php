@@ -82,6 +82,8 @@ class SQLResponce
 class SQLObject
 {
     private static $con;
+    private $d_db_name; // default database name
+    private $isInDefault = true;
     
     /**
      * SQLObject constructor | Can accept database  credentials
@@ -114,6 +116,7 @@ class SQLObject
     public function connect($db_host, $db_user, $db_pass, $db_name)
     {
         if ($this->isConnected()) return;
+        $this->d_db_name = $db_name;
         self::$con = mysqli_connect($db_host, $db_user, $db_pass, $db_name);
     }
     
@@ -123,6 +126,11 @@ class SQLObject
      */
     private function isConnected()
     { return (isset(self::$con) && $this->ping()) ? true : false; }
+    
+    public function select_db($name){
+        $this->isInDefault = false;
+        return mysqli_select_db(self::$con, $name);
+    }
     
     /**
      * Get connect error status
@@ -152,6 +160,11 @@ class SQLObject
     public function ping()
     { return (@self::$con->ping()) ? true : false; }
     
+    private function set_default_db()
+    { 
+        $this->isInDefault = true;
+        return mysqli_select_db(self::$con, $this->d_db_name); 
+    }
     
     /**
      * Send query, in which is processed specially.
@@ -168,6 +181,7 @@ class SQLObject
                 if (isset($bind) && $bind != NULL) call_user_func_array(array($prep, "bind_param" ), $bind);
                 if ($prep->execute()) {
                     $result = new SQLResponce($prep);
+                    if(!$this->isInDefault) $this->set_default_db(); // reset default database
                     if ($rr) return ($result->hasRows()) ? $result->getData() : array();
                     return $result;
                 }
@@ -175,6 +189,9 @@ class SQLObject
             throw new \Exception($this->getLastError());
         }
         catch (\Exception $ex) 
-        { die("Error " . $ex->getMessage()); }
+        { 
+            if(!$this->isInDefault) $this->set_default_db(); // reset default database
+            die("Error " . $ex->getMessage()); 
+        }
     }
 }

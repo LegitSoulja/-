@@ -37,7 +37,9 @@ $si->SELECT(["id", "username", "email"], "table", array("id > 5", "AND", "active
 // :: SELECT `from`, `where`, `key` FROM `table`
 $si->SELECT(["from", "where", "key"], "table"); // @array
 
-
+// change database name
+$si->select_db("otherdatabase")->SELECT([], "table");
+// to continue using this database, you will need to select it again.
 
 // SQLResponce Example
 $responce = $si->SELECT([], "table", [], false); // @SQLResponce
