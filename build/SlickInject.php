@@ -212,7 +212,7 @@ namespace SlickInject {
   {
       private static $con;
       private $d_db_name; // default database name
-      
+
       /**
        * SQLObject constructor | Can accept database  credentials
        * @return void
@@ -223,16 +223,16 @@ namespace SlickInject {
           if (count($args) === 4)
               return $this->connect($args[0], $args[1], $args[2], $args[3]);
       }
-      
-      
+
+
       /**
        * Close database connected
        * @return void
        */
       public function close()
       { @\mysqli_close(self::$con); }
-      
-      
+
+
       /**
        * Connect to database
        * @param string $db_host          Database host
@@ -247,46 +247,49 @@ namespace SlickInject {
           $this->d_db_name = $db_name;
           self::$con = mysqli_connect($db_host, $db_user, $db_pass, $db_name);
       }
-      
+
       /**
        * [Private] Checks if the database connection was ever established.
        * @return bool
        */
       private function isConnected()
       { return (isset(self::$con) && $this->ping()) ? true : false; }
-      
-      public function select_db($name)
-      { return mysqli_select_db(self::$con, $name); }
-      
+
+      public function select_db($name){
+          return mysqli_select_db(self::$con, $name);
+      }
+
       /**
        * Get connect error status
        * @return int
        */
       public function getConnectionError()
       { return @\mysqli_connect_error(); }
-      
+
       /**
        * Get last error from a failed prepare, and or execute.
        * @return string
        */
       public function getLastError()
       { return @\mysqli_error(self::$con); }
-      
+
       /** Deprecated [Useless]
        * Escape string using mysqli
        * @return string
        */
       private function escapeString(&$string)
       { return self::$con->real_escape_string($string); }
-      
+
       /**
        * Check if connection still live
        * @return bool
        */
       public function ping()
       { return (@self::$con->ping()) ? true : false; }
-      
-      
+
+      private function set_default_db()
+      { return mysqli_select_db(self::$con, $this->d_db_name); }
+
       /**
        * Send query, in which is processed specially.
        * @param stting $sql                  The query that will be prepared
@@ -302,7 +305,7 @@ namespace SlickInject {
                   if (isset($bind) && $bind != NULL) call_user_func_array(array($prep, "bind_param" ), $bind);
                   if ($prep->execute()) {
                       $result = new SQLResponce($prep);
-                      mysqli_select_db(self::$con, $this->d_db_name);
+                      $this->set_default_db(); // reset default database
                       if ($rr) return ($result->hasRows()) ? $result->getData() : array();
                       return $result;
                   }
@@ -311,7 +314,7 @@ namespace SlickInject {
           }
           catch (\Exception $ex) 
           { 
-              mysqli_select_db(self::$con, $this->d_db_name);
+              $this->set_default_db(); // reset default database
               die("Error " . $ex->getMessage()); 
           }
       }
