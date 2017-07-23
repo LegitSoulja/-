@@ -82,6 +82,7 @@ class SQLResponce
 class SQLObject
 {
     private static $con;
+    private $d_db_name; // default database name
     
     /**
      * SQLObject constructor | Can accept database  credentials
@@ -114,6 +115,7 @@ class SQLObject
     public function connect($db_host, $db_user, $db_pass, $db_name)
     {
         if ($this->isConnected()) return;
+        $this->d_db_name = $db_name;
         self::$con = mysqli_connect($db_host, $db_user, $db_pass, $db_name);
     }
     
@@ -123,6 +125,10 @@ class SQLObject
      */
     private function isConnected()
     { return (isset(self::$con) && $this->ping()) ? true : false; }
+    
+    public function select_db($name){
+        return mysqli_select_db($name);
+    }
     
     /**
      * Get connect error status
@@ -168,6 +174,7 @@ class SQLObject
                 if (isset($bind) && $bind != NULL) call_user_func_array(array($prep, "bind_param" ), $bind);
                 if ($prep->execute()) {
                     $result = new SQLResponce($prep);
+                    mysqli_select_db($this->d_db_name);
                     if ($rr) return ($result->hasRows()) ? $result->getData() : array();
                     return $result;
                 }
@@ -175,6 +182,9 @@ class SQLObject
             throw new \Exception($this->getLastError());
         }
         catch (\Exception $ex) 
-        { die("Error " . $ex->getMessage()); }
+        { 
+            mysqli_select_db($this->d_db_name);
+            die("Error " . $ex->getMessage()); 
+        }
     }
 }
