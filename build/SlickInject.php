@@ -256,7 +256,7 @@ namespace SlickInject {
       { return (isset(self::$con) && $this->ping()) ? true : false; }
       
       public function select_db($name)
-      { return mysqli_select_db($name); }
+      { return mysqli_select_db(self::$con, $name); }
       
       /**
        * Get connect error status
@@ -302,7 +302,7 @@ namespace SlickInject {
                   if (isset($bind) && $bind != NULL) call_user_func_array(array($prep, "bind_param" ), $bind);
                   if ($prep->execute()) {
                       $result = new SQLResponce($prep);
-                      mysqli_select_db($this->d_db_name);
+                      mysqli_select_db(self::$con, $this->d_db_name);
                       if ($rr) return ($result->hasRows()) ? $result->getData() : array();
                       return $result;
                   }
@@ -311,7 +311,7 @@ namespace SlickInject {
           }
           catch (\Exception $ex) 
           { 
-              mysqli_select_db($this->d_db_name);
+              mysqli_select_db(self::$con, $this->d_db_name);
               die("Error " . $ex->getMessage()); 
           }
       }
