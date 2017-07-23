@@ -20,13 +20,12 @@ class SQLResponce
      * SQLResponce constructor
      * @return void
      */
-    function __construct($result, $stmt)
+    function __construct($stmt, $roows = array())
     {
-        $this->result = $result;
+        $this->result = $stmt->get_result();
         $this->stmt   = $stmt;
-        if ($result->num_rows < 1) return;
-        $rows = array();
-        while ($row = $result->fetch_assoc()) 
+        if ($this->result->num_rows < 1) return;
+        while ($row = $this->result->fetch_assoc()) 
         { array_push($rows, $row); }
      
         if (count($rows) === 1) return $this->row = $rows;
