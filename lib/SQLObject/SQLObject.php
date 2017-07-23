@@ -11,69 +11,73 @@ namespace SlickInject;
 class SQLResponce
 {
     
-    private static $result;
-    private static $rows;
-    private static $row;
-    private static $stmt;
+    private $result;
+    private $rows;
+    private $row;
+    private $stmt;
     
     /**
      * SQLResponce constructor
      * @return void
      */
-    function __construct($stmt, $rows = array())
+    function __construct($result, $stmt)
     {
-        self::$stmt   = $stmt;
-        self::$result = $stmt->get_result();
-        if (self::$result->num_rows < 1) return;
-        while ($row = self::$result->fetch_assoc())
+        $this->result = $result;
+        $this->stmt   = $stmt;
+        if ($result->num_rows < 1) return;
+        $rows = array();
+        while ($row = $result->fetch_assoc()) 
         { array_push($rows, $row); }
-        if (count($rows) === 1) return self::$row = $rows;
-        return self::$rows = $rows;
+     
+        if (count($rows) === 1) return $this->row = $rows;
+        return $this->rows = $rows;
     }
-    
-    function __destruct(){}
     
     /**
      * Return mysqli_result object
      * @return object
      */
     public function getResult()
-    { return self::$result; }
+    { return $this->result; }
     
     /**
      * Check if any rows was affected during execution
      * @return bool
      */
     public function didAffect()
-    { return (self::$stmt->affected_rows > 0) ? true : false; }
+    { return ($this->stmt->affected_rows > 0) ? true : false; }
     
     /**
      * Check if result hasn't failed
      * @return bool
      */
     public function error()
-    { return (self::$result) ? true : false; }
+    { return ($this->result) ? true : false; }
     
     /**
      * Check if results contain rows
      * @return bool
      */
     public function hasRows()
-    { return ((count(self::$rows) > 0) || (count(self::$row) > 0)) ? true : false; }
+    { return ((count($this->rows) > 0) || (count($this->row) > 0)) ? true : false; }
     
     /**
      * Return number of rows
      * @return int
      */
     public function num_rows()
-    { return (int) self::$result->num_rows; }
+    { return (int) $this->result->num_rows; }
     
     /**
      * Return rows from results
      * @return array
      */
     public function getData()
-    { return (count(self::$rows) > 0) ? self::$rows : self::$row; }
+    { 
+     // echo count(self::$rows);
+      return (count($this->rows) > 0) ? $this->rows : $this->row; 
+    
+    }
 }
 
 class SQLObject
