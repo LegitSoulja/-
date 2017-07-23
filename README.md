@@ -27,7 +27,7 @@ $si = new SlickInject("host", "username", "password", "database_name");
 
 > Using SELECT, you will automatically get returned the selected rows in an array format. Check examples for more detailed information. 
 
-#### Notes about ```SELECT```
+##### Notes about ```SELECT```
 
 - **The 1st argument ```must``` be an array. ```[]``` = ```*```**
 - **The 3rd argument ```must``` be an array, and or ```NULL```**
@@ -70,13 +70,13 @@ $si->SELECT([], "table", array("id"=>1, "group_id"=>1));
 $si->SELECT([], "table", array("id"=>1, "AND", "group_id"=>1));
 ```
 
-##### ```SELECT `email` FROM `table` ORDER BY id```
+###### ```SELECT `email` FROM `table` ORDER BY id```
 
 ```php
 $si->SELECT(["email"], "table", array("ORDER BY", "id"))
 ```
 
-##### ```SELECT `email` FROM `table` WHERE id = 1 ORDER BY id```
+###### ```SELECT `email` FROM `table` WHERE id = 1 ORDER BY id```
 
 ```php
 $si->SELECT(["email"], "table", array("id"=>1, "ORDER BY", "id"))
@@ -88,6 +88,12 @@ $si->SELECT(["email"], "table", array("id"=>1, "ORDER BY", "id"))
 
 ```php
 $si->SELECT(["email"], "table", array("groud_id"=>1, "`id`>1"));
+```
+
+##### Change database
+
+```php
+$si->select_db("otherdatabase")->SELECT([], "table"); 
 ```
 
 ###### SQLResponce | SELECT (Example)
