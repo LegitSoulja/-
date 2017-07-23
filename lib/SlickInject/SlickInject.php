@@ -51,6 +51,12 @@ class SlickInject
     public function getSQLObject()
     { return self::$SQLObject; }
     
+    public function select_db($name){
+        self::$SQLObject->select_db($name);
+        return $this;
+    }
+    
+    
     /**
      *Close database connection
      * @return void
