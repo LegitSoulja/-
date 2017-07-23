@@ -127,7 +127,7 @@ class SQLObject
     { return (isset(self::$con) && $this->ping()) ? true : false; }
     
     public function select_db($name){
-        return mysqli_select_db($name);
+        return mysqli_select_db(self::$con, $name);
     }
     
     /**
@@ -158,6 +158,8 @@ class SQLObject
     public function ping()
     { return (@self::$con->ping()) ? true : false; }
     
+    private function set_default_db()
+    { return mysqli_select_db(self::$con, $this->d_db_name); }
     
     /**
      * Send query, in which is processed specially.
@@ -174,7 +176,7 @@ class SQLObject
                 if (isset($bind) && $bind != NULL) call_user_func_array(array($prep, "bind_param" ), $bind);
                 if ($prep->execute()) {
                     $result = new SQLResponce($prep);
-                    mysqli_select_db($this->d_db_name);
+                    $this->set_default_db(); // reset default database
                     if ($rr) return ($result->hasRows()) ? $result->getData() : array();
                     return $result;
                 }
@@ -183,7 +185,7 @@ class SQLObject
         }
         catch (\Exception $ex) 
         { 
-            mysqli_select_db($this->d_db_name);
+            $this->set_default_db(); // reset default database
             die("Error " . $ex->getMessage()); 
         }
     }
