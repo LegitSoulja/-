@@ -126,7 +126,7 @@ class SlickInject
      */
     public function DELETE($table, $where = NULL)
     {
-        if (!$this->isConnected() || !isset($table) || !isset($object)) return;
+        if (!$this->isConnected() || !isset($table) || !isset($where)) return;
         $delete = Parser::DELETE($table, $where);
         return self::$SQLObject->query($delete[0], (isset($delete[1])) ? $delete[1] : NULL);
     }
