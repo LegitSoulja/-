@@ -6,6 +6,9 @@
 \| @Source: https://github.com/LegitSoulja/SlickInject
 */
 
+// do not ignore this error. 
+if (!extension_loaded('mysqlnd')) throw new Error("Failed to load nd_mysqli extension.");
+
 use SlickInject\Parser as Parser;
 use SlickInject\SQLObject as SQLObject;
 
