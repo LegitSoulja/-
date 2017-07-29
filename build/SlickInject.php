@@ -6,6 +6,8 @@
 \| @Source: https://github.com/LegitSoulja/SlickInject
 */
 
+if (!extension_loaded('mysqlnd')) throw new Error("Failed to load nd_mysqli extension.");
+
 namespace {
   
   use SlickInject\Parser as Parser;
