@@ -178,7 +178,17 @@ class SQLObject
         try {
             $prep = self::$con->stmt_init();
             if ($prep->prepare($sql)) {
-                if (isset($bind) && $bind != NULL) call_user_func_array(array($prep, "bind_param" ), $bind);
+                if (isset($bind) && $bind != NULL) {
+                    $out = array($bind[0]);
+                    
+                     foreach ($bind as $key => $value) {
+                         if ($key != 0) {
+                        $out[$key] = &$bind[$key];
+                         }
+                     }
+                    
+                    call_user_func_array(array($prep, "bind_param" ), $out);
+                }
                 if ($prep->execute()) {
                     $result = new SQLResponce($prep);
                     if(!$this->isInDefault) $this->set_default_db(); // reset default database
