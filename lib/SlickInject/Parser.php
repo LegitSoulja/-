@@ -115,9 +115,6 @@ class Parser
         foreach ($values as $v) 
         { $types .= self::getType($v); }
         
-        foreach (array_keys($values) as $i) 
-        { $values[$i] =& $values[$i]; }
-        
         array_unshift($values, $types);
         
         return array( $sql, $values );
