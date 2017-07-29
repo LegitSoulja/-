@@ -14,6 +14,11 @@ SlickInject is a PHP library in which allows you to write efficent code, and be 
 
 Using SlickInject, just remember how your SQL is wrote. You'll slowly start to understand the concept behind this, and hopefully you may even have a way to make this even better.
 
+#### Installation
+I have prepared/compiled SlickInject into 1 file if you're interested. It's inside the build folder. However, Load all the files in lib folder. Composer should load, or manually load the 3 files. test.php also provides a library loader I wrote.
+
+SlickInject is still being debugged, and constantly updated. This documentation is not 100% well complete and documented. 
+
 
 #### Connect to database.
 
