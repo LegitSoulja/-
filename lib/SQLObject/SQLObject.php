@@ -182,7 +182,7 @@ class SQLObject
                     $out = array($bind[0]);
                     
                      foreach ($bind as $key => $value) {
-                         if (key != 0) {
+                         if ($key != 0) {
                         $out[$key] = &$bind[$key];
                          }
                      }
