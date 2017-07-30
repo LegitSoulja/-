@@ -71,7 +71,7 @@ class SlickInject
   
     private function output($state, $message = "", $close = false){
       if($close) $this->close();
-      die(json_encode(array("state"=>$state, "message"=>$message)))
+      die(json_encode(array("state"=>$state, "message"=>$message)));
     }
     
     /**
