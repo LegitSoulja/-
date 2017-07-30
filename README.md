@@ -2,13 +2,10 @@
 
 ###### ::v2
 
-#### Supports
+#### Supports PHP (v5.6 - v7.1)
 - [x] MySQLi (100% fully supported)
 > Extensions needed
-- - nd_mysqli
-- - mysqlnd
-- [ ] PDO (Adapters Needed)
-- [ ] MySQL (Adapter Needed)
+- - mysqlnd/nd_mysqli
 
 > ###### [![g](https://img.shields.io/badge/build-padding-brightgreen.svg)](#) [![GitHub issues](https://img.shields.io/github/issues/LegitSoulja/SlickInject.svg)](https://github.com/LegitSoulja/SlickInject/issues) [![GitHub forks](https://img.shields.io/github/forks/LegitSoulja/SlickInject.svg)](https://github.com/LegitSoulja/SlickInject/network) [![GitHub stars](https://img.shields.io/github/stars/LegitSoulja/SlickInject.svg)](https://github.com/LegitSoulja/SlickInject/stargazers)
 
