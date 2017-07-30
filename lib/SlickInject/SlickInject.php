@@ -14,6 +14,7 @@ use SlickInject\SQLObject as SQLObject;
 
 define("SI_VERSION", 102); // 1.0.2
 
+#buildbelow
 class SlickInject
 {
     
@@ -148,3 +149,4 @@ class SlickInject
         return self::$SQLObject->query($delete[0], (isset($delete[1])) ? $delete[1] : NULL);
     }
 }
+#endbuild
