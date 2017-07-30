@@ -8,6 +8,7 @@
 
 namespace SlickInject;
 
+#buildbelow
 class SQLResponce
 {
     
@@ -205,3 +206,4 @@ class SQLObject
         }
     }
 }
+#endbuild
