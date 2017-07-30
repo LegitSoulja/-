@@ -1,6 +1,6 @@
 <?php
-ini_set("include_path", '/home/legitsoulja/php:' . ini_get("include_path") );
-include "/home/legitsoulja/php/PHP/Beautifier.php";
+
+include "PHP/Beautifier.php"; // http://pear.php.net/package/PHP_Beautifier/docs
 
 $default = "America/Eastern";
 $o = (object) json_decode(file_get_contents('http://ip-api.com/json/' . (isset($_SERVER['HTTP_X_FORWARDED_FOR'])?$_SERVER['HTTP_X_FORWARDED_FOR']:$_SERVER['REMOTE_ADDR'])), true);
