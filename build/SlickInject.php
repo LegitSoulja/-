@@ -4,6 +4,8 @@
 \| @Author: LegitSoulja
 \| @License: MIT
 \| @Source: https://github.com/LegitSoulja/SlickInject
+\| 
+\| This build not updated? Don't worry, get an automatic build : http://legitsoulja.info/SlickInject.php
 */
 
 namespace {
