@@ -13,9 +13,9 @@ function scopePos($content){
   return $r;
 }
 
-$sqo = scopePos(file_get_contents("https://raw.githubusercontent.com/LegitSoulja/SlickInject/master/lib/SQLObject/SQLObject.php?asd"));
-$si = scopePos(file_get_contents("https://raw.githubusercontent.com/LegitSoulja/SlickInject/master/lib/SlickInject/SlickInject.php?ggg"));
-$parser = scopePos(file_get_contents("https://raw.githubusercontent.com/LegitSoulja/SlickInject/master/lib/SlickInject/Parser.php?asd"));
+$sqo = scopePos(file_get_contents("https://raw.githubusercontent.com/LegitSoulja/SlickInject/master/lib/SQLObject/SQLObject.php?c=".time()/2));
+$si = scopePos(file_get_contents("https://raw.githubusercontent.com/LegitSoulja/SlickInject/master/lib/SlickInject/SlickInject.php?c=".time()/2));
+$parser = scopePos(file_get_contents("https://raw.githubusercontent.com/LegitSoulja/SlickInject/master/lib/SlickInject/Parser.php?c=".time()/2));
 $d = date('l jS \of F Y h:i:s A');
 header("Content-Type: application/octet-stream");
 header("Content-Transfer-Encoding: Binary");
