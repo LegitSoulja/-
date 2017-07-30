@@ -8,6 +8,7 @@
 
 namespace SlickInject;
 
+#buildbelow
 /**
  * Class Parser
  * This class should not be extended. They are static functions, but grouped in an organized maner,
@@ -176,3 +177,4 @@ class Parser
         return array( $sql, $where[1] );
     }
 }
+#endbuild
