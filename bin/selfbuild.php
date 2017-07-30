@@ -20,13 +20,12 @@ $si = scopePos(file_get_contents("https://raw.githubusercontent.com/LegitSoulja/
 $parser = scopePos(file_get_contents("https://raw.githubusercontent.com/LegitSoulja/SlickInject/master/lib/SlickInject/Parser.php?c=".time()/2));
 $d = date('l jS \of F Y h:i:s A');
 
-// https://img.shields.io/badge/build-passing-brightgreen.svg
 if($status){
-header("Content-Type: text/plain");
+  header("Content-Type: text/plain");
 }else{
-header("Content-Type: application/octet-stream");
-header("Content-Transfer-Encoding: Binary");
-header("Content-disposition: attachment; filename=\"SlickInject.php\"");
+  header("Content-Type: application/octet-stream");
+  header("Content-Transfer-Encoding: Binary");
+  header("Content-disposition: attachment; filename=\"SlickInject.php\"");
 }
 
 $build = <<<BUILD
@@ -55,7 +54,6 @@ BUILD;
 
 $pb = new PHP_Beautifier();
 $pb->addFilter("ArrayNested");
-//$pb->addFilter("ListClassFunction");
 $pb->addFilter('EqualsAlign');
 $pb->addFilter('NewLines');
 $pb->addFilter('IndentStyles');
@@ -68,25 +66,15 @@ $h = str_replace($clean, "", $h);
 try{
     eval($h);
     unset($h);
-    if($status){
-        die(header("Location: https://img.shields.io/badge/build-passing-brightgreen.svg"));
-    }else{
-        $pb->show();
-    }
+    if($status) die(header("Location: https://img.shields.io/badge/build-passing-brightgreen.svg"));
+    $pb->show();
     die();
 }catch(Error $ex){
-    //print_r($ex);
-    if($status){
-            die(header("Location: https://img.shields.io/badge/build-failing-red.svg"));
-    }
+    if($status) die(header("Location: https://img.shields.io/badge/build-failing-red.svg"));
     header_remove();
     header("Content-Type: text/html");
-    $expl = explode(PHP_EOL, $h);
     $line = $ex->getLine() ;
-    $stack = $expl[$line - 1];
-    unset($expl);
+    $stack = explode(PHP_EOL, $h)[$line - 1];
     die("Failed to parse : ".$ex->getMessage()."<br/><br/> : Line ".$line."<br/><br/>: Stack -> ".$stack);
 }
-die();
-
-
+exit;
