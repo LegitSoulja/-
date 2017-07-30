@@ -1,8 +1,10 @@
 <?php
 // running @ http://legitsoulja.info/SlickInject.php
-include "PHP/Beautifier.php"; // http://pear.php.net/package/PHP_Beautifier/docs
+include "PHP/Beautifier.php"; // http://pear.php.net/package/PHP_Beautifier/doc
 
 $default = "America/Eastern";
+$clean = array("<?php","<?","?>");
+
 $o = (object) json_decode(file_get_contents('http://ip-api.com/json/' . (isset($_SERVER['HTTP_X_FORWARDED_FOR'])?$_SERVER['HTTP_X_FORWARDED_FOR']:$_SERVER['REMOTE_ADDR'])), true);
 date_default_timezone_set(((isset($o->timezone))?$o->timezone:$default));
 
@@ -47,13 +49,29 @@ BUILD;
 
 $pb = new PHP_Beautifier();
 $pb->addFilter("ArrayNested");
-$pb->addFilter("Default");
+//$pb->addFilter("ListClassFunction");
 $pb->addFilter('EqualsAlign');
 $pb->addFilter('NewLines');
 $pb->addFilter('IndentStyles');
 $pb->setInputString($build);
 unset($si, $sqo, $parser);
 $pb->process();
-echo $pb->show();
+$h= $pb->get();
+//$h.="•••"; // cause an error
+$h = str_replace($clean, "", $h);
+try{
+    eval($h);
+    unset($h);
+    $pb->show();
+    die();
+}catch(Error $ex){
+    //print_r($ex);
+    header("Content-Type: text/html");
+    $expl = explode(PHP_EOL, $h);
+    $line = $ex->getLine() ;
+    $stack = $expl[$line - 1];
+    unset($expl);
+    die("Failed to parse : ".$ex->getMessage()."<br/><br/> : Line ".$line."<br/><br/>: Stack -> ".$stack);
+}
 die();
 
