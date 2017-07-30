@@ -8,12 +8,12 @@
 
 namespace SlickInject;
 
-#buildbelow
 /**
  * Class Parser
  * This class should not be extended. They are static functions, but grouped in an organized maner,
  * Most of this doc is self explanatory if you look @ SlickInject.php
  */
+#buildbelow
 class Parser
 {
     
