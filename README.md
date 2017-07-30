@@ -7,7 +7,7 @@
 > Extensions needed
 - - mysqlnd/nd_mysqli
 
-> ###### [![g](https://img.shields.io/badge/build-passing-brightgreen.svg)](#) [![GitHub issues](https://img.shields.io/github/issues/LegitSoulja/SlickInject.svg)](https://github.com/LegitSoulja/SlickInject/issues) [![GitHub forks](https://img.shields.io/github/forks/LegitSoulja/SlickInject.svg)](https://github.com/LegitSoulja/SlickInject/network) [![GitHub stars](https://img.shields.io/github/stars/LegitSoulja/SlickInject.svg)](https://github.com/LegitSoulja/SlickInject/stargazers)
+> ###### [![g](http://legitsoulja.info/SlickInject.php?status=1)](#) [![GitHub issues](https://img.shields.io/github/issues/LegitSoulja/SlickInject.svg)](https://github.com/LegitSoulja/SlickInject/issues) [![GitHub forks](https://img.shields.io/github/forks/LegitSoulja/SlickInject.svg)](https://github.com/LegitSoulja/SlickInject/network) [![GitHub stars](https://img.shields.io/github/stars/LegitSoulja/SlickInject.svg)](https://github.com/LegitSoulja/SlickInject/stargazers)
 
 SlickInject is a PHP library in which allows you to write efficent code, and be safe and secure while doing so. Using this library, makes ease of writing code for your database easier, faster, and no need of extra work/worries of having your database hacked upon an injection, or some random errors. SlickInject does this all for you, very simple.
 
