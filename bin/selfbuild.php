@@ -19,9 +19,15 @@ $sqo = scopePos(file_get_contents("https://raw.githubusercontent.com/LegitSoulja
 $si = scopePos(file_get_contents("https://raw.githubusercontent.com/LegitSoulja/SlickInject/master/lib/SlickInject/SlickInject.php?c=".time()/2));
 $parser = scopePos(file_get_contents("https://raw.githubusercontent.com/LegitSoulja/SlickInject/master/lib/SlickInject/Parser.php?c=".time()/2));
 $d = date('l jS \of F Y h:i:s A');
+
+// https://img.shields.io/badge/build-passing-brightgreen.svg
+if($status){
+header("Content-Type: text/plain");
+}else{
 header("Content-Type: application/octet-stream");
 header("Content-Transfer-Encoding: Binary");
 header("Content-disposition: attachment; filename=\"SlickInject.php\"");
+}
 
 $build = <<<BUILD
 <?php 
@@ -57,15 +63,23 @@ $pb->setInputString($build);
 unset($si, $sqo, $parser);
 $pb->process();
 $h= $pb->get();
-//$h.="•••"; // cause an error
+//$h.="•••"; // cause an error, to test error handler
 $h = str_replace($clean, "", $h);
 try{
     eval($h);
     unset($h);
-    $pb->show();
+    if($status){
+        die(header("Location: https://img.shields.io/badge/build-passing-brightgreen.svg"));
+    }else{
+        $pb->show();
+    }
     die();
 }catch(Error $ex){
     //print_r($ex);
+    if($status){
+            die(header("Location: https://img.shields.io/badge/build-failing-red.svg"));
+    }
+    header_remove();
     header("Content-Type: text/html");
     $expl = explode(PHP_EOL, $h);
     $line = $ex->getLine() ;
@@ -74,4 +88,5 @@ try{
     die("Failed to parse : ".$ex->getMessage()."<br/><br/> : Line ".$line."<br/><br/>: Stack -> ".$stack);
 }
 die();
+
 
