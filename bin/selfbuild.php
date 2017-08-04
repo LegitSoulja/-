@@ -1,5 +1,6 @@
 <?php
 // running @ http://legitsoulja.info/SlickInject.php
+$status = (isset($_GET["status"]))?true:false;
 include "PHP/Beautifier.php"; // http://pear.php.net/package/PHP_Beautifier/doc
 
 $default = "America/Eastern";
