@@ -1,5 +1,6 @@
 ### SlickInject!
 ###### ::v2
+> **Discontinued.**
 
 #### Supports PHP (v5.6 - v7.1)
 - [x] MySQLi (100% fully supported)
