@@ -4,7 +4,7 @@
 #### Supports PHP (v5.6 - v7.1)
 - [x] MySQLi (100% fully supported)
 
-> ###### [![g](http://legitsoulja.info/SlickInject.php?status=1)](#) [![GitHub issues](https://img.shields.io/github/issues/LegitSoulja/SlickInject.svg)](https://github.com/LegitSoulja/SlickInject/issues) [![GitHub forks](https://img.shields.io/github/forks/LegitSoulja/SlickInject.svg)](https://github.com/LegitSoulja/SlickInject/network) [![GitHub stars](https://img.shields.io/github/stars/LegitSoulja/SlickInject.svg)](https://github.com/LegitSoulja/SlickInject/stargazers)
+> ###### [![g](http://legitsoulja.info/build/SlickInject?status)](#) [![GitHub issues](https://img.shields.io/github/issues/LegitSoulja/SlickInject.svg)](https://github.com/LegitSoulja/SlickInject/issues) [![GitHub forks](https://img.shields.io/github/forks/LegitSoulja/SlickInject.svg)](https://github.com/LegitSoulja/SlickInject/network) [![GitHub stars](https://img.shields.io/github/stars/LegitSoulja/SlickInject.svg)](https://github.com/LegitSoulja/SlickInject/stargazers)
 
 SlickInject is a ```PHP``` library in which allows you to write fast back-end sites using MySQLi with style. Not only SlickInject increase workflow, but also manages your queries, and make sure you stay secure. SlickInject writes your queries automatically, and protects your database from any leaks & injections.
 
