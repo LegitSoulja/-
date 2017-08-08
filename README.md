@@ -16,7 +16,7 @@ SlickInject is a ```PHP``` library in which allows you to write fast back-end si
 - Lib\SlickInject (SlickInject/Parser)
 - Lib\SQLObject (SQLObject)
 
-**Single Build**: [Download/Generate a new build](http://legitsoulja.info/SlickInject.php)
+**Single Build**: [Download/Generate a new build](http://legitsoulja.info/build/SlickInject)
 
 > This single build is SlickInject combined into one single file. The link above will generate you a new updated build that hasn't been yet updated. Rely on this link, or the file in the build folder.
 
