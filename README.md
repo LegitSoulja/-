@@ -8,6 +8,8 @@
 
 SlickInject is a ```PHP``` library in which allows you to write fast back-end sites using MySQLi with style. Not only SlickInject increase workflow, but also manages your queries, and make sure you stay secure. SlickInject writes your queries automatically, and protects your database from any leaks & injections.
 
+> I would've never made this if I knew a project as of [Medoo](https://medoo.in/) existed. This project was something I had thought of on my own originally due to the time I waste in working backend. I never intended to make a project similar, and or better. This is something I use for my personal use. It's small, fast, and lightweight. It wouldn't be public, but decided why not share an have an extra repository. If you like this project, please show appreciation.
+
 #### Installation
 **Library**
 
