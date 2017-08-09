@@ -1,6 +1,6 @@
 <?php
 /*
-\| Compiled & Built on Wednesday 9th of August 2017 02:37:26 PM : Clean & Formatted
+\| Compiled & Built on Wednesday 9th of August 2017 02:39:25 PM : Clean & Formatted
 \| SlickInject v2
 \| @Author: LegitSoulja
 \| @Status: Discontinued
@@ -56,10 +56,7 @@ namespace {
         */
         private function output($state, $message = "", $close   = false) {
             if ($close) $this->close();
-            die(json_encode(array(
-                "state" => $state,
-                "message" => $message
-            )));
+            die(json_encode(array("state" => $state, "message" => $message)));
         }
         /**
          * Close database connection
@@ -278,18 +275,13 @@ namespace SlickInject {
             try {
                 if ($prep = self::$con->prepare($sql)) {
                     if (isset($bind) && $bind != NULL) {
-                        $out  = array(
-                            $bind[0]
-                        );
+                        $out  = array($bind[0]);
                         foreach ($bind as $key  => $value) {
                             if ($key != 0) {
                                 $out[$key]      = & $bind[$key];
                             }
                         }
-                        call_user_func_array(array(
-                            $prep,
-                            "bind_param"
-                        ) , $out);
+                        call_user_func_array(array($prep, "bind_param"), $out);
                     }
                     if ($prep->execute()) {
                         $result = new SQLResponce($prep);
@@ -310,201 +302,13 @@ namespace SlickInject {
         /**
          * Reserved keywords to prevent future errors
          */
-        private static $RESERVED_KEYWORDS = array(
-            "ADD",
-            "KEYS",
-            "EXTERNAL",
-            "PROCEDURE",
-            "ALL",
-            "FETCH",
-            "PUBLIC",
-            "ALTER",
-            "FILE",
-            "RAISERROR",
-            "AND",
-            "FILLFACTOR",
-            "READ",
-            "ANY",
-            "FOR",
-            "READTEXT",
-            "AS",
-            "FOREIGN",
-            "RECONFIGURE",
-            "ASC",
-            "FREETEXT",
-            "REFERENCES",
-            "AUTHORIZATION",
-            "FREETEXTTABLE",
-            "REPLICATION",
-            "BACKUP",
-            "FROM",
-            "RESTORE",
-            "BEGIN",
-            "FULL",
-            "RESTRICT",
-            "BETWEEN",
-            "FUNCTION",
-            "RETURN",
-            "BREAK",
-            "GOTO",
-            "REVERT",
-            "BROWSE",
-            "GRANT",
-            "REVOKE",
-            "BULK",
-            "GROUP",
-            "RIGHT",
-            "BY",
-            "HAVING",
-            "ROLLBACK",
-            "CASCADE",
-            "HOLDLOCK",
-            "ROWCOUNT",
-            "CASE",
-            "IDENTITY",
-            "ROWGUIDCOL",
-            "CHECK",
-            "IDENTITY_INSERT",
-            "RULE",
-            "CHECKPOINT",
-            "IDENTITYCOL",
-            "SAVE",
-            "CLOSE",
-            "IF",
-            "SCHEMA",
-            "CLUSTERED",
-            "IN",
-            "SECURITYAUDIT",
-            "COALESCE",
-            "INDEX",
-            "SELECT",
-            "COLLATE",
-            "INNER",
-            "SEMANTICKEYPHRASETABLE",
-            "COLUMN",
-            "INSERT",
-            "SEMANTICSIMILARITYDETAILSTABLE",
-            "COMMIT",
-            "INTERSECT",
-            "SEMANTICSIMILARITYTABLE",
-            "COMPUTE",
-            "INTO",
-            "SESSION_USER",
-            "CONSTRAINT",
-            "IS",
-            "SET",
-            "CONTAINS",
-            "JOIN",
-            "SETUSER",
-            "CONTAINSTABLE",
-            "KEY",
-            "SHUTDOWN",
-            "CONTINUE",
-            "KILL",
-            "SOME",
-            "CONVERT",
-            "LEFT",
-            "STATISTICS",
-            "CREATE",
-            "LIKE",
-            "SYSTEM_USER",
-            "CROSS",
-            "LINENO",
-            "TABLE",
-            "CURRENT",
-            "LOAD",
-            "TABLESAMPLE",
-            "CURRENT_DATE",
-            "MERGE",
-            "TEXTSIZE",
-            "CURRENT_TIME",
-            "NATIONAL",
-            "THEN",
-            "CURRENT_TIMESTAMP",
-            "NOCHECK",
-            "TO",
-            "CURRENT_USER",
-            "NONCLUSTERED",
-            "TOP",
-            "CURSOR",
-            "NOT",
-            "TRAN",
-            "DATABASE",
-            "NULL",
-            "TRANSACTION",
-            "DBCC",
-            "NULLIF",
-            "TRIGGER",
-            "DEALLOCATE",
-            "OF",
-            "TRUNCATE",
-            "DECLARE",
-            "OFF",
-            "TRY_CONVERT",
-            "DEFAULT",
-            "OFFSETS",
-            "TSEQUAL",
-            "DELETE",
-            "ON",
-            "UNION",
-            "DENY",
-            "OPEN",
-            "UNIQUE",
-            "DESC",
-            "OPENDATASOURCE",
-            "UNPIVOT",
-            "DISK",
-            "OPENQUERY",
-            "UPDATE",
-            "DISTINCT",
-            "OPENROWSET",
-            "UPDATETEXT",
-            "DISTRIBUTED",
-            "OPENXML",
-            "USE",
-            "DOUBLE",
-            "OPTION",
-            "USER",
-            "DROP",
-            "OR",
-            "VALUES",
-            "DUMP",
-            "ORDER",
-            "VARYING",
-            "ELSE",
-            "OUTER",
-            "VIEW",
-            "END",
-            "OVER",
-            "WAITFOR",
-            "ERRLVL",
-            "PERCENT",
-            "WHEN",
-            "ESCAPE",
-            "PIVOT",
-            "WHERE",
-            "EXCEPT",
-            "PLAN",
-            "WHILE",
-            "EXEC",
-            "PRECISION",
-            "WITH",
-            "EXECUTE",
-            "PRIMARY",
-            "WITHIN",
-            "GROUP",
-            "EXISTS",
-            "PRINT",
-            "WRITETEXT",
-            "EXIT",
-            "PROC"
-        );
+        private static $RESERVED_KEYWORDS = array("ADD", "KEYS", "EXTERNAL", "PROCEDURE", "ALL", "FETCH", "PUBLIC", "ALTER", "FILE", "RAISERROR", "AND", "FILLFACTOR", "READ", "ANY", "FOR", "READTEXT", "AS", "FOREIGN", "RECONFIGURE", "ASC", "FREETEXT", "REFERENCES", "AUTHORIZATION", "FREETEXTTABLE", "REPLICATION", "BACKUP", "FROM", "RESTORE", "BEGIN", "FULL", "RESTRICT", "BETWEEN", "FUNCTION", "RETURN", "BREAK", "GOTO", "REVERT", "BROWSE", "GRANT", "REVOKE", "BULK", "GROUP", "RIGHT", "BY", "HAVING", "ROLLBACK", "CASCADE", "HOLDLOCK", "ROWCOUNT", "CASE", "IDENTITY", "ROWGUIDCOL", "CHECK", "IDENTITY_INSERT", "RULE", "CHECKPOINT", "IDENTITYCOL", "SAVE", "CLOSE", "IF", "SCHEMA", "CLUSTERED", "IN", "SECURITYAUDIT", "COALESCE", "INDEX", "SELECT", "COLLATE", "INNER", "SEMANTICKEYPHRASETABLE", "COLUMN", "INSERT", "SEMANTICSIMILARITYDETAILSTABLE", "COMMIT", "INTERSECT", "SEMANTICSIMILARITYTABLE", "COMPUTE", "INTO", "SESSION_USER", "CONSTRAINT", "IS", "SET", "CONTAINS", "JOIN", "SETUSER", "CONTAINSTABLE", "KEY", "SHUTDOWN", "CONTINUE", "KILL", "SOME", "CONVERT", "LEFT", "STATISTICS", "CREATE", "LIKE", "SYSTEM_USER", "CROSS", "LINENO", "TABLE", "CURRENT", "LOAD", "TABLESAMPLE", "CURRENT_DATE", "MERGE", "TEXTSIZE", "CURRENT_TIME", "NATIONAL", "THEN", "CURRENT_TIMESTAMP", "NOCHECK", "TO", "CURRENT_USER", "NONCLUSTERED", "TOP", "CURSOR", "NOT", "TRAN", "DATABASE", "NULL", "TRANSACTION", "DBCC", "NULLIF", "TRIGGER", "DEALLOCATE", "OF", "TRUNCATE", "DECLARE", "OFF", "TRY_CONVERT", "DEFAULT", "OFFSETS", "TSEQUAL", "DELETE", "ON", "UNION", "DENY", "OPEN", "UNIQUE", "DESC", "OPENDATASOURCE", "UNPIVOT", "DISK", "OPENQUERY", "UPDATE", "DISTINCT", "OPENROWSET", "UPDATETEXT", "DISTRIBUTED", "OPENXML", "USE", "DOUBLE", "OPTION", "USER", "DROP", "OR", "VALUES", "DUMP", "ORDER", "VARYING", "ELSE", "OUTER", "VIEW", "END", "OVER", "WAITFOR", "ERRLVL", "PERCENT", "WHEN", "ESCAPE", "PIVOT", "WHERE", "EXCEPT", "PLAN", "WHILE", "EXEC", "PRECISION", "WITH", "EXECUTE", "PRIMARY", "WITHIN", "GROUP", "EXISTS", "PRINT", "WRITETEXT", "EXIT", "PROC");
         final static private function WHERE($arr, $required          = false) {
             $append            = $values            = array();
             $flag              = 0;
             foreach ($arr as $k => $v) {
                 if (!is_numeric($k) && !empty($v)) {
-                    if (in_array(strtoupper($k) , self::$RESERVED_KEYWORDS)):
+                    if (in_array(strtoupper($k), self::$RESERVED_KEYWORDS)):
                         array_push($append, "`" . $k . "`=?");
                     else:
                         array_push($append, "" . $k . "=?");
@@ -528,10 +332,7 @@ namespace SlickInject {
                 $types.= self::getType($v);
             }
             if (!empty($types)) array_unshift($values, $types);
-            return array(
-                $append,
-                $values
-            );
+            return array($append, $values);
         }
         /**
          * Get initial of type in which is needed to bind the proper types when executing to the database
@@ -553,15 +354,13 @@ namespace SlickInject {
             }
         }
         final static public function SELECT($columns, $table, $where, $explain = false) {
-            $columns = (count($columns) > 0) ? $columns : array(
-                "*"
-            );
+            $columns = (count($columns) > 0) ? $columns : array("*");
             foreach ($columns as $k       => $v) {
-                if (in_array(strtoupper($v) , self::$RESERVED_KEYWORDS)) $columns[$k]         = "`" . $v . "`";
+                if (in_array(strtoupper($v), self::$RESERVED_KEYWORDS)) $columns[$k]         = "`" . $v . "`";
             }
             $where   = (count($where) > 0) ? self::WHERE($where) : NULL;
             $sql     = (($explain) ? "EXPLAIN " : "");
-            if (in_array(strtoupper($table) , self::$RESERVED_KEYWORDS)) {
+            if (in_array(strtoupper($table), self::$RESERVED_KEYWORDS)) {
                 $table   = "`" . $table . "`";
             }
             // $sql .= "SELECT [" . join(", ", $columns) . "] FROM " . $table;
@@ -572,13 +371,10 @@ namespace SlickInject {
             elseif (isset($where[0])) {
                 $sql.= " " . join(" ", $where[0]);
             }
-            return array(
-                $sql,
-                (isset($where[1])) ? $where[1] : NULL
-            );
+            return array($sql, (isset($where[1])) ? $where[1] : NULL);
         }
         final static public function INSERT($table, $object) {
-            if (in_array(strtoupper($table) , self::$RESERVED_KEYWORDS)) {
+            if (in_array(strtoupper($table), self::$RESERVED_KEYWORDS)) {
                 $table   = "`" . $table . "`";
             }
             $sql     = "INSERT INTO " . $table;
@@ -600,13 +396,10 @@ namespace SlickInject {
                 $types.= self::getType($v);
             }
             array_unshift($values, $types);
-            return array(
-                $sql,
-                $values
-            );
+            return array($sql, $values);
         }
         final static public function UPDATE($table, $object, $where) {
-            if (in_array(strtoupper($table) , self::$RESERVED_KEYWORDS)) {
+            if (in_array(strtoupper($table), self::$RESERVED_KEYWORDS)) {
                 $table  = "`" . $table . "`";
             }
             $insert = array();
@@ -616,7 +409,7 @@ namespace SlickInject {
             foreach ($object as $k => $v) {
                 if (isset($k) && isset($v)) {
                     if (is_numeric($k)) continue;
-                    if (in_array(strtoupper($k) , self::$RESERVED_KEYWORDS)):
+                    if (in_array(strtoupper($k), self::$RESERVED_KEYWORDS)):
                         array_push($insert, "`" . $k . "`=?");
                     else:
                         array_push($insert, "" . $k . "=?");
@@ -642,16 +435,11 @@ namespace SlickInject {
                 $ni++;
             }
             array_unshift($values, $types);
-            return array(
-                $sql,
-                $values
-            );
+            return array($sql, $values);
         }
         final static public function TRUNCATE($table) {
             $sql = "TRUNCATE TABLE `" . $table . "`";
-            return array(
-                $sql
-            );
+            return array($sql);
         }
         final static public function DELETE($table, $where) {
             $sql   = "DELETE FROM `" . $table . "`";
@@ -659,10 +447,7 @@ namespace SlickInject {
                 $where = self::WHERE($where);
                 $sql.= " WHERE " . join(" ", $where[0]);
             }
-            return array(
-                $sql,
-                $where[1]
-            );
+            return array($sql, $where[1]);
         }
     }
 }
