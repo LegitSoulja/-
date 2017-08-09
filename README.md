@@ -9,7 +9,7 @@
 
 SlickInject is a ```PHP``` library in which allows you to write fast back-end sites using MySQLi with style. Not only SlickInject increase workflow, but also manages your queries, and make sure you stay secure. SlickInject writes your queries automatically, and protects your database from any leaks & injections.
 
-> I would've never made this if I knew a project as of [Medoo](https://medoo.in/) existed. This project was something I had thought of on my own originally due to the time I waste in working backend. I never intended to make a project similar, and or better. This is something I use for my personal use. It's small, fast, and lightweight. It wouldn't be public, but decided why not share an have an extra repository. If you like this project, please show appreciation.
+> I would've never made this if I knew a project as of [Medoo](https://medoo.in/) existed. This project was something I had thought of on my own originally due to the time I wasted in working backend. I never intended to make a project similar, and or better. This is something I use for my personal use. It's small, fast, and lightweight. It wouldn't be public, but decided why not share and have an extra repository. If you like this project, please show appreciation.
 
 #### Installation
 **Library**
@@ -100,7 +100,7 @@ $si->select_db("otherdatabase")->SELECT([], "table");
 
 ###### SQLResponce | SELECT (Example)
 
-Except for the ```SELECT``` method, the others will return you ```SQLResponce```, however by default, you are given the rows of the selected data as an array, which can be toggled false as the 4th argument when using ```SELECT```
+> Except for the ```SELECT``` method, the others will return you ```SQLResponce```, however by default, you are given the rows of the selected data as an array, which can be toggled false as the 4th argument when using ```SELECT```
 
 ###### Obtain number of rows
 
@@ -173,7 +173,7 @@ $si->TRUNCATE("table");
 
 ### Closing Database
 
-When using SlickInject, it does not handle rather or not the connection should be open or closed. Using the statement below, you can close your databse when you're done using it.
+> When using SlickInject, it does not handle rather or not the connection should be open or closed. Using the statement below, you can close your databse when you're done using it.
 
 ```php
 
@@ -201,8 +201,6 @@ $si->close();
 ### SQLResponce
 
 #### Functions | Return <T> | Description
-
-> Last arguments for SlickInject must be false as of [this](https://github.com/LegitSoulja/SlickInject/blob/dev/README.md#obtain-mysqli_query-request), to get SQLResponce 
 
 - hasRows() :: bool : If query returned any rows
 
