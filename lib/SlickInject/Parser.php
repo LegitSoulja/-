@@ -103,7 +103,7 @@ class Parser
         $values  = array();
         foreach ($object as $k => $v) {
             if (isset($k) && isset($v)) {
-                if (is_numeric($k)) return;
+                if (is_numeric($k)) continue;
                 array_push($names, "`" . $k . "`");
                 array_push($replace, "?");
                 array_push($values, $v);
