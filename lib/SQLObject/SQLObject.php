@@ -13,8 +13,7 @@ class SQLResponce
 {
     
     private $result;
-    private $rows;
-    private $row;
+    private $rows = array();
     private $stmt;
     
     /**
@@ -28,9 +27,7 @@ class SQLResponce
         if ($this->result->num_rows < 1) return;
         while ($row = $this->result->fetch_assoc()) 
         { array_push($rows, $row); }
-     
-        if (count($rows) === 1) return $this->row = $rows;
-        return $this->rows = $rows;
+        $this->rows = $rows;
     }
     
     /**
@@ -59,7 +56,7 @@ class SQLResponce
      * @return bool
      */
     public function hasRows()
-    { return ((count($this->rows) > 0) || (count($this->row) > 0)) ? true : false; }
+    { return (!empty($this->rows)) ? true : false; }
     
     /**
      * Return number of rows
@@ -73,11 +70,7 @@ class SQLResponce
      * @return array
      */
     public function getData()
-    { 
-     // echo count(self::$rows);
-      return (count($this->rows) > 0) ? $this->rows : $this->row; 
-    
-    }
+    { return $this->rows; }
 }
 
 class SQLObject
@@ -90,11 +83,8 @@ class SQLObject
      * SQLObject constructor | Can accept database  credentials
      * @return void
      */
-    function __construct()
-    {
-        $args = func_get_args();
-        if (count($args) === 4)
-            return $this->connect($args[0], $args[1], $args[2], $args[3]);
+    function __construct($dbhost, $dbuser, $dbpass, $dbname) {
+        return $this->connect($dbhost, $dbuser, $dbpass, $dbname);
     }
     
     
@@ -181,13 +171,11 @@ class SQLObject
             if ($prep = self::$con->prepare($sql)) {
                 if (isset($bind) && $bind != NULL) {
                     $out = array($bind[0]);
-                    
                      foreach ($bind as $key => $value) {
                          if ($key != 0) {
-                        $out[$key] = &$bind[$key];
+                             $out[$key] = &$bind[$key];
                          }
                      }
-                    
                     call_user_func_array(array($prep, "bind_param" ), $out);
                 }
                 if ($prep->execute()) {
