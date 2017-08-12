@@ -9,13 +9,12 @@
 // do not ignore this error. 
 if (!extension_loaded('mysqlnd')) throw new Error("Failed to load nd_mysqli extension.");
 
-use SlickInject\Parser as Parser;
 use SlickInject\SQLObject as SQLObject;
 
 define("SI_VERSION", 102); // 1.0.2
 
 #buildbelow
-class SlickInject
+class SlickInject extends \SlickInject\Parser;
 {
     
     private static $SQLObject;
@@ -92,7 +91,7 @@ class SlickInject
     public function UPDATE($table, $object, $where)
     {
         if (!$this->isConnected() || !isset($table) || !isset($object) || !isset($where)) return;
-        $update = Parser::UPDATE($table, $object, $where);
+        $update = parent::UPDATE($table, $object, $where);
         return self::$SQLObject->query($update[0], (isset($update[1])) ? $update[1] : NULL);
     }
     
@@ -107,7 +106,7 @@ class SlickInject
     public function SELECT($columns, $table, $where = NULL, $rr = true)
     {
         if (!$this->isConnected() || !isset($columns) || !isset($table)) return;
-        $select = Parser::SELECT($columns, $table, $where);
+        $select = parent::SELECT($columns, $table, $where);
         return self::$SQLObject->query($select[0], (isset($select[1])) ? $select[1] : NULL, $rr);
     }
     
@@ -120,7 +119,7 @@ class SlickInject
     public function INSERT($table, $object)
     {
         if (!$this->isConnected() || !isset($table) || !isset($object)) return;
-        $insert = Parser::INSERT($table, $object);
+        $insert = parent::INSERT($table, $object);
         return self::$SQLObject->query($insert[0], $insert[1]);
     }
     
@@ -132,7 +131,7 @@ class SlickInject
     public function TRUNCATE($table)
     {
         if (!$this->isConnected() || !isset($table)) return;
-        $truncate = Parser::TRUNCATE($table);
+        $truncate = parent::TRUNCATE($table);
         return self::$SQLObject->query($truncate[0]);
     }
     
@@ -145,7 +144,7 @@ class SlickInject
     public function DELETE($table, $where = NULL)
     {
         if (!$this->isConnected() || !isset($table) || !isset($where)) return;
-        $delete = Parser::DELETE($table, $where);
+        $delete = parent::DELETE($table, $where);
         return self::$SQLObject->query($delete[0], (isset($delete[1])) ? $delete[1] : NULL);
     }
 }
