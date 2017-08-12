@@ -14,7 +14,7 @@ use SlickInject\SQLObject as SQLObject;
 define("SI_VERSION", 102); // 1.0.2
 
 #buildbelow
-class SlickInject extends SlickInject\Parser;
+class SlickInject extends \SlickInject\Parser
 {
     
     private static $SQLObject;
