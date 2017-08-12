@@ -166,7 +166,6 @@ class SQLObject
      */
     public function query($sql, $bind, $rr = false)
     {
-        if(!$this->isConnected()) throw new \Exception("Can't do it partner. Your database connection is not open.");
         try {
             if ($prep = self::$con->prepare($sql)) {
                 if (isset($bind) && $bind != NULL) {
