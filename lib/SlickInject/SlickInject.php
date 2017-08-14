@@ -89,7 +89,7 @@ class SlickInject extends SlickInject\Parser
     public function UPDATE($table, $object, $where)
     {
         if (!$this->isConnected() || !isset($table) || !isset($object) || !isset($where)) return;
-        $update = parent::$UPDATE($table, $object, $where);
+        $update = parent::_UPDATE($table, $object, $where);
         return self::$SQLObject->query($update[0], (isset($update[1])) ? $update[1] : NULL);
     }
     
@@ -104,7 +104,7 @@ class SlickInject extends SlickInject\Parser
     public function SELECT($columns, $table, $where = NULL, $rr = true)
     {
         if (!$this->isConnected() || !isset($columns) || !isset($table)) return;
-        $select = parent::$SELECT($columns, $table, $where);
+        $select = parent::_SELECT($columns, $table, $where);
         return self::$SQLObject->query($select[0], (isset($select[1])) ? $select[1] : NULL, $rr);
     }
     
@@ -117,7 +117,7 @@ class SlickInject extends SlickInject\Parser
     public function INSERT($table, $object)
     {
         if (!$this->isConnected() || !isset($table) || !isset($object)) return;
-        $insert = parent::$INSERT($table, $object);
+        $insert = parent::_INSERT($table, $object);
         return self::$SQLObject->query($insert[0], $insert[1]);
     }
     
@@ -129,7 +129,7 @@ class SlickInject extends SlickInject\Parser
     public function TRUNCATE($table)
     {
         if (!$this->isConnected() || !isset($table)) return;
-        $truncate = parent::$TRUNCATE($table);
+        $truncate = parent::_TRUNCATE($table);
         return self::$SQLObject->query($truncate[0]);
     }
     
@@ -142,7 +142,7 @@ class SlickInject extends SlickInject\Parser
     public function DELETE($table, $where = NULL)
     {
         if (!$this->isConnected() || !isset($table) || !isset($where)) return;
-        $delete = parent::$DELETE($table, $where);
+        $delete = parent::_DELETE($table, $where);
         return self::$SQLObject->query($delete[0], (isset($delete[1])) ? $delete[1] : NULL);
     }
 }
