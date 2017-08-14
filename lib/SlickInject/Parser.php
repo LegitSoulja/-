@@ -21,7 +21,7 @@ class Parser
      */
     private static $RESERVED_KEYWORDS = array("ADD", "KEYS", "EXTERNAL", "PROCEDURE", "ALL", "FETCH", "PUBLIC", "ALTER", "FILE", "RAISERROR", "AND", "FILLFACTOR", "READ", "ANY", "FOR", "READTEXT", "AS", "FOREIGN", "RECONFIGURE", "ASC", "FREETEXT", "REFERENCES", "AUTHORIZATION", "FREETEXTTABLE", "REPLICATION", "BACKUP", "FROM", "RESTORE", "BEGIN", "FULL", "RESTRICT", "BETWEEN", "FUNCTION", "RETURN", "BREAK", "GOTO", "REVERT", "BROWSE", "GRANT", "REVOKE", "BULK", "GROUP", "RIGHT", "BY", "HAVING", "ROLLBACK", "CASCADE", "HOLDLOCK", "ROWCOUNT", "CASE", "IDENTITY", "ROWGUIDCOL", "CHECK", "IDENTITY_INSERT", "RULE", "CHECKPOINT", "IDENTITYCOL", "SAVE", "CLOSE", "IF", "SCHEMA", "CLUSTERED", "IN", "SECURITYAUDIT", "COALESCE", "INDEX", "SELECT", "COLLATE", "INNER", "SEMANTICKEYPHRASETABLE", "COLUMN", "INSERT", "SEMANTICSIMILARITYDETAILSTABLE", "COMMIT", "INTERSECT", "SEMANTICSIMILARITYTABLE", "COMPUTE", "INTO", "SESSION_USER", "CONSTRAINT", "IS", "SET", "CONTAINS", "JOIN", "SETUSER", "CONTAINSTABLE", "KEY", "SHUTDOWN", "CONTINUE", "KILL", "SOME", "CONVERT", "LEFT", "STATISTICS", "CREATE", "LIKE", "SYSTEM_USER", "CROSS", "LINENO", "TABLE", "CURRENT", "LOAD", "TABLESAMPLE", "CURRENT_DATE", "MERGE", "TEXTSIZE", "CURRENT_TIME", "NATIONAL", "THEN", "CURRENT_TIMESTAMP", "NOCHECK", "TO", "CURRENT_USER", "NONCLUSTERED", "TOP", "CURSOR", "NOT", "TRAN", "DATABASE", "NULL", "TRANSACTION", "DBCC", "NULLIF", "TRIGGER", "DEALLOCATE", "OF", "TRUNCATE", "DECLARE", "OFF", "TRY_CONVERT", "DEFAULT", "OFFSETS", "TSEQUAL", "DELETE", "ON", "UNION", "DENY", "OPEN", "UNIQUE", "DESC", "OPENDATASOURCE", "UNPIVOT", "DISK", "OPENQUERY", "UPDATE", "DISTINCT", "OPENROWSET", "UPDATETEXT", "DISTRIBUTED", "OPENXML", "USE", "DOUBLE", "OPTION", "USER", "DROP", "OR", "VALUES", "DUMP", "ORDER", "VARYING", "ELSE", "OUTER", "VIEW", "END", "OVER", "WAITFOR", "ERRLVL", "PERCENT", "WHEN", "ESCAPE", "PIVOT", "WHERE", "EXCEPT", "PLAN", "WHILE", "EXEC", "PRECISION", "WITH", "EXECUTE", "PRIMARY", "WITHIN", "GROUP", "EXISTS", "PRINT", "WRITETEXT", "EXIT", "PROC");
     
-    static private function WHERE($arr, $required = false)
+    private static function WHERE($arr, $required = false)
     {
         $append = $values = array();
         $flag   = 0;
@@ -56,7 +56,7 @@ class Parser
      * @param string $type               <T>
      * @return char
      */
-    static private function getType($type)
+    private static function getType($type)
     {
         switch (gettype($type)) {
             case "string": return "s";
@@ -67,7 +67,7 @@ class Parser
         }
     }
     
-    static public function SELECT($columns, $table, $where, $explain = false)
+    public static function _SELECT($columns, $table, $where, $explain = false)
     {
         $columns = (count($columns) > 0) ? $columns : array("*");
         
@@ -92,7 +92,7 @@ class Parser
         
         return array( $sql, (isset($where[1])) ? $where[1] : NULL );
     }
-    static public function INSERT($table, $object)
+    public static function _INSERT($table, $object)
     {
         if (in_array(strtoupper($table), self::$RESERVED_KEYWORDS)) 
         { $table = "`" . $table . "`"; }
@@ -119,7 +119,7 @@ class Parser
         
         return array( $sql, $values );
     }
-    static public function UPDATE($table, $object, $where)
+    public static function _UPDATE($table, $object, $where)
     {
         if (in_array(strtoupper($table), self::$RESERVED_KEYWORDS)) 
         { $table = "`" . $table . "`"; }
@@ -161,12 +161,12 @@ class Parser
         array_unshift($values, $types);
         return array( $sql, $values );
     }
-    static public function TRUNCATE($table)
+    public static function _TRUNCATE($table)
     {
         $sql = "TRUNCATE TABLE `" . $table . "`";
         return array( $sql );
     }
-    static public function DELETE($table, $where)
+    public static function _DELETE($table, $where)
     {
         $sql = "DELETE FROM `" . $table . "`";
         if (count($where) > 0) {
