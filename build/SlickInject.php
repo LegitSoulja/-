@@ -1,6 +1,6 @@
 <?php
 /*
-\| Compiled & Built on Wednesday 9th of August 2017 02:39:25 PM : Clean & Formatted
+\| Compiled & Built on Monday 14th of August 2017 03:53:11 AM : Clean & Formatted
 \| SlickInject v2
 \| @Author: LegitSoulja
 \| @Status: Discontinued
@@ -9,9 +9,8 @@
 */
 namespace {
     if (!extension_loaded('mysqlnd')) throw new Error("Failed to load nd_mysqli extension.");
-    use SlickInject\Parser as Parser;
     use SlickInject\SQLObject as SQLObject;
-    class SlickInject {
+    class SlickInject extends SlickInject\Parser {
         private static $SQLObject;
         /**
          * SlickInject constructor | Can accept database credentials.
@@ -74,7 +73,7 @@ namespace {
          */
         public function UPDATE($table, $object, $where) {
             if (!$this->isConnected() || !isset($table) || !isset($object) || !isset($where)) return;
-            $update = Parser::UPDATE($table, $object, $where);
+            $update = parent::_UPDATE($table, $object, $where);
             return self::$SQLObject->query($update[0], (isset($update[1])) ? $update[1] : NULL);
         }
         /**
@@ -87,7 +86,7 @@ namespace {
          */
         public function SELECT($columns, $table, $where  = NULL, $rr     = true) {
             if (!$this->isConnected() || !isset($columns) || !isset($table)) return;
-            $select = Parser::SELECT($columns, $table, $where);
+            $select = parent::_SELECT($columns, $table, $where);
             return self::$SQLObject->query($select[0], (isset($select[1])) ? $select[1] : NULL, $rr);
         }
         /**
@@ -98,7 +97,7 @@ namespace {
          */
         public function INSERT($table, $object) {
             if (!$this->isConnected() || !isset($table) || !isset($object)) return;
-            $insert = Parser::INSERT($table, $object);
+            $insert = parent::_INSERT($table, $object);
             return self::$SQLObject->query($insert[0], $insert[1]);
         }
         /**
@@ -108,7 +107,7 @@ namespace {
          */
         public function TRUNCATE($table) {
             if (!$this->isConnected() || !isset($table)) return;
-            $truncate = Parser::TRUNCATE($table);
+            $truncate = parent::_TRUNCATE($table);
             return self::$SQLObject->query($truncate[0]);
         }
         /**
@@ -119,7 +118,7 @@ namespace {
          */
         public function DELETE($table, $where  = NULL) {
             if (!$this->isConnected() || !isset($table) || !isset($where)) return;
-            $delete = Parser::DELETE($table, $where);
+            $delete = parent::_DELETE($table, $where);
             return self::$SQLObject->query($delete[0], (isset($delete[1])) ? $delete[1] : NULL);
         }
     }
@@ -127,8 +126,7 @@ namespace {
 namespace SlickInject {
     class SQLResponce {
         private $result;
-        private $rows;
-        private $row;
+        private $rows = array();
         private $stmt;
         /**
          * SQLResponce constructor
@@ -141,8 +139,7 @@ namespace SlickInject {
             while ($row        = $this->result->fetch_assoc()) {
                 array_push($rows, $row);
             }
-            if (count($rows) === 1) return $this->row  = $rows;
-            return $this->rows = $rows;
+            $this->rows = $rows;
         }
         /**
          * Return mysqli_result object
@@ -170,7 +167,7 @@ namespace SlickInject {
          * @return bool
          */
         public function hasRows() {
-            return ((count($this->rows) > 0) || (count($this->row) > 0)) ? true : false;
+            return (!empty($this->rows)) ? true : false;
         }
         /**
          * Return number of rows
@@ -184,8 +181,7 @@ namespace SlickInject {
          * @return array
          */
         public function getData() {
-            // echo count(self::$rows);
-            return (count($this->rows) > 0) ? $this->rows : $this->row;
+            return $this->rows;
         }
     }
     class SQLObject {
@@ -196,9 +192,8 @@ namespace SlickInject {
          * SQLObject constructor | Can accept database  credentials
          * @return void
          */
-        function __construct() {
-            $args        = func_get_args();
-            if (count($args) === 4) return $this->connect($args[0], $args[1], $args[2], $args[3]);
+        function __construct($dbhost, $dbuser, $dbpass, $dbname) {
+            return $this->connect($dbhost, $dbuser, $dbpass, $dbname);
         }
         /**
          * Close database connected
@@ -271,7 +266,6 @@ namespace SlickInject {
          * @return boolean
          */
         public function query($sql, $bind, $rr   = false) {
-            if (!$this->isConnected()) throw new \Exception("Can't do it partner. Your database connection is not open.");
             try {
                 if ($prep = self::$con->prepare($sql)) {
                     if (isset($bind) && $bind != NULL) {
@@ -303,7 +297,7 @@ namespace SlickInject {
          * Reserved keywords to prevent future errors
          */
         private static $RESERVED_KEYWORDS = array("ADD", "KEYS", "EXTERNAL", "PROCEDURE", "ALL", "FETCH", "PUBLIC", "ALTER", "FILE", "RAISERROR", "AND", "FILLFACTOR", "READ", "ANY", "FOR", "READTEXT", "AS", "FOREIGN", "RECONFIGURE", "ASC", "FREETEXT", "REFERENCES", "AUTHORIZATION", "FREETEXTTABLE", "REPLICATION", "BACKUP", "FROM", "RESTORE", "BEGIN", "FULL", "RESTRICT", "BETWEEN", "FUNCTION", "RETURN", "BREAK", "GOTO", "REVERT", "BROWSE", "GRANT", "REVOKE", "BULK", "GROUP", "RIGHT", "BY", "HAVING", "ROLLBACK", "CASCADE", "HOLDLOCK", "ROWCOUNT", "CASE", "IDENTITY", "ROWGUIDCOL", "CHECK", "IDENTITY_INSERT", "RULE", "CHECKPOINT", "IDENTITYCOL", "SAVE", "CLOSE", "IF", "SCHEMA", "CLUSTERED", "IN", "SECURITYAUDIT", "COALESCE", "INDEX", "SELECT", "COLLATE", "INNER", "SEMANTICKEYPHRASETABLE", "COLUMN", "INSERT", "SEMANTICSIMILARITYDETAILSTABLE", "COMMIT", "INTERSECT", "SEMANTICSIMILARITYTABLE", "COMPUTE", "INTO", "SESSION_USER", "CONSTRAINT", "IS", "SET", "CONTAINS", "JOIN", "SETUSER", "CONTAINSTABLE", "KEY", "SHUTDOWN", "CONTINUE", "KILL", "SOME", "CONVERT", "LEFT", "STATISTICS", "CREATE", "LIKE", "SYSTEM_USER", "CROSS", "LINENO", "TABLE", "CURRENT", "LOAD", "TABLESAMPLE", "CURRENT_DATE", "MERGE", "TEXTSIZE", "CURRENT_TIME", "NATIONAL", "THEN", "CURRENT_TIMESTAMP", "NOCHECK", "TO", "CURRENT_USER", "NONCLUSTERED", "TOP", "CURSOR", "NOT", "TRAN", "DATABASE", "NULL", "TRANSACTION", "DBCC", "NULLIF", "TRIGGER", "DEALLOCATE", "OF", "TRUNCATE", "DECLARE", "OFF", "TRY_CONVERT", "DEFAULT", "OFFSETS", "TSEQUAL", "DELETE", "ON", "UNION", "DENY", "OPEN", "UNIQUE", "DESC", "OPENDATASOURCE", "UNPIVOT", "DISK", "OPENQUERY", "UPDATE", "DISTINCT", "OPENROWSET", "UPDATETEXT", "DISTRIBUTED", "OPENXML", "USE", "DOUBLE", "OPTION", "USER", "DROP", "OR", "VALUES", "DUMP", "ORDER", "VARYING", "ELSE", "OUTER", "VIEW", "END", "OVER", "WAITFOR", "ERRLVL", "PERCENT", "WHEN", "ESCAPE", "PIVOT", "WHERE", "EXCEPT", "PLAN", "WHILE", "EXEC", "PRECISION", "WITH", "EXECUTE", "PRIMARY", "WITHIN", "GROUP", "EXISTS", "PRINT", "WRITETEXT", "EXIT", "PROC");
-        final static private function WHERE($arr, $required          = false) {
+        private static function WHERE($arr, $required          = false) {
             $append            = $values            = array();
             $flag              = 0;
             foreach ($arr as $k => $v) {
@@ -339,7 +333,7 @@ namespace SlickInject {
          * @param string $type               <T>
          * @return char
          */
-        final static private function getType($type) {
+        private static function getType($type) {
             switch (gettype($type)) {
                 case "string":
                     return "s";
@@ -353,7 +347,7 @@ namespace SlickInject {
                     throw new \Error("Unable to bind params");
             }
         }
-        final static public function SELECT($columns, $table, $where, $explain = false) {
+        public static function _SELECT($columns, $table, $where, $explain = false) {
             $columns = (count($columns) > 0) ? $columns : array("*");
             foreach ($columns as $k       => $v) {
                 if (in_array(strtoupper($v), self::$RESERVED_KEYWORDS)) $columns[$k]         = "`" . $v . "`";
@@ -373,7 +367,7 @@ namespace SlickInject {
             }
             return array($sql, (isset($where[1])) ? $where[1] : NULL);
         }
-        final static public function INSERT($table, $object) {
+        public static function _INSERT($table, $object) {
             if (in_array(strtoupper($table), self::$RESERVED_KEYWORDS)) {
                 $table   = "`" . $table . "`";
             }
@@ -398,7 +392,7 @@ namespace SlickInject {
             array_unshift($values, $types);
             return array($sql, $values);
         }
-        final static public function UPDATE($table, $object, $where) {
+        public static function _UPDATE($table, $object, $where) {
             if (in_array(strtoupper($table), self::$RESERVED_KEYWORDS)) {
                 $table  = "`" . $table . "`";
             }
@@ -437,11 +431,11 @@ namespace SlickInject {
             array_unshift($values, $types);
             return array($sql, $values);
         }
-        final static public function TRUNCATE($table) {
+        public static function _TRUNCATE($table) {
             $sql = "TRUNCATE TABLE `" . $table . "`";
             return array($sql);
         }
-        final static public function DELETE($table, $where) {
+        public static function _DELETE($table, $where) {
             $sql   = "DELETE FROM `" . $table . "`";
             if (count($where) > 0) {
                 $where = self::WHERE($where);
