@@ -5,7 +5,7 @@
 #### Supports PHP (v5.6 - v7.1)
 - [x] MySQLi (100% fully supported)
 
-> ###### [![](http://legitsoulja.info/build/SlickInject?status)](#) [![](https://img.shields.io/github/issues/LegitSoulja/SlickInject.svg)](https://github.com/LegitSoulja/SlickInject/issues) [![](https://img.shields.io/github/forks/LegitSoulja/SlickInject.svg)](https://github.com/LegitSoulja/SlickInject/network) [![](https://img.shields.io/github/stars/LegitSoulja/SlickInject.svg)](https://github.com/LegitSoulja/SlickInject/stargazers)
+(https://img.shields.io/github/issues/LegitSoulja/SlickInject.svg)](https://github.com/LegitSoulja/SlickInject/issues) [![](https://img.shields.io/github/forks/LegitSoulja/SlickInject.svg)](https://github.com/LegitSoulja/SlickInject/network) [![](https://img.shields.io/github/stars/LegitSoulja/SlickInject.svg)](https://github.com/LegitSoulja/SlickInject/stargazers)
 
 SlickInject is a ```PHP``` library in which allows you to write fast back-end sites using MySQLi with style. Not only SlickInject increase workflow, but also manages your queries, and make sure you stay secure. SlickInject writes your queries automatically, and protects your database from any leaks & injections.
 
@@ -16,10 +16,8 @@ SlickInject is a ```PHP``` library in which allows you to write fast back-end si
 
 - Lib\SlickInject (SlickInject/Parser)
 - Lib\SQLObject (SQLObject)
-
-**Single Build**: [Download/Generate a new build](http://legitsoulja.info/build/SlickInject)
-
-> This single build is SlickInject combined into one single file. The link above will generate you a new updated build that hasn't been yet updated. Rely on this link, or the file in the build folder.
+- **OR**
+- build/SlickInject.php
 
 ---
 #### Connect to database.
