@@ -7,338 +7,67 @@
 \| @License: MIT
 \| @Source: https://github.com/LegitSoulja/SlickInject
 */
-namespace {
-    if (!extension_loaded('mysqlnd')) throw new Error("Failed to load nd_mysqli extension.");
-    use SlickInject\SQLObject as SQLObject;
-    class SlickInject extends SlickInject\Parser {
-        private static $ip;
-        /**
-         * SlickInject constructor | Can accept database credentials.
-         * @return void
-         */
-        function __construct() {
-            $zaa = func_get_args();
-            if (count($zaa) === 4) return $this->gzvnect($zaa[0], $zaa[1], $zaa[2], $zaa[3]);
-        }
-        /**
-         * Connect to database
-         * @param string $jjp          Database host
-         * @param string $el          Database username
-         * @param string $tna          Database password
-         * @param string $ms          Database name
-         * @return void
-         */
-        public function connect($jjp, $el, $tna, $ms) {
-            if ($this->isConnected()) return;
-            self::$ip = new SQLObject($jjp, $el, $tna, $ms);
-        }
-        private function isConnected() {
-            return ((self::$ip instanceof SQLObject)) ? true : false;
-        }
-        /**
-         * Returns SQLObject
-         * @return \SlickInject\SQLObject
-         */
-        public function getSQLObject() {
-            return self::$ip;
-        }
-        public function select_db($cos) {
-            self::$ip->select_db($cos);
-            return $this;
-        }
-        /*
-         * Output logged data, w/ an option to close the database behind for even quicker clean code
-         * @param bool $ts_      State of message, used for some type of error reporting to alert rather or not the output was good.
-         * @param string\array     The message in which you are sending.
-         * @param bool             False by default, True to close the database before executing
-         * @return extermination
-        */
-        private function output($ts_, $cxo = "", $me   = false) {
-            if ($me) $this->me();
-            die(json_encode(array("state" => $ts_, "message" => $cxo)));
-        }
-        /**
-         * Close database connection
-         * @return void
-         */
-        public function close() {
-            return self::$ip->close();
-        }
-        /**
-         * Update database with data
-         * @param string $dsv          Name of table in which you're updating.
-         * @param array $etq          List of key/values of the data you're updating
-         * @param array $lxbo           List of key/values of the where exist
-         * @return \SlickInject\SQLResponce
-         */
-        public function UPDATE($dsv, $etq, $lxbo) {
-            if (!$this->isConnected() || !isset($dsv) || !isset($etq) || !isset($lxbo)) return;
-            $bk = parent::_UPDATE($dsv, $etq, $lxbo);
-            return self::$ip->query($bk[0], (isset($bk[1])) ? $bk[1] : NULL);
-        }
-        /**
-         * Select data from a database
-         * @param array $qk              List of specific columns that is being obtained. * = [];
-         * @param string $dsv               Name of table in which you're updating.
-         * @param array $lxbo                List of key/values of the where exist
-         * @param bool $ft                    Return rows, false returns \SlickInject\SQLResponce
-         * @return array
-         */
-        public function SELECT($qk, $dsv, $lxbo  = NULL, $ft     = true) {
-            if (!$this->isConnected() || !isset($qk) || !isset($dsv)) return;
-            $db = parent::_SELECT($qk, $dsv, $lxbo);
-            return self::$ip->query($db[0], (isset($db[1])) ? $db[1] : NULL, $ft);
-        }
-        /**
-         * Insert data into a database
-         * @param string $dsv               Name of table in which you're updating.
-         * @param array $etq                List of key/values of the data you're inserting
-         * @return \SlickInject\SQLResponce
-         */
-        public function INSERT($dsv, $etq) {
-            if (!$this->isConnected() || !isset($dsv) || !isset($etq)) return;
-            $foy = parent::_INSERT($dsv, $etq);
-            return self::$ip->query($foy[0], $foy[1]);
-        }
-        /**
-         * Truncate/Delete table
-         * @param string $dsv               Name of table in which you're updating.
-         * @return \SlickInject\SQLResponce
-         */
-        public function TRUNCATE($dsv) {
-            if (!$this->isConnected() || !isset($dsv)) return;
-            $jrb = parent::_TRUNCATE($dsv);
-            return self::$ip->query($jrb[0]);
-        }
-        /**
-         * Delete a row in a table
-         * @param string $dsv               Name of table in which you're updating.
-         * @param array $lxbo                List of key/values that directs which/where table is being deleted
-         * @return \SlickInject\SQLResponce
-         */
-        public function DELETE($dsv, $lxbo  = NULL) {
-            if (!$this->isConnected() || !isset($dsv) || !isset($lxbo)) return;
-            $isd = parent::_DELETE($dsv, $lxbo);
-            return self::$ip->query($isd[0], (isset($isd[1])) ? $isd[1] : NULL);
-        }
-    }
-}
 namespace SlickInject {
-    class SQLResponce {
-        private $ihb;
-        private $uwl = array();
-        private $xr;
-        /**
-         * SQLResponce constructor
-         * @return void
-         */
-        function __construct($xr, $uwl         = array()) {
-            $this->ihb = $xr->get_result();
-            $this->xr   = $xr;
-            if ($this->ihb->num_rows < 1) return;
-            while ($p_        = $this->ihb->fetch_assoc()) {
-                array_push($uwl, $p_);
-            }
-            $this->uwl = $uwl;
-        }
-        /**
-         * Return mysqli_result object
-         * @return object
-         */
-        public function getResult() {
-            return $this->ihb;
-        }
-        /**
-         * Check if any rows was affected during execution
-         * @return bool
-         */
-        public function didAffect() {
-            return ($this->xr->affected_rows > 0) ? true : false;
-        }
-        /**
-         * Check if result hasn't failed
-         * @return bool
-         */
-        public function error() {
-            return ($this->ihb) ? true : false;
-        }
-        /**
-         * Check if results contain rows
-         * @return bool
-         */
-        public function hasRows() {
-            return (!empty($this->uwl)) ? true : false;
-        }
-        /**
-         * Return number of rows
-         * @return int
-         */
-        public function num_rows() {
-            return (int)$this->ihb->num_rows;
-        }
-        /**
-         * Return rows from results
-         * @return array
-         */
-        public function getData() {
-            return $this->uwl;
-        }
-    }
-    class SQLObject {
-        private static $gzv;
-        private $bw; // default database name
-        private $djy = true;
-        /**
-         * SQLObject constructor | Can accept database  credentials
-         * @return void
-         */
-        function __construct($cfi, $lxif, $rm, $ys) {
-            return $this->gzvnect($cfi, $lxif, $rm, $ys);
-        }
-        /**
-         * Close database connected
-         * @return void
-         */
-        public function close() {
-            @\mysqli_close(self::$gzv);
-        }
-        /**
-         * Connect to database
-         * @param string $jjp          Database host
-         * @param string $el          Database username
-         * @param string $tna          Database password
-         * @param string $ms          Database name
-         * @return void
-         */
-        public function connect($jjp, $el, $tna, $ms) {
-            if ($this->isConnected()) return;
-            $this->bw = $ms;
-            self::$gzv             = new \mysqli($jjp, $el, $tna, $ms);
-        }
-        /**
-         * [Private] Checks if the database connection was ever established.
-         * @return bool
-         */
-        private function isConnected() {
-            return (isset(self::$gzv) && $this->ping()) ? true : false;
-        }
-        public function select_db($cos) {
-            $this->djy = false;
-            return mysqli_select_db(self::$gzv, $cos);
-        }
-        /**
-         * Get connect error status
-         * @return int
-         */
-        public function getConnectionError() {
-            return @\mysqli_connect_error();
-        }
-        /**
-         * Get last error from a failed prepare, and or execute.
-         * @return string
-         */
-        public function getLastError() {
-            return @\mysqli_error(self::$gzv);
-        }
-        /** Deprecated [Useless]
-         * Escape string using mysqli
-         * @return string
-         */
-        private function escapeString(&$yz) {
-            return self::$gzv->real_escape_string($yz);
-        }
-        /**
-         * Check if connection still live
-         * @return bool
-         */
-        public function ping() {
-            return (@self::$gzv->ping()) ? true : false;
-        }
-        private function set_default_db() {
-            $this->djy = true;
-            return mysqli_select_db(self::$gzv, $this->bw);
-        }
-        /**
-         * Send query, in which is processed specially.
-         * @param stting $rb                  The query that will be prepared
-         * @param array $d_y                  Types, and params to be binded before execute
-         * @param bool $ft                     Return rows (Array), or returns SQLObject (Object).
-         * @return boolean
-         */
-        public function query($rb, $d_y, $ft   = false) {
-            try {
-                if ($l_u = self::$gzv->prepare($rb)) {
-                    if (isset($d_y) && $d_y != NULL) {
-                        $ss  = array($d_y[0]);
-                        foreach ($d_y as $_c  => $os) {
-                            if ($_c != 0) {
-                                $ss[$_c]      = & $d_y[$_c];
-                            }
-                        }
-                        call_user_func_array(array($l_u, "bind_param"), $ss);
-                    }
-                    if ($l_u->execute()) {
-                        $ihb = new SQLResponce($l_u);
-                        if (!$this->djy) $this->set_default_db(); // reset default database
-                        if ($ft) return ($ihb->hasRows()) ? $ihb->getData() : array();
-                        return $ihb;
-                    }
-                }
-                throw new \Exception($this->getLastError());
-            }
-            catch(\Exception $rv_) {
-                if (!$this->djy) $this->set_default_db(); // reset default database
-                die("Error " . $rv_->getMessage());
-            }
-        }
-    }
-    class Parser {
+    class Parser
+    {
+        
         /**
          * Reserved keywords to prevent future errors
          */
-        private static $rz = array("ADD", "KEYS", "EXTERNAL", "PROCEDURE", "ALL", "FETCH", "PUBLIC", "ALTER", "FILE", "RAISERROR", "AND", "FILLFACTOR", "READ", "ANY", "FOR", "READTEXT", "AS", "FOREIGN", "RECONFIGURE", "ASC", "FREETEXT", "REFERENCES", "AUTHORIZATION", "FREETEXTTABLE", "REPLICATION", "BACKUP", "FROM", "RESTORE", "BEGIN", "FULL", "RESTRICT", "BETWEEN", "FUNCTION", "RETURN", "BREAK", "GOTO", "REVERT", "BROWSE", "GRANT", "REVOKE", "BULK", "GROUP", "RIGHT", "BY", "HAVING", "ROLLBACK", "CASCADE", "HOLDLOCK", "ROWCOUNT", "CASE", "IDENTITY", "ROWGUIDCOL", "CHECK", "IDENTITY_INSERT", "RULE", "CHECKPOINT", "IDENTITYCOL", "SAVE", "CLOSE", "IF", "SCHEMA", "CLUSTERED", "IN", "SECURITYAUDIT", "COALESCE", "INDEX", "SELECT", "COLLATE", "INNER", "SEMANTICKEYPHRASETABLE", "COLUMN", "INSERT", "SEMANTICSIMILARITYDETAILSTABLE", "COMMIT", "INTERSECT", "SEMANTICSIMILARITYTABLE", "COMPUTE", "INTO", "SESSION_USER", "CONSTRAINT", "IS", "SET", "CONTAINS", "JOIN", "SETUSER", "CONTAINSTABLE", "KEY", "SHUTDOWN", "CONTINUE", "KILL", "SOME", "CONVERT", "LEFT", "STATISTICS", "CREATE", "LIKE", "SYSTEM_USER", "CROSS", "LINENO", "TABLE", "CURRENT", "LOAD", "TABLESAMPLE", "CURRENT_DATE", "MERGE", "TEXTSIZE", "CURRENT_TIME", "NATIONAL", "THEN", "CURRENT_TIMESTAMP", "NOCHECK", "TO", "CURRENT_USER", "NONCLUSTERED", "TOP", "CURSOR", "NOT", "TRAN", "DATABASE", "NULL", "TRANSACTION", "DBCC", "NULLIF", "TRIGGER", "DEALLOCATE", "OF", "TRUNCATE", "DECLARE", "OFF", "TRY_CONVERT", "DEFAULT", "OFFSETS", "TSEQUAL", "DELETE", "ON", "UNION", "DENY", "OPEN", "UNIQUE", "DESC", "OPENDATASOURCE", "UNPIVOT", "DISK", "OPENQUERY", "UPDATE", "DISTINCT", "OPENROWSET", "UPDATETEXT", "DISTRIBUTED", "OPENXML", "USE", "DOUBLE", "OPTION", "USER", "DROP", "OR", "VALUES", "DUMP", "ORDER", "VARYING", "ELSE", "OUTER", "VIEW", "END", "OVER", "WAITFOR", "ERRLVL", "PERCENT", "WHEN", "ESCAPE", "PIVOT", "WHERE", "EXCEPT", "PLAN", "WHILE", "EXEC", "PRECISION", "WITH", "EXECUTE", "PRIMARY", "WITHIN", "GROUP", "EXISTS", "PRINT", "WRITETEXT", "EXIT", "PROC");
-        private static function WHERE($zxx, $jla          = false) {
-            $cu            = $oss            = array();
-            $hy              = 0;
-            foreach ($zxx as $lxi => $lx) {
-                if (!is_numeric($lxi) && !empty($lx)) {
-                    if (in_array(strtoupper($lxi), self::$rz)):
-                        array_push($cu, "`" . $lxi . "`=?");
+        private static $RESERVED_KEYWORDS = array("ADD", "KEYS", "EXTERNAL", "PROCEDURE", "ALL", "FETCH", "PUBLIC", "ALTER", "FILE", "RAISERROR", "AND", "FILLFACTOR", "READ", "ANY", "FOR", "READTEXT", "AS", "FOREIGN", "RECONFIGURE", "ASC", "FREETEXT", "REFERENCES", "AUTHORIZATION", "FREETEXTTABLE", "REPLICATION", "BACKUP", "FROM", "RESTORE", "BEGIN", "FULL", "RESTRICT", "BETWEEN", "FUNCTION", "RETURN", "BREAK", "GOTO", "REVERT", "BROWSE", "GRANT", "REVOKE", "BULK", "GROUP", "RIGHT", "BY", "HAVING", "ROLLBACK", "CASCADE", "HOLDLOCK", "ROWCOUNT", "CASE", "IDENTITY", "ROWGUIDCOL", "CHECK", "IDENTITY_INSERT", "RULE", "CHECKPOINT", "IDENTITYCOL", "SAVE", "CLOSE", "IF", "SCHEMA", "CLUSTERED", "IN", "SECURITYAUDIT", "COALESCE", "INDEX", "SELECT", "COLLATE", "INNER", "SEMANTICKEYPHRASETABLE", "COLUMN", "INSERT", "SEMANTICSIMILARITYDETAILSTABLE", "COMMIT", "INTERSECT", "SEMANTICSIMILARITYTABLE", "COMPUTE", "INTO", "SESSION_USER", "CONSTRAINT", "IS", "SET", "CONTAINS", "JOIN", "SETUSER", "CONTAINSTABLE", "KEY", "SHUTDOWN", "CONTINUE", "KILL", "SOME", "CONVERT", "LEFT", "STATISTICS", "CREATE", "LIKE", "SYSTEM_USER", "CROSS", "LINENO", "TABLE", "CURRENT", "LOAD", "TABLESAMPLE", "CURRENT_DATE", "MERGE", "TEXTSIZE", "CURRENT_TIME", "NATIONAL", "THEN", "CURRENT_TIMESTAMP", "NOCHECK", "TO", "CURRENT_USER", "NONCLUSTERED", "TOP", "CURSOR", "NOT", "TRAN", "DATABASE", "NULL", "TRANSACTION", "DBCC", "NULLIF", "TRIGGER", "DEALLOCATE", "OF", "TRUNCATE", "DECLARE", "OFF", "TRY_CONVERT", "DEFAULT", "OFFSETS", "TSEQUAL", "DELETE", "ON", "UNION", "DENY", "OPEN", "UNIQUE", "DESC", "OPENDATASOURCE", "UNPIVOT", "DISK", "OPENQUERY", "UPDATE", "DISTINCT", "OPENROWSET", "UPDATETEXT", "DISTRIBUTED", "OPENXML", "USE", "DOUBLE", "OPTION", "USER", "DROP", "OR", "VALUES", "DUMP", "ORDER", "VARYING", "ELSE", "OUTER", "VIEW", "END", "OVER", "WAITFOR", "ERRLVL", "PERCENT", "WHEN", "ESCAPE", "PIVOT", "WHERE", "EXCEPT", "PLAN", "WHILE", "EXEC", "PRECISION", "WITH", "EXECUTE", "PRIMARY", "WITHIN", "GROUP", "EXISTS", "PRINT", "WRITETEXT", "EXIT", "PROC");
+        
+        private static function WHERE($arr, $required = false)
+        {
+            $append = $values = array();
+            $flag   = 0;
+            foreach ($arr as $k => $v) {
+                if (!is_numeric($k) && !empty($v)) {
+                    if (in_array(strtoupper($k), self::$RESERVED_KEYWORDS)):
+                        array_push($append, "`" . $k . "`=?");
                     else:
-                        array_push($cu, "" . $lxi . "=?");
+                        array_push($append, "" . $k . "=?");
                     endif;
-                    array_push($cu, 'AND');
-                    array_push($oss, $lx);
-                    $hy = 1;
+                    array_push($append, 'AND');
+                    array_push($values, $v);
+                    $flag = 1;
+                } else {
+                    if ($flag === 0 && $required === TRUE)
+                        throw new \Exception("An error has occured");
+                    if ($flag === 1)
+                        array_pop($append);
+                    array_push($append, $v);
+                    $flag = 2;
                 }
-                else {
-                    if ($hy === 0 && $jla === TRUE) throw new \Exception("An error has occured");
-                    if ($hy === 1) array_pop($cu);
-                    array_push($cu, $lx);
-                    $hy = 2;
-                }
             }
-            if ($hy === 1) {
-                array_pop($cu);
+            
+            if ($flag === 1) {
+                array_pop($append);
             }
-            $hrq = "";
-            foreach ($oss as $lx) {
-                $hrq.= self::getType($lx);
+            
+            $types = "";
+            foreach ($values as $v) {
+                $types .= self::getType($v);
             }
-            if (!empty($hrq)) array_unshift($oss, $hrq);
-            return array($cu, $oss);
+            
+            if (!empty($types))
+                array_unshift($values, $types);
+            return array(
+                $append,
+                $values
+            );
         }
+        
         /**
          * Get initial of type in which is needed to bind the proper types when executing to the database
-         * @param string $ih               <T>
+         * @param string $type               <T>
          * @return char
          */
-        private static function getType($ih) {
-            switch (gettype($ih)) {
+        private static function getType($type)
+        {
+            switch (gettype($type)) {
                 case "string":
                     return "s";
                 case "boolean": // bool is recognized as an integer
-                    
                 case "integer":
                     return "i";
                 case "double":
@@ -347,101 +76,518 @@ namespace SlickInject {
                     throw new \Error("Unable to bind params");
             }
         }
-        public static function _SELECT($qk, $dsv, $lxbo, $rv_plain = false) {
-            $qk = (count($qk) > 0) ? $qk : array("*");
-            foreach ($qk as $lxi       => $lx) {
-                if (in_array(strtoupper($lx), self::$rz)) $qk[$lxi]         = "`" . $lx . "`";
+        
+        public static function _SELECT($columns, $table, $where, $explain = false)
+        {
+            $columns = (count($columns) > 0) ? $columns : array(
+                "*"
+            );
+            
+            foreach ($columns as $k => $v) {
+                if (in_array(strtoupper($v), self::$RESERVED_KEYWORDS))
+                    $columns[$k] = "`" . $v . "`";
             }
-            $lxbo   = (count($lxbo) > 0) ? self::WHERE($lxbo) : NULL;
-            $rb     = (($rv_plain) ? "EXPLAIN " : "");
-            if (in_array(strtoupper($dsv), self::$rz)) {
-                $dsv   = "`" . $dsv . "`";
+            
+            $where = (count($where) > 0) ? self::WHERE($where) : NULL;
+            $sql   = (($explain) ? "EXPLAIN " : "");
+            
+            if (in_array(strtoupper($table), self::$RESERVED_KEYWORDS)) {
+                $table = "`" . $table . "`";
             }
-            // $rb .= "SELECT [" . join(", ", $qk) . "] FROM " . $dsv;
-            $rb.= "SELECT " . join(", ", $qk) . " FROM " . $dsv;
-            if ($lxbo != NULL && count($lxbo[1]) > 1 && isset($lxbo[0])) {
-                $rb.= " WHERE " . join(" ", $lxbo[0]);
+            
+            // $sql .= "SELECT [" . join(", ", $columns) . "] FROM " . $table;
+            $sql .= "SELECT " . join(", ", $columns) . " FROM " . $table;
+            
+            if ($where != NULL && count($where[1]) > 1 && isset($where[0])) {
+                $sql .= " WHERE " . join(" ", $where[0]);
+            } elseif (isset($where[0])) {
+                $sql .= " " . join(" ", $where[0]);
             }
-            elseif (isset($lxbo[0])) {
-                $rb.= " " . join(" ", $lxbo[0]);
-            }
-            return array($rb, (isset($lxbo[1])) ? $lxbo[1] : NULL);
+            
+            return array(
+                $sql,
+                (isset($where[1])) ? $where[1] : NULL
+            );
         }
-        public static function _INSERT($dsv, $etq) {
-            if (in_array(strtoupper($dsv), self::$rz)) {
-                $dsv   = "`" . $dsv . "`";
+        public static function _INSERT($table, $object)
+        {
+            if (in_array(strtoupper($table), self::$RESERVED_KEYWORDS)) {
+                $table = "`" . $table . "`";
             }
-            $rb     = "INSERT INTO " . $dsv;
-            $coss   = array();
-            $ru = array();
-            $oss  = array();
-            foreach ($etq as $lxi => $lx) {
-                if (isset($lxi) && isset($lx)) {
-                    if (is_numeric($lxi)) continue;
-                    array_push($coss, "`" . $lxi . "`");
-                    array_push($ru, "?");
-                    array_push($oss, $lx);
+            $sql     = "INSERT INTO " . $table;
+            $names   = array();
+            $replace = array();
+            $values  = array();
+            foreach ($object as $k => $v) {
+                if (isset($k) && isset($v)) {
+                    if (is_numeric($k))
+                        continue;
+                    array_push($names, "`" . $k . "`");
+                    array_push($replace, "?");
+                    array_push($values, $v);
                 }
             }
-            $rb.= " (" . join(", ", $coss) . ") VALUES ";
-            $rb.= " (" . join(", ", $ru) . ")";
-            $hrq = "";
-            foreach ($oss as $lx) {
-                $hrq.= self::getType($lx);
+            $sql .= " (" . join(", ", $names) . ") VALUES ";
+            $sql .= " (" . join(", ", $replace) . ")";
+            
+            $types = "";
+            foreach ($values as $v) {
+                $types .= self::getType($v);
             }
-            array_unshift($oss, $hrq);
-            return array($rb, $oss);
+            
+            array_unshift($values, $types);
+            
+            return array(
+                $sql,
+                $values
+            );
         }
-        public static function _UPDATE($dsv, $etq, $lxbo) {
-            if (in_array(strtoupper($dsv), self::$rz)) {
-                $dsv  = "`" . $dsv . "`";
+        public static function _UPDATE($table, $object, $where)
+        {
+            if (in_array(strtoupper($table), self::$RESERVED_KEYWORDS)) {
+                $table = "`" . $table . "`";
             }
-            $foy = array();
-            $oss = array();
-            $lxbo  = (count($lxbo) > 0) ? self::WHERE($lxbo, TRUE) : NULL;
-            $rb    = "UPDATE " . $dsv . " SET";
-            foreach ($etq as $lxi => $lx) {
-                if (isset($lxi) && isset($lx)) {
-                    if (is_numeric($lxi)) continue;
-                    if (in_array(strtoupper($lxi), self::$rz)):
-                        array_push($foy, "`" . $lxi . "`=?");
+            
+            $insert = array();
+            $values = array();
+            $where  = (count($where) > 0) ? self::WHERE($where, TRUE) : NULL;
+            $sql    = "UPDATE " . $table . " SET";
+            foreach ($object as $k => $v) {
+                if (isset($k) && isset($v)) {
+                    if (is_numeric($k))
+                        continue;
+                    if (in_array(strtoupper($k), self::$RESERVED_KEYWORDS)):
+                        array_push($insert, "`" . $k . "`=?");
                     else:
-                        array_push($foy, "" . $lxi . "=?");
+                        array_push($insert, "" . $k . "=?");
                     endif;
-                    array_push($oss, $lx);
+                    array_push($values, $v);
                 }
             }
-            $rb.= " " . join(", ", $foy);
-            if ($lxbo != NULL) {
-                $rb.= " WHERE " . join(" ", $lxbo[0]);
+            $sql .= " " . join(", ", $insert);
+            if ($where != NULL) {
+                $sql .= " WHERE " . join(" ", $where[0]);
             }
-            $hrq = "";
-            foreach ($oss as $lx) {
-                $hrq.= self::getType($lx);
+            
+            $types = "";
+            
+            foreach ($values as $v) {
+                $types .= self::getType($v);
             }
-            if ($lxbo != NULL) {
-                $hrq.= $lxbo[1][0];
-                array_shift($lxbo[1]);
+            
+            if ($where != NULL) {
+                $types .= $where[1][0];
+                array_shift($where[1]);
             }
-            $ty = count($oss);
-            foreach ($lxbo[1] as $lxi  => $lx) {
-                $oss[$ty]    = $lx;
-                $ty++;
+            
+            $ni = count($values);
+            
+            foreach ($where[1] as $k => $v) {
+                $values[$ni] = $v;
+                $ni++;
             }
-            array_unshift($oss, $hrq);
-            return array($rb, $oss);
+            
+            
+            array_unshift($values, $types);
+            return array(
+                $sql,
+                $values
+            );
         }
-        public static function _TRUNCATE($dsv) {
-            $rb = "TRUNCATE TABLE `" . $dsv . "`";
-            return array($rb);
+        public static function _TRUNCATE($table)
+        {
+            $sql = "TRUNCATE TABLE `" . $table . "`";
+            return array(
+                $sql
+            );
         }
-        public static function _DELETE($dsv, $lxbo) {
-            $rb   = "DELETE FROM `" . $dsv . "`";
-            if (count($lxbo) > 0) {
-                $lxbo = self::WHERE($lxbo);
-                $rb.= " WHERE " . join(" ", $lxbo[0]);
+        public static function _DELETE($table, $where)
+        {
+            $sql = "DELETE FROM `" . $table . "`";
+            if (count($where) > 0) {
+                $where = self::WHERE($where);
+                $sql .= " WHERE " . join(" ", $where[0]);
             }
-            return array($rb, $lxbo[1]);
+            return array(
+                $sql,
+                $where[1]
+            );
+        }
+    }
+    class SQLResponce
+    {
+        
+        private $result;
+        private $rows = array();
+        private $stmt;
+        
+        /**
+         * SQLResponce constructor
+         * @return void
+         */
+        function __construct($stmt, $rows = array())
+        {
+            $this->result = $stmt->get_result();
+            $this->stmt   = $stmt;
+            if ($this->result->num_rows < 1)
+                return;
+            while ($row = $this->result->fetch_assoc()) {
+                array_push($rows, $row);
+            }
+            $this->rows = $rows;
+        }
+        
+        /**
+         * Return mysqli_result object
+         * @return object
+         */
+        public function getResult()
+        {
+            return $this->result;
+        }
+        
+        /**
+         * Check if any rows was affected during execution
+         * @return bool
+         */
+        public function didAffect()
+        {
+            return ($this->stmt->affected_rows > 0) ? true : false;
+        }
+        
+        /**
+         * Check if result hasn't failed
+         * @return bool
+         */
+        public function error()
+        {
+            return ($this->result) ? true : false;
+        }
+        
+        /**
+         * Check if results contain rows
+         * @return bool
+         */
+        public function hasRows()
+        {
+            return (!empty($this->rows)) ? true : false;
+        }
+        
+        /**
+         * Return number of rows
+         * @return int
+         */
+        public function num_rows()
+        {
+            return (int) $this->result->num_rows;
+        }
+        
+        /**
+         * Return rows from results
+         * @return array
+         */
+        public function getData()
+        {
+            return $this->rows;
+        }
+    }
+    
+    class SQLObject
+    {
+        private static $con;
+        private $d_db_name; // default database name
+        private $isInDefault = true;
+        
+        /**
+         * SQLObject constructor | Can accept database  credentials
+         * @return void
+         */
+        function __construct($dbhost, $dbuser, $dbpass, $dbname)
+        {
+            return $this->connect($dbhost, $dbuser, $dbpass, $dbname);
+        }
+        
+        
+        /**
+         * Close database connected
+         * @return void
+         */
+        public function close()
+        {
+            @\mysqli_close(self::$con);
+        }
+        
+        
+        /**
+         * Connect to database
+         * @param string $db_host          Database host
+         * @param string $db_user          Database username
+         * @param string $db_pass          Database password
+         * @param string $db_name          Database name
+         * @return void
+         */
+        public function connect($db_host, $db_user, $db_pass, $db_name)
+        {
+            if ($this->isConnected())
+                return;
+            $this->d_db_name = $db_name;
+            self::$con       = new \mysqli($db_host, $db_user, $db_pass, $db_name);
+        }
+        
+        /**
+         * [Private] Checks if the database connection was ever established.
+         * @return bool
+         */
+        private function isConnected()
+        {
+            return (isset(self::$con) && $this->ping()) ? true : false;
+        }
+        
+        public function select_db($name)
+        {
+            $this->isInDefault = false;
+            return mysqli_select_db(self::$con, $name);
+        }
+        
+        /**
+         * Get connect error status
+         * @return int
+         */
+        public function getConnectionError()
+        {
+            return @\mysqli_connect_error();
+        }
+        
+        /**
+         * Get last error from a failed prepare, and or execute.
+         * @return string
+         */
+        public function getLastError()
+        {
+            return @\mysqli_error(self::$con);
+        }
+        
+        /** Deprecated [Useless]
+         * Escape string using mysqli
+         * @return string
+         */
+        private function escapeString(&$string)
+        {
+            return self::$con->real_escape_string($string);
+        }
+        
+        /**
+         * Check if connection still live
+         * @return bool
+         */
+        public function ping()
+        {
+            return (@self::$con->ping()) ? true : false;
+        }
+        
+        private function set_default_db()
+        {
+            $this->isInDefault = true;
+            return mysqli_select_db(self::$con, $this->d_db_name);
+        }
+        
+        /**
+         * Send query, in which is processed specially.
+         * @param stting $sql                  The query that will be prepared
+         * @param array $bind                  Types, and params to be binded before execute
+         * @param bool $rr                     Return rows (Array), or returns SQLObject (Object).
+         * @return boolean
+         */
+        public function query($sql, $bind, $rr = false)
+        {
+            try {
+                if ($prep = self::$con->prepare($sql)) {
+                    if (isset($bind) && $bind != NULL) {
+                        $out = array(
+                            $bind[0]
+                        );
+                        foreach ($bind as $key => $value) {
+                            if ($key != 0) {
+                                $out[$key] =& $bind[$key];
+                            }
+                        }
+                        call_user_func_array(array(
+                            $prep,
+                            "bind_param"
+                        ), $out);
+                    }
+                    if ($prep->execute()) {
+                        $result = new SQLResponce($prep);
+                        if (!$this->isInDefault)
+                            $this->set_default_db(); // reset default database
+                        if ($rr)
+                            return ($result->hasRows()) ? $result->getData() : array();
+                        return $result;
+                    }
+                }
+                throw new \Exception($this->getLastError());
+            }
+            catch (\Exception $ex) {
+                if (!$this->isInDefault)
+                    $this->set_default_db(); // reset default database
+                die("Error " . $ex->getMessage());
+            }
+        }
+    }
+}
+
+namespace {
+    if (!extension_loaded('mysqlnd'))
+        throw new Error("Failed to load nd_mysqli extension.");
+    use SlickInject\SQLObject as SQLObject;
+    class SlickInject extends SlickInject\Parser
+    {
+        
+        private static $SQLObject;
+        
+        /**
+         * SlickInject constructor | Can accept database credentials.
+         * @return void
+         */
+        function __construct()
+        {
+            $args = func_get_args();
+            if (count($args) === 4)
+                return $this->connect($args[0], $args[1], $args[2], $args[3]);
+        }
+        
+        /**
+         * Connect to database
+         * @param string $db_host          Database host
+         * @param string $db_user          Database username
+         * @param string $db_pass          Database password
+         * @param string $db_name          Database name
+         * @return void
+         */
+        public function connect($db_host, $db_user, $db_pass, $db_name)
+        {
+            if ($this->isConnected())
+                return;
+            self::$SQLObject = new SQLObject($db_host, $db_user, $db_pass, $db_name);
+        }
+        
+        private function isConnected()
+        {
+            return ((self::$SQLObject instanceof SQLObject)) ? true : false;
+        }
+        
+        /**
+         * Returns SQLObject
+         * @return \SlickInject\SQLObject
+         */
+        public function getSQLObject()
+        {
+            return self::$SQLObject;
+        }
+        
+        public function select_db($name)
+        {
+            self::$SQLObject->select_db($name);
+            return $this;
+        }
+        
+        /*
+         * Output logged data, w/ an option to close the database behind for even quicker clean code
+         * @param bool $state      State of message, used for some type of error reporting to alert rather or not the output was good.
+         * @param string\array     The message in which you are sending.
+         * @param bool             False by default, True to close the database before executing
+         * @return extermination
+         */
+        
+        private function output($state, $message = "", $close = false)
+        {
+            if ($close)
+                $this->close();
+            die(json_encode(array(
+                "state" => $state,
+                "message" => $message
+            )));
+        }
+        
+        /**
+         * Close database connection
+         * @return void
+         */
+        public function close()
+        {
+            return self::$SQLObject->close();
+        }
+        
+        /**
+         * Update database with data
+         * @param string $table          Name of table in which you're updating.
+         * @param array $object          List of key/values of the data you're updating
+         * @param array $where           List of key/values of the where exist
+         * @return \SlickInject\SQLResponce
+         */
+        public function UPDATE($table, $object, $where)
+        {
+            if (!$this->isConnected() || !isset($table) || !isset($object) || !isset($where))
+                return;
+            $update = parent::_UPDATE($table, $object, $where);
+            return self::$SQLObject->query($update[0], (isset($update[1])) ? $update[1] : NULL);
+        }
+        
+        /**
+         * Select data from a database
+         * @param array $columns              List of specific columns that is being obtained. * = [];
+         * @param string $table               Name of table in which you're updating.
+         * @param array $where                List of key/values of the where exist
+         * @param bool $rr                    Return rows, false returns \SlickInject\SQLResponce
+         * @return array
+         */
+        public function SELECT($columns, $table, $where = NULL, $rr = true)
+        {
+            if (!$this->isConnected() || !isset($columns) || !isset($table))
+                return;
+            $select = parent::_SELECT($columns, $table, $where);
+            return self::$SQLObject->query($select[0], (isset($select[1])) ? $select[1] : NULL, $rr);
+        }
+        
+        /**
+         * Insert data into a database
+         * @param string $table               Name of table in which you're updating.
+         * @param array $object                List of key/values of the data you're inserting
+         * @return \SlickInject\SQLResponce
+         */
+        public function INSERT($table, $object)
+        {
+            if (!$this->isConnected() || !isset($table) || !isset($object))
+                return;
+            $insert = parent::_INSERT($table, $object);
+            return self::$SQLObject->query($insert[0], $insert[1]);
+        }
+        
+        /**
+         * Truncate/Delete table
+         * @param string $table               Name of table in which you're updating.
+         * @return \SlickInject\SQLResponce
+         */
+        public function TRUNCATE($table)
+        {
+            if (!$this->isConnected() || !isset($table))
+                return;
+            $truncate = parent::_TRUNCATE($table);
+            return self::$SQLObject->query($truncate[0]);
+        }
+        
+        /**
+         * Delete a row in a table
+         * @param string $table               Name of table in which you're updating.
+         * @param array $where                List of key/values that directs which/where table is being deleted
+         * @return \SlickInject\SQLResponce
+         */
+        public function DELETE($table, $where = NULL)
+        {
+            if (!$this->isConnected() || !isset($table) || !isset($where))
+                return;
+            $delete = parent::_DELETE($table, $where);
+            return self::$SQLObject->query($delete[0], (isset($delete[1])) ? $delete[1] : NULL);
         }
     }
 }
