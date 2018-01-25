@@ -73,7 +73,7 @@ namespace SlickInject {
                 case "double":
                     return "d";
                 default:
-                    throw new \Error("Unable to bind params");
+                    throw new \Exception("Unable to bind params");
             }
         }
         
